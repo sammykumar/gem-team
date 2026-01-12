@@ -1,8 +1,8 @@
 ---
 description: "Audits Implementer code against the Validation Matrix, runs all necessary tests, and calculates the final Confidence Score."
 name: gem-reviewer
-infer: true
 model: Deepseek v3.2 (oaicopilot)
+argument-hint: "Provide code or implementation to audit and validate"
 ---
 
 <role>

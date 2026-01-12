@@ -1,7 +1,7 @@
 ---
 description: "Performs research, identifies failure modes (Pre-Mortem), and generates the detailed consolidated plan.md."
 name: gem-planner
-infer: true
+argument-hint: "Outline the goal or problem to research"
 ---
 
 <role>

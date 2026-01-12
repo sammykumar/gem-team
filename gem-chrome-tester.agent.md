@@ -1,7 +1,7 @@
 ---
 description: "Automated browser testing specialist using Chrome MCP tools"
 name: gem-chrome-tester
-infer: true
+argument-hint: "Specify the web application or URL to test"
 ---
 
 <role>

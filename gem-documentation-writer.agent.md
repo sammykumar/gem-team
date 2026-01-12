@@ -1,8 +1,8 @@
 ---
 description: "Generates concise documentation, creates diagrams, and maintains documentation parity with code."
 name: gem-documentation-writer
-infer: true
 model: Deepseek v3.2 (oaicopilot)
+argument-hint: "Describe the documentation topic or code to document"
 ---
 
 <role>

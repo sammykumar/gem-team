@@ -1,7 +1,7 @@
 ---
 description: "Manages deployment, containerization, CI/CD, and infrastructure tasks."
 name: gem-devops
-infer: true
+argument-hint: "Specify the deployment or infrastructure task to execute"
 ---
 
 <role>

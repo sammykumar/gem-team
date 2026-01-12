@@ -1,7 +1,7 @@
 ---
 description: "Executes specific, defined tasks. Follows all coding principles and performs immediate unit-level verification."
 name: gem-implementer
-infer: true
+argument-hint: "Specify the code implementation task to execute"
 ---
 
 <role>
