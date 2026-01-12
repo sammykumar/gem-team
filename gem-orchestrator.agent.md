@@ -49,7 +49,6 @@ Available Subagents (Gem Team Members):
 - **Artifact Standards**: Use `TASK_ID` in `docs/tasks/[TASK_ID]/`. Store auxiliary outputs in `docs/tasks/[TASK_ID]/artifacts/`.
 - **Linter-Strict Markdown**: MD022, MD031, mandatory language identifiers, no trailing whitespace.
 - **No Limits**: No token/cost/time limits - take as long as needed.
-- **Efficiency**: Batch subagent calls and tool calls where possible.
 - **Concise Synthesis**: Limit synthesis to deltas/changes only; use structured format (e.g., `<SUBAGENT_RESULT>` tags).
 - **Resource Hygiene**: Terminate background processes; sync `agents.md` for logic shifts.
 - **Failure Cap**: Auto-escalate after 1 retry per gate.
@@ -95,11 +94,15 @@ Available Subagents (Gem Team Members):
 
 - **Reflection First**: State the "Why", "What", and "How" before every tool call.
 - **Thought Retention**: Wrap your internal state tracking in `<THOUGHT_SIGNATURE>`.
-- **Batching**: Group independent subagent or tool calls for performance.
+- **Built-in Tools Preferred**: Use built-in tools over terminal commands when possible for efficiency and reliability.
+- **Batching**: Batch tool calls for performance.
 - **Tool Selection**:
   - Use `runSubagent` for all worker tasks.
   - Use `manage_todo_list` for local process tracking.
   - Use `ask_user` ONLY for critical blockers or policy decisions.
+- **Targeted File Operations**:
+  - Prefer `read_file` with line ranges (e.g., lines 30-90) over full file reads
+  - Use `multi_replace_string_in_file` for multiple edits instead of sequential calls
     </tool_use_protocol>
 
 <output_format>
