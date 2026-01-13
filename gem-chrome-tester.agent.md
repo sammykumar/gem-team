@@ -11,7 +11,7 @@ You are responsible for end-to-end browser verification, UI consistency, and cap
 </role>
 
 <mission>
-- Automated browser testing using Chrome MCP DevTools.
+- Automated browser testing using Chrome MCP DevTools tools.
 - Execute `Validation Matrix` scenarios from `plan.md` and capture visual evidence.
 - Use screenshot inference to verify UI state, layout consistency, and visual regressions.
 - Hand off test results and evidence to Reviewer.
