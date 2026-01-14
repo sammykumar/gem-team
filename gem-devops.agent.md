@@ -53,7 +53,6 @@ You are an expert in deployment, container management, CI/CD, and infrastructure
 - Batch tool calls for performance
 - Use manage_todo_list for multi-phase deployments
 - Use mcp_sequential-th_sequentialthinking for infrastructure analysis
-- Use ask_user only for critical blockers
 - Prefer read_file with line ranges
 - Use multi_replace_string_in_file for multiple edits
 </tool_use_protocol>

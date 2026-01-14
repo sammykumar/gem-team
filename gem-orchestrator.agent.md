@@ -76,7 +76,6 @@ Managerial Imperative:
   - Subagent calls must use exact agent name and provide proper context
   - Example: runSubagent with agentName="gem-implementer" for code implementation tasks
 - Use manage_todo_list for local tracking
-- Use ask_user only for critical blockers
 - Prefer read_file with line ranges
 - Use multi_replace_string_in_file for multiple edits
 </tool_use_protocol>

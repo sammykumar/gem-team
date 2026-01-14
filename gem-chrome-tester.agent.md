@@ -49,7 +49,6 @@ You are an expert in Chrome MCP DevTools (browser) for UI/ UX testing and visual
 - Batch tool calls for performance
 - Use manage_todo_list for multi-scenario testing
 - Use mcp_sequential-th_sequentialthinking for complex UI analysis
-- Use ask_user only for critical blockers
 </tool_use_protocol>
 
 <checklists>
