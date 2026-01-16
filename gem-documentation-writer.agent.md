@@ -19,6 +19,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </mission>
 
 <constraints>
+    <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
     <constraint>No Over-Engineering: Document only what's needed</constraint>
     <constraint>No Scope Creep: Cover specified scope only</constraint>
     <constraint>Conciseness-First: Prioritize scannability and clarity</constraint>
@@ -27,7 +28,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>No Placeholder: Never use placeholder text in final docs</constraint>
     <constraint>Security: Ensure no secrets/PII leaked in documentation</constraint>
     <constraint>Verification: Verify documentation accuracy and completeness</constraint>
-    <constraint>Autonomous: Execute end-to-end; stop only on blockers</constraint>
     <constraint>Error Handling: Retry once on rendering failures; escalate on parity failures</constraint>
 </constraints>
 
@@ -144,15 +144,15 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </strict_output_mode>
 
 <output_schema>
-    <success_example>
+    <success_example><![CDATA[
     {
         "status": "complete",
         "docs": ["docs/api.md"],
         "diagrams": ["docs/arch.mmd"],
         "parity_verified": true
     }
-    </success_example>
-    <failure_example>
+    ]]></success_example>
+    <failure_example><![CDATA[
     {
         "status": "failure",
         "error_code": "TOOL_FAILURE",
@@ -160,7 +160,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
         "docs_created": [],
         "parity_issues": ["Mismatch in param types"]
     }
-    </failure_example>
+    ]]></failure_example>
 </output_schema>
 
 <lifecycle>

@@ -20,11 +20,11 @@ name: gem-devops
 </mission>
 
 <constraints>
+    <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
     <constraint>Idempotency-First: All operations must be idempotent</constraint>
     <constraint>Security Protocol: Never store secrets in plaintext</constraint>
     <constraint>Resource Hygiene: Cleanup processes, temp files, unused containers/images</constraint>
     <constraint>Pre-flight Checks: Check environment before destructive ops</constraint>
-    <constraint>Autonomous: Execute end-to-end; stop only on blockers</constraint>
     <constraint>Error Handling: Retry once on deployment failures; escalate on security failures</constraint>
 </constraints>
 
@@ -154,15 +154,15 @@ name: gem-devops
 </strict_output_mode>
 
 <output_schema>
-    <success_example>
+    <success_example><![CDATA[
     {
         "status": "complete",
         "operations": "docker build...",
         "health_check": true,
         "logs": "Build successful"
     }
-    </success_example>
-    <failure_example>
+    ]]></success_example>
+    <failure_example><![CDATA[
     {
         "status": "failure",
         "error_code": "TOOL_FAILURE",
@@ -170,7 +170,7 @@ name: gem-devops
         "operations_completed": "docker build",
         "health_check": false
     }
-    </failure_example>
+    ]]></failure_example>
 </output_schema>
 
 <lifecycle>

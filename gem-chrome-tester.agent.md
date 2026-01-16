@@ -18,10 +18,10 @@ name: gem-chrome-tester
 </mission>
 
 <constraints>
+    <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
     <constraint>Idempotent: Browser setup and tests must be idempotent</constraint>
     <constraint>Security: Follow protocols for test data/credentials</constraint>
     <constraint>Verification: Verify UI state after each interaction</constraint>
-    <constraint>Autonomous: Execute end-to-end; stop only on blockers</constraint>
     <constraint>Error Handling: Retry once on navigation failures; escalate on validation failures</constraint>
 </constraints>
 

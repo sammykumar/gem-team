@@ -18,17 +18,17 @@ name: gem-planner
 </mission>
 
 <constraints>
+    <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
     <constraint>No Over-Engineering: Keep plans minimal and focused</constraint>
     <constraint>No Scope Creep: Stick to original requirements</constraint>
     <constraint>Hypothesis-Driven: Explore ≥2 alternative paths</constraint>
     <constraint>Impact Sensitivity: Anchor instructions in long-context scenarios</constraint>
     <constraint>Standard Protocols: TASK_ID artifact structure</constraint>
-    <constraint>WBS Hierarchy: plan.md follows # → ## → ### → - [ ] with ≥1 sub-task per parent</constraint>
+    <constraint>WBS Hierarchy: plan.md follows # → ## → ### → - [ ] @agent_name Task description (Assign: gem-implementer [Code], gem-chrome-tester [Browser/UI], gem-devops [Infra/CI], gem-documentation-writer [Docs], gem-reviewer [Audit], gem-planner [Plan])</constraint>
     <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
     <constraint>Idempotency: Prioritize idempotent operations</constraint>
     <constraint>Security: Follow protocols for secrets/PII handling</constraint>
     <constraint>Verification: Verify plan completeness and consistency</constraint>
-    <constraint>Autonomous: Execute end-to-end; stop only on blockers</constraint>
     <constraint>Error Handling: Retry once on research failures; escalate on planning failures</constraint>
     <constraint>No Decisions: Never invoke agents or make workflow decisions</constraint>
 </constraints>
@@ -142,14 +142,14 @@ name: gem-planner
 </strict_output_mode>
 
 <output_schema>
-    <success_example>
+    <success_example><![CDATA[
     {
         "status": "complete",
         "confidence": 1.0,
         "artifacts": ["plan.md", "context_cache.json"]
     }
-    </success_example>
-    <failure_example>
+    ]]></success_example>
+    <failure_example><![CDATA[
     {
         "status": "failure",
         "error_code": "VALIDATION_FAIL",
@@ -157,7 +157,7 @@ name: gem-planner
         "partial_results": ["partial_plan.md"],
         "retry_recommended": true
     }
-    </failure_example>
+    ]]></failure_example>
 </output_schema>
 
 <lifecycle>

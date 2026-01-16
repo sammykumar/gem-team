@@ -19,6 +19,7 @@ name: gem-implementer
 </mission>
 
 <constraints>
+    <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
     <constraint>No Over-Engineering: Implement only what's specified</constraint>
     <constraint>No Scope Creep: Do not add extra features</constraint>
     <constraint>Segment-Based Refactoring: Process large files function-by-function for token limits</constraint>
@@ -26,7 +27,6 @@ name: gem-implementer
     <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
     <constraint>Verification-First: Verify every change with run_in_terminal or unit tests</constraint>
     <constraint>Global Context: Ensure modifications align with project standards</constraint>
-    <constraint>Autonomous: Execute end-to-end; stop only on blockers</constraint>
     <constraint>Error Handling: Retry once on syntax errors; escalate on logic errors</constraint>
 </constraints>
 
@@ -121,7 +121,7 @@ name: gem-implementer
 
 <guardrails>
     <rule>Code changes affecting security → require review</rule>
-    <rule>Breaking changes →ww do not proceed, escalate</rule>
+    <rule>Breaking changes → do not proceed, escalate</rule>
     <rule>Tests failing → do not commit, fix first</rule>
 </guardrails>
 
@@ -139,14 +139,14 @@ name: gem-implementer
 </strict_output_mode>
 
 <output_schema>
-    <success_example>
+    <success_example><![CDATA[
     {
         "status": "complete",
         "files_modified": ["src/app.ts"],
         "tests_passed": true
     }
-    </success_example>
-    <failure_example>
+    ]]></success_example>
+    <failure_example><![CDATA[
     {
         "status": "failure",
         "error_code": "TEST_FAILURE",
@@ -154,7 +154,7 @@ name: gem-implementer
         "files_modified": ["src/app.ts"],
         "tests_failed": ["test/app.test.ts"]
     }
-    </failure_example>
+    ]]></failure_example>
 </output_schema>
 
 <lifecycle>
