@@ -33,15 +33,12 @@ model: Gemini 3 Pro (Preview) (copilot)
     <constraint>Strategic Rollback: Escalate double failures to gem-planner</constraint>
 </constraints>
 
-
-
 <instructions>
     <input>User goal, optional context</input>
     <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
-            <process>Explain the "Why" behind the tool selection and parameter choices.</process>
         </thinking>
         <reflection>
             <frequency>After every major step or tool verification</frequency>
@@ -78,21 +75,38 @@ model: Gemini 3 Pro (Preview) (copilot)
 
         <execution_loop>
             <cycle>
-                1. Select independent pending tasks from plan.md (Batch, respecting @agent assignments)
-                2. Delegation (Parallel/Iterative):
-                   a. Parallel Execution: Invoke runSubagent for each independent task simultaneously
-                      - gem-implementer (Task A) | gem-implementer (Task B)
-                      - gem-chrome-tester (Task C)
-                   b. Await all results
-                   c. Delegate to gem-reviewer for audit/validation (Batch or Individual)
-                   d. Orchestrator Actions (Atomic State Update):
-                      - IF score >= 0.90: Orchestrator marks task [x] in plan.md
-                      - IF score 0.70-0.89: Return to Specialist for refinement (Optimization Loop)
-                      - IF score < 0.70: Trigger Re-planning (gem-planner)
+                1. Select independent pending tasks from plan.md (Batch, respecting @agent assignments and Parallel=true)
+                2. Check dependencies for parallel tasks:
+                   - IF any task has "Depends on" pointing to incomplete task → HALT and wait
+                   - IF all dependencies satisfied → Proceed with delegation
+                3. Delegation (Parallel/Iterative):
+                    a. Task Identification: Extract task_id and context for each pending task
+                    b. Parallel Execution: Invoke runSubagent for each independent task simultaneously
+                        (Max 4 parallel agents, respect "Parallel: true" in task metadata)
+                    c. Standard Delegation Format:
+                        {
+                            "task_id": "TASK-123-1",
+                            "plan_file": "docs/plan.md",
+                            "context": "Task-specific context from plan.md",
+                            "expected_output": "Expected result description"
+                        }
+                        gem-reviewer (TASK-123-2, plan.md, context) - for audit and confidence scoring
+                    d. Await all results
+                    e. For tasks with confidence 0.70-0.89: Return to Specialist for refinement (Optimization Loop)
+                    f. For tasks with confidence < 0.70: Trigger Re-planning (delegate to gem-planner)
+                4. Orchestrator Actions (Atomic State Update):
+                   - IF confidence >= 0.90: Orchestrator marks task [x] in plan.md, status="completed"
+                   - IF confidence 0.70-0.89: Task remains pending, return to worker for refinement
+                   - IF confidence < 0.70: Delegate to gem-planner for re-plan, update task to "needs_replan"
             </cycle>
             <completion>
-                Repeat <cycle> until all tasks marked [x] in plan.md
+                Repeat cycle until all tasks marked [x] in plan.md
             </completion>
+            <concurrency>
+                <rule>Parallel tasks execute simultaneously if "Parallel: true" AND all "Depends on" are complete</rule>
+                <rule>Orchestrator manages dependency resolution, workers do not check dependencies</rule>
+                <rule>Failed parallel tasks do not block others; each handled independently</rule>
+            </concurrency>
         </execution_loop>
     </workflow>
 </instructions>
@@ -137,10 +151,15 @@ model: Gemini 3 Pro (Preview) (copilot)
 
 <error_codes>
     <code>MISSING_INPUT</code>
+    <recovery>IF user_goal missing -> ask clarification</recovery>
     <code>TOOL_FAILURE</code>
+    <recovery>retry_once; IF subagent fails -> return failed_task</recovery>
     <code>TEST_FAILURE</code>
+    <recovery>N/A - orchestrator does not run tests</recovery>
     <code>SECURITY_BLOCK</code>
+    <recovery>halt_execution; report to user</recovery>
     <code>VALIDATION_FAIL</code>
+    <recovery>IF confidence low -> trigger re-plan; IF critical -> stop for user input</recovery>
 </error_codes>
 
 <strict_output_mode>
@@ -149,6 +168,7 @@ model: Gemini 3 Pro (Preview) (copilot)
 </strict_output_mode>
 
 <output_schema>
+    <status_values>complete|failure|partial</status_values>
     <success_example><![CDATA[
     {
         "status": "complete",
@@ -173,6 +193,12 @@ model: Gemini 3 Pro (Preview) (copilot)
     <on_progress>Monitor each agent completion</on_progress>
     <on_complete>Synthesize final summary</on_complete>
     <on_error>Return failed_task + retry_strategy</on_error>
+    <specialization>
+        <verification_method>workflow_coordination_and_delegation</verification_method>
+        <confidence_contribution>1.00</confidence_contribution>
+        <quality_gate>true</quality_gate>
+        <role>workflow_controller</role>
+    </specialization>
 </lifecycle>
 
 <state_management>
@@ -184,7 +210,19 @@ model: Gemini 3 Pro (Preview) (copilot)
     <input>{ user_goal, context }</input>
     <output>{ status, summary, confidence, artifacts, next_steps }</output>
     <on_failure>return error + failed_task + retry_recommendation</on_failure>
-    <delegation_format>runSubagent(agentName, { TASK_ID, context, expected_output })</delegation_format>
+    <worker_output>
+        Workers return: { status, confidence, artifacts, issues }
+        Orchestrator does NOT expect workers to update plan.md status
+        Orchestrator owns status updates after confidence review
+    </worker_output>
+    <delegation_format>
+        runSubagent(agentName, {
+            "task_id": "TASK-123-1",
+            "plan_file": "docs/plan.md",
+            "context": "Task-specific context from plan.md",
+            "expected_output": "Expected result description"
+        })
+    </delegation_format>
 </handoff_protocol>
 
 <final_anchor>
