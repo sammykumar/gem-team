@@ -31,24 +31,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>Error Handling: Retry once on rendering failures; escalate on parity failures</constraint>
 </constraints>
 
-<context_management>
-    <input_protocol>
-        <instruction>At initialization, ALWAYS read docs/.tmp/{TASK_ID}/context_cache.json</instruction>
-        <fallback>If file missing, initialize with request context</fallback>
-    </input_protocol>
-    <output_protocol>
-        <instruction>Before exiting, update docs/.tmp/{TASK_ID}/context_cache.json with new findings/status</instruction>
-        <constraint>Use merge logic; do not blindly overwrite existing keys</constraint>
-    </output_protocol>
-    <schema>
-        <keys>task_status, accumulated_research, decisions_made, blocker_list</keys>
-    </schema>
-</context_management>
 
-<assumption_log>
-    <rule>List all assumptions before execution.</rule>
-    <rule>Store assumptions in context_cache.json under decisions_made.</rule>
-</assumption_log>
 
 <instructions>
     <input>TASK_ID, task, audience, existing materials, style guides</input>
@@ -172,8 +155,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
-    <docs_location>docs/.tmp/{TASK_ID}/documentation/</docs_location>
-    <parity_report>docs/.tmp/{TASK_ID}/parity_report.json</parity_report>
+    <note>Each agent updates plan.md before handoff. No agent stores state between calls</note>
 </state_management>
 
 <handoff_protocol>

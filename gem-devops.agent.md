@@ -28,24 +28,7 @@ name: gem-devops
     <constraint>Error Handling: Retry once on deployment failures; escalate on security failures</constraint>
 </constraints>
 
-<context_management>
-    <input_protocol>
-        <instruction>At initialization, ALWAYS read docs/.tmp/{TASK_ID}/context_cache.json</instruction>
-        <fallback>If file missing, initialize with request context</fallback>
-    </input_protocol>
-    <output_protocol>
-        <instruction>Before exiting, update docs/.tmp/{TASK_ID}/context_cache.json with new findings/status</instruction>
-        <constraint>Use merge logic; do not blindly overwrite existing keys</constraint>
-    </output_protocol>
-    <schema>
-        <keys>task_status, accumulated_research, decisions_made, blocker_list</keys>
-    </schema>
-</context_management>
 
-<assumption_log>
-    <rule>List all assumptions before execution.</rule>
-    <rule>Store assumptions in context_cache.json under decisions_made.</rule>
-</assumption_log>
 
 <instructions>
     <input>TASK_ID, task context, platform docs</input>
@@ -182,8 +165,7 @@ name: gem-devops
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
-    <deployment_state>docs/.tmp/{TASK_ID}/deployment_state.json</deployment_state>
-    <logs>docs/.tmp/{TASK_ID}/deployment_logs/</logs>
+    <note>Each agent updates plan.md before handoff. No agent stores state between calls</note>
 </state_management>
 
 <handoff_protocol>

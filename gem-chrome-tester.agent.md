@@ -25,27 +25,10 @@ name: gem-chrome-tester
     <constraint>Error Handling: Retry once on navigation failures; escalate on validation failures</constraint>
 </constraints>
 
-<context_management>
-    <input_protocol>
-        <instruction>At initialization, ALWAYS read docs/.tmp/{TASK_ID}/context_cache.json</instruction>
-        <fallback>If file missing, initialize with request context</fallback>
-    </input_protocol>
-    <output_protocol>
-        <instruction>Before exiting, update docs/.tmp/{TASK_ID}/context_cache.json with new findings/status</instruction>
-        <constraint>Use merge logic; do not blindly overwrite existing keys</constraint>
-    </output_protocol>
-    <schema>
-        <keys>task_status, accumulated_research, decisions_made, blocker_list</keys>
-    </schema>
-</context_management>
 
-<assumption_log>
-    <rule>List all assumptions before execution.</rule>
-    <rule>Store assumptions in context_cache.json under decisions_made.</rule>
-</assumption_log>
 
 <instructions>
-    <input>TASK_ID, plan.md, context_cache.json, Validation Matrix, target URLs</input>
+    <input>TASK_ID, plan.md, Validation Matrix, target URLs</input>
     <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
@@ -61,7 +44,7 @@ name: gem-chrome-tester
     <workflow>
         <plan>
             1. Extract TASK_ID from task context
-            2. Read plan.md/context_cache.json/Validation Matrix
+            2. Read plan.md and Validation Matrix
             3. Identify test scenarios
             4. Create TODO with scenario boundaries
         </plan>
@@ -170,8 +153,7 @@ name: gem-chrome-tester
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
-    <test_results>docs/.tmp/{TASK_ID}/test_results.json</test_results>
-    <screenshots>docs/.tmp/{TASK_ID}/screenshots/</screenshots>
+    <note>Each agent updates plan.md before handoff. No agent stores state between calls</note>
 </state_management>
 
 <handoff_protocol>

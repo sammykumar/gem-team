@@ -33,24 +33,7 @@ model: Gemini 3 Pro (Preview) (copilot)
     <constraint>Strategic Rollback: Escalate double failures to gem-planner</constraint>
 </constraints>
 
-<context_management>
-    <input_protocol>
-        <instruction>At initialization, ALWAYS read docs/.tmp/{TASK_ID}/context_cache.json</instruction>
-        <fallback>If file missing, initialize with request context</fallback>
-    </input_protocol>
-    <output_protocol>
-        <instruction>Before exiting, update docs/.tmp/{TASK_ID}/context_cache.json with new findings/status</instruction>
-        <constraint>Use merge logic; do not blindly overwrite existing keys</constraint>
-    </output_protocol>
-    <schema>
-        <keys>task_status, accumulated_research, decisions_made, blocker_list</keys>
-    </schema>
-</context_management>
 
-<assumption_log>
-    <rule>List all assumptions before execution.</rule>
-    <rule>Store assumptions in context_cache.json under decisions_made.</rule>
-</assumption_log>
 
 <instructions>
     <input>User goal, optional context</input>
@@ -74,7 +57,7 @@ model: Gemini 3 Pro (Preview) (copilot)
             4. Map intents to parallel planning with TASK_IDs
         </plan>
         <triage>Request → Normalized (delegate via runSubagent to gem-planner)</triage>
-        <planning>Planner → plan.md (WBS structure #→##→###→-[ ] @agent... + context_cache.json)</planning>
+        <planning>Planner → plan.md (WBS structure #→##→###→-[ ] @agent...)</planning>
         <approval>
             <logic>Evaluate plan.md against Criticality Criteria</logic>
             <criteria>
@@ -194,8 +177,7 @@ model: Gemini 3 Pro (Preview) (copilot)
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
-    <central_state>docs/.tmp/{TASK_ID}/orchestrator_state.json</central_state>
-    <note>All agent results aggregated here</note>
+    <note>Orchestrator tracks progress in plan.md. Agent results returned via handoff protocol.</note>
 </state_management>
 
 <handoff_protocol>

@@ -28,27 +28,10 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>Error Handling: Retry once on test failures; escalate on security failures</constraint>
 </constraints>
 
-<context_management>
-    <input_protocol>
-        <instruction>At initialization, ALWAYS read docs/.tmp/{TASK_ID}/context_cache.json</instruction>
-        <fallback>If file missing, initialize with request context</fallback>
-    </input_protocol>
-    <output_protocol>
-        <instruction>Before exiting, update docs/.tmp/{TASK_ID}/context_cache.json with new findings/status</instruction>
-        <constraint>Use merge logic; do not blindly overwrite existing keys</constraint>
-    </output_protocol>
-    <schema>
-        <keys>task_status, accumulated_research, decisions_made, blocker_list</keys>
-    </schema>
-</context_management>
 
-<assumption_log>
-    <rule>List all assumptions before execution.</rule>
-    <rule>Store assumptions in context_cache.json under decisions_made.</rule>
-</assumption_log>
 
 <instructions>
-    <input>TASK_ID, plan.md, context_cache.json, Validation Matrix, DoD</input>
+    <input>TASK_ID, plan.md, Validation Matrix, DoD</input>
     <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
@@ -64,13 +47,13 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <workflow>
         <plan>
             1. Extract TASK_ID from task context
-            2. Read plan.md/context_cache.json/Validation Matrix
+            2. Read plan.md and Validation Matrix
             3. Identify changes and test requirements
             4. Create TODO mapping verification steps
             5. Map multi-hypothesis failure scenarios
         </plan>
         <execute>
-            - Planning: Read plan.md/context_cache.json/Validation Matrix
+            - Planning: Read plan.md and Validation Matrix
             - Auditing: Simulate ≥3 failure paths
             - Verification: Execute tests, verify logic, audit security (secrets/SQLi/XSS/input), evaluate performance
         </execute>
@@ -186,9 +169,11 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
-    <audit_results>docs/.tmp/{TASK_ID}/audit.json</audit_results>
-    <note>Confidence score returned to Orchestrator for status update</note>
-    <input>{ TASK_ID, plan.md, context_cache.json, Validation Matrix }</input>
+    <note>Each agent updates plan.md before handoff. No agent stores state between calls</note>
+</state_management>
+
+<handoff_protocol>
+    <input>{ TASK_ID, plan.md, Validation Matrix }</input>
     <output>{ status, confidence, issues, aar, security_issue }</output>
     <on_failure>return error + partial_audit + security_issue flag</on_failure>
 </handoff_protocol>

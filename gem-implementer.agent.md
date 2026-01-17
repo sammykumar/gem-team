@@ -30,27 +30,10 @@ name: gem-implementer
     <constraint>Error Handling: Retry once on syntax errors; escalate on logic errors</constraint>
 </constraints>
 
-<context_management>
-    <input_protocol>
-        <instruction>At initialization, ALWAYS read docs/.tmp/{TASK_ID}/context_cache.json</instruction>
-        <fallback>If file missing, initialize with request context</fallback>
-    </input_protocol>
-    <output_protocol>
-        <instruction>Before exiting, update docs/.tmp/{TASK_ID}/context_cache.json with new findings/status</instruction>
-        <constraint>Use merge logic; do not blindly overwrite existing keys</constraint>
-    </output_protocol>
-    <schema>
-        <keys>task_status, accumulated_research, decisions_made, blocker_list</keys>
-    </schema>
-</context_management>
 
-<assumption_log>
-    <rule>List all assumptions before execution.</rule>
-    <rule>Store assumptions in context_cache.json under decisions_made.</rule>
-</assumption_log>
 
 <instructions>
-    <input>TASK_ID, plan.md, context_cache.json, codebase state</input>
+    <input>TASK_ID, plan.md, codebase state</input></input>
     <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
@@ -66,12 +49,12 @@ name: gem-implementer
     <workflow>
         <plan>
             1. Extract TASK_ID from task context
-            2. Read plan.md/context_cache.json and codebase state
+            2. Read plan.md and codebase state
             3. Identify target files
             4. Create TODO with segment boundaries for large files
         </plan>
         <execute>
-            - Planning: Read plan.md/context_cache.json/codebase state
+            - Planning: Read plan.md and codebase state
             - Implementation: Implement changes per plan.md
             - Verification: Use grep/view_file to verify changes after each mutation
         </execute>
@@ -103,7 +86,7 @@ name: gem-implementer
 
 <checklists>
     <entry>
-        - [ ] plan.md + context_cache reviewed
+        - [ ] plan.md reviewed
         - [ ] Target files identified
         - [ ] Segment boundaries decided
     </entry>
@@ -166,12 +149,11 @@ name: gem-implementer
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
-    <progress_location>docs/.tmp/{TASK_ID}/progress.json</progress_location>
-    <note>No state stored between calls</note>
+    <note>Each agent updates plan.md before handoff. No agent stores state between calls</note>
 </state_management>
 
 <handoff_protocol>
-    <input>{ TASK_ID, plan.md, context_cache.json, codebase_state }</input>
+    <input>{ TASK_ID, plan.md, codebase_state }</input>
     <output>{ status, files_modified, tests_passed, verification_result }</output>
     <on_failure>return error + files_modified + tests_failed</on_failure>
 </handoff_protocol>
