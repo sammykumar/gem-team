@@ -28,6 +28,10 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
     <constraint>Idempotency: Verify changes are idempotent</constraint>
     <constraint>Error Handling: Retry once on test failures; escalate on security failures</constraint>
+    <communication>
+        <constraint>Silent Execution: Execute tasks silently with no conversational output</constraint>
+        <constraint>Work Autonomously: No user confirmation required; do not ask for or wait on approval</constraint>
+    </communication>
 </constraints>
 
 

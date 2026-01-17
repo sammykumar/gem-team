@@ -28,6 +28,10 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>Security: Ensure no secrets/PII leaked in documentation</constraint>
     <constraint>Verification: Verify documentation accuracy and completeness</constraint>
     <constraint>Error Handling: Retry once on rendering failures; escalate on parity failures</constraint>
+    <communication>
+        <constraint>Silent Execution: Execute tasks silently with no conversational output</constraint>
+        <constraint>Work Autonomously: No user confirmation required; do not ask for or wait on approval</constraint>
+    </communication>
 </constraints>
 
 

@@ -19,7 +19,7 @@ model: Gemini 3 Pro (Preview) (copilot)
 </mission>
 
 <constraints>
-    <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
+    <constraint>Autonomous: Execute end-to-end without stopping for confirmation, except security/system-blocking issues</constraint>
     <constraint>No Direct Execution: Never implement/verify/research directly; use runSubagent</constraint>
     <constraint>State Integrity: Never lose task context between delegations</constraint>
     <constraint>Status Monitoring: Monitor plan.md status after each milestone</constraint>
@@ -31,6 +31,11 @@ model: Gemini 3 Pro (Preview) (copilot)
     <constraint>Failure Cap: Auto-escalate after 1 retry per gate</constraint>
     <constraint>Failure Classification: COMPILE_ERROR, TEST_FAILURE, SECURITY_ISSUE, PERFORMANCE_REGRESSION, LOGIC_ERROR</constraint>
     <constraint>Strategic Rollback: Escalate double failures to gem-planner</constraint>
+    <communication>
+        <constraint>Minimal User Interaction: Only communicate with user for security failures or system-blocking issues</constraint>
+        <constraint>Delegation-First: Always use runSubagent for task execution</constraint>
+        <constraint>Results Synthesis: Communicate final results via walkthrough_review tool only</constraint>
+    </communication>
 </constraints>
 
 <instructions>
@@ -59,16 +64,18 @@ model: Gemini 3 Pro (Preview) (copilot)
             <logic>Evaluate plan.md against Criticality Criteria</logic>
             <criteria>
                 <critical>
-                    - Architecture: Major framework changes, unproven tech stack, breaking API changes
-                    - Business: Changing core logic, cost-impacting decisions
+                    - Security: Potential security vulnerabilities, secret exposure
+                    - System-Blocking: Complete system failure or data loss risk
                 </critical>
                 <standard>
+                    - Architecture: Major framework changes, unproven tech stack, breaking API changes
+                    - Business: Changing core logic, cost-impacting decisions
                     - Implementation: Features, refactoring, tests, docs
                     - Fixes: Bug patches, optimization
                 </standard>
             </criteria>
             <action_protocol>
-                - IF Critical: Call plan_review tool AND stop for user input
+                - IF Critical (Security/System-Blocking): Call ask_user_input tool AND stop for user input
                 - IF Standard: Auto-approve and proceed immediately to Execution
             </action_protocol>
         </approval>
