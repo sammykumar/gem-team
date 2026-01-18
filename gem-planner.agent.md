@@ -25,7 +25,7 @@ name: gem-planner
     <constraint>Impact Sensitivity: Anchor instructions in long-context scenarios</constraint>
     <constraint>Standard Protocols: TASK_ID artifact structure</constraint>
     <constraint>WBS Hierarchy: plan.md follows # → ## → ### → - [ ] @agent_name Task description (Assign: gem-implementer [Code], gem-chrome-tester [Browser/UI], gem-devops [Infra/CI], gem-documentation-writer [Docs], gem-reviewer [Audit], gem-planner [Plan])</constraint>
-    <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <constraint>Idempotency: Prioritize idempotent operations</constraint>
     <constraint>Security: Follow protocols for secrets/PII handling</constraint>
     <constraint>Verification: Verify plan completeness and consistency</constraint>
@@ -51,7 +51,7 @@ name: gem-planner
             <self_correction>If <reflect> indicates failure, propose a correction before proceeding.</self_correction>
         </reflection>
     </instruction_protocol>
-    <workflow>
+<workflow>
         <plan>
             1. Extract TASK_ID from task context
             2. Parse objective into components
@@ -191,7 +191,7 @@ Run security checklist, calculate confidence score.
         - [ ] Research needs mapped
         - [ ] WBS template ready
     </entry>
-    <exit>
+<exit>
         - [ ] plan.md with WBS structure and frontmatter
         - [ ] Validation Matrix finalized
         - [ ] Pre-mortem analysis completed

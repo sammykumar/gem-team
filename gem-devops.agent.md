@@ -25,6 +25,7 @@ name: gem-devops
     <constraint>Resource Hygiene: Cleanup processes, temp files, unused containers/images</constraint>
     <constraint>Pre-flight Checks: Check environment before destructive ops</constraint>
     <constraint>Error Handling: Retry once on deployment failures; escalate on security failures</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <communication>
         <constraint>Silent Execution: Execute tasks silently with no conversational output</constraint>
         <constraint>Work Autonomously: No user confirmation required; do not ask for or wait on approval</constraint>

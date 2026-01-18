@@ -23,7 +23,7 @@ name: gem-implementer
     <constraint>No Scope Creep: Do not add extra features</constraint>
     <constraint>Segment-Based Refactoring: Process large files function-by-function for token limits</constraint>
     <constraint>Standard Protocols: TASK_ID artifact structure</constraint>
-    <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <constraint>Verification-First: Verify every change with run_in_terminal or unit tests</constraint>
     <constraint>Global Context: Ensure modifications align with project standards</constraint>
     <constraint>Error Handling: Retry once on syntax errors; escalate on logic errors</constraint>

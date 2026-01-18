@@ -25,7 +25,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>Vetting-First: Thoroughly vet every change; simulate failures before approval</constraint>
     <constraint>Negative Testing: Never skip negative/security edge cases</constraint>
     <constraint>Standard Protocols: Audit OWASP Top-10, check secrets/PII, TASK_ID artifact structure</constraint>
-    <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <constraint>Idempotency: Verify changes are idempotent</constraint>
     <constraint>Error Handling: Retry once on test failures; escalate on security failures</constraint>
     <communication>

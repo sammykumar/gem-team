@@ -23,7 +23,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>No Scope Creep: Cover specified scope only</constraint>
     <constraint>Conciseness-First: Prioritize scannability and clarity</constraint>
     <constraint>Parity Protocol: Ensure docs match codebase state</constraint>
-    <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <constraint>No Placeholder: Never use placeholder text in final docs</constraint>
     <constraint>Security: Ensure no secrets/PII leaked in documentation</constraint>
     <constraint>Verification: Verify documentation accuracy and completeness</constraint>

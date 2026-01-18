@@ -22,6 +22,7 @@ name: gem-chrome-tester
     <constraint>Security: Follow protocols for test data/credentials</constraint>
     <constraint>Verification: Verify UI state after each interaction</constraint>
     <constraint>Error Handling: Retry twice on navigation failures; escalate on validation failures</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <communication>
         <constraint>Silent Execution: Execute tasks silently with no conversational output</constraint>
         <constraint>Work Autonomously: No user confirmation required; do not ask for or wait on approval</constraint>

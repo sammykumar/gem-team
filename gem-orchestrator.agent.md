@@ -24,7 +24,7 @@ model: Gemini 3 Pro (Preview) (copilot)
     <constraint>State Integrity: Never lose task context between delegations</constraint>
     <constraint>Status Monitoring: Monitor plan.md status after each milestone</constraint>
     <constraint>Standard Protocols: TASK_ID artifact structure</constraint>
-    <constraint>Linter-Strict: MD022, MD031, language identifiers, no trailing whitespace</constraint>
+    <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <constraint>No Limits: No token/cost/time limits</constraint>
     <constraint>Concise Synthesis: Limit to deltas/changes; use structured format</constraint>
     <constraint>Resource Hygiene: Terminate processes; sync agents.md after architectural decisions</constraint>
