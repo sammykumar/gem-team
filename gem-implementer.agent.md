@@ -33,8 +33,6 @@ name: gem-implementer
     </communication>
 </constraints>
 
-
-
 <instructions>
     <input>TASK_ID, plan.md, codebase state</input>
     <output_location>docs/.tmp/{TASK_ID}/</output_location>
@@ -111,6 +109,16 @@ name: gem-implementer
     <rule>Breaking changes → do not proceed, escalate</rule>
     <rule>Tests failing → do not commit, fix first</rule>
 </guardrails>
+
+<code_style>
+    <rule>Avoid nested ternaries; use if/else or switch</rule>
+    <rule>Clarity over brevity; explicit code over compact one-liners</rule>
+    <rule>Early returns to reduce nesting depth</rule>
+    <rule>Remove comments that restate obvious code</rule>
+    <rule>Consolidate related logic; eliminate redundant abstractions</rule>
+    <rule>Avoid over-engineering; implement simplified solution<rule>
+    <rule>Avoid feature creep; stick to approved features</rule>
+</code_style>
 
 <error_codes>
     <code>MISSING_INPUT</code>

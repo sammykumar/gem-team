@@ -34,8 +34,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     </communication>
 </constraints>
 
-
-
 <instructions>
     <input>TASK_ID, plan.md, Validation Matrix, DoD</input>
     <output_location>docs/.tmp/{TASK_ID}/</output_location>
@@ -146,6 +144,16 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <rule>Secrets/PII detected → abort, report to Orchestrator</rule>
     <rule>Confidence < 0.90 → do not approve, escalate with rationale</rule>
 </guardrails>
+
+<code_quality_checks>
+    <check>Flag nested ternaries; recommend if/else or switch</check>
+    <check>Flag overly compact code; recommend explicit, readable alternatives</check>
+    <check>Flag deep nesting; recommend early returns/guard clauses</check>
+    <check>Flag redundant abstractions; recommend consolidation</check>
+    <check>Flag comments restating obvious code; recommend removal</check>
+    <check>Flag over-engineering; recommend simplified solution</check>
+    <check>Flag feature creep; recommend sticking to approved features</check>
+</code_quality_checks>
 
 <error_codes>
     <code>MISSING_INPUT</code>
