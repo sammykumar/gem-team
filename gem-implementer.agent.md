@@ -35,7 +35,6 @@ name: gem-implementer
 
 <instructions>
     <input>TASK_ID, plan.md, codebase state</input>
-    <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -100,9 +99,6 @@ name: gem-implementer
     </exit>
 </checklists>
 
-<output_format>
-    <format>{TASK_ID} | {STATUS}</format>
-</output_format>
 
 <guardrails>
     <rule>Code changes affecting security → require review</rule>
@@ -133,30 +129,6 @@ name: gem-implementer
     <recovery>IF files not modified -> return error; IF tests failing -> return failing tests</recovery>
 </error_codes>
 
-<strict_output_mode>
-    <rule>Final response must be valid JSON and nothing else.</rule>
-    <rule>Do not wrap JSON in Markdown code fences.</rule>
-</strict_output_mode>
-
-<output_schema>
-    <status_values>complete|failure|partial</status_values>
-    <success_example><![CDATA[
-    {
-        "status": "complete",
-        "files_modified": ["src/app.ts"],
-        "tests_passed": true
-    }
-    ]]></success_example>
-    <failure_example><![CDATA[
-    {
-        "status": "failure",
-        "error_code": "TEST_FAILURE",
-        "error": "Compilation failed",
-        "files_modified": ["src/app.ts"],
-        "tests_failed": ["test/app.test.ts"]
-    }
-    ]]></failure_example>
-</output_schema>
 
 <lifecycle>
     <on_start>Read plan.md, locate task by task_id</on_start>

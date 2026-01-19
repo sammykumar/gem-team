@@ -36,7 +36,6 @@ name: gem-devops
 
 <instructions>
     <input>TASK_ID, plan.md, platform docs</input>
-    <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -118,9 +117,6 @@ name: gem-devops
     <source>CI/CD: Platform docs (GitHub Actions, etc.)</source>
 </specialized_sources>
 
-<output_format>
-    <format>{TASK_ID} | {STATUS}</format>
-</output_format>
 
 <guardrails>
     <rule>Secrets in plaintext → abort, report security issue</rule>
@@ -141,31 +137,6 @@ name: gem-devops
     <recovery>IF security leak detected -> fail; IF health check fail -> return partial</recovery>
 </error_codes>
 
-<strict_output_mode>
-    <rule>Final response must be valid JSON and nothing else.</rule>
-    <rule>Do not wrap JSON in Markdown code fences.</rule>
-</strict_output_mode>
-
-<output_schema>
-    <status_values>complete|failure|partial</status_values>
-    <success_example><![CDATA[
-    {
-        "status": "complete",
-        "operations": "docker build...",
-        "health_check": true,
-        "logs": "Build successful"
-    }
-    ]]></success_example>
-    <failure_example><![CDATA[
-    {
-        "status": "failure",
-        "error_code": "TOOL_FAILURE",
-        "error": "Pod failed to start",
-        "operations_completed": "docker build",
-        "health_check": false
-    }
-    ]]></failure_example>
-</output_schema>
 
 <lifecycle>
     <on_start>Read plan.md, locate task by task_id</on_start>

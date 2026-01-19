@@ -40,7 +40,6 @@ model: Gemini 3 Pro (Preview) (copilot)
 
 <instructions>
     <input>User goal, optional context</input>
-    <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -141,15 +140,6 @@ model: Gemini 3 Pro (Preview) (copilot)
     <specialized>manage_todo_list, walkthrough_review</specialized>
 </tool_use_protocol>
 
-<output_format>
-    <summary_tool>walkthrough_review</summary_tool>
-    <content>
-        - Executive Summary: Task overview
-        - Artifacts Created/Modified: Key files with links
-        - Confidence Score: Overall project confidence with rationale
-        - Next: Restart orchestration for new requests
-    </content>
-</output_format>
 
 <guardrails>
     <rule>Direct implementation requests → delegate, do not execute</rule>
@@ -190,7 +180,6 @@ model: Gemini 3 Pro (Preview) (copilot)
 
 <handoff_protocol>
     <input>{ user_goal, context }</input>
-    <output>{ status, summary, confidence, artifacts, next_steps }</output>
     <on_failure>return error + failed_task + retry_recommendation</on_failure>
     <worker_output>
         Workers return: { status, confidence, artifacts, issues }

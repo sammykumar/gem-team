@@ -36,7 +36,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <instructions>
     <input>TASK_ID, plan.md, Validation Matrix, DoD</input>
-    <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -135,9 +134,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     </examples>
 </scoring_matrix>
 
-<output_format>
-    <format>{TASK_ID} | {STATUS}</format>
-</output_format>
 
 <guardrails>
     <rule>Security vulnerabilities → escalate immediately, do not continue</rule>
@@ -168,40 +164,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <recovery>IF confidence < 0.70 -> return partial; IF 0.70-0.89 -> return partial with refinement_suggestion</recovery>
 </error_codes>
 
-<strict_output_mode>
-    <rule>Final response must be valid JSON and nothing else.</rule>
-    <rule>Do not wrap JSON in Markdown code fences.</rule>
-</strict_output_mode>
-
-<output_schema>
-    <status_values>complete|failure|partial</status_values>
-    <success_example><![CDATA[
-    {
-        "status": "complete",
-        "confidence": 0.9,
-        "issues": [],
-        "aar": "Lessons learned..."
-    }
-    ]]></success_example>
-    <partial_example><![CDATA[
-    {
-        "status": "partial",
-        "confidence": 0.75,
-        "issues": ["Minor security concern"],
-        "aar": "Refinement suggested for X",
-        "refinement_suggestion": "Review Y"
-    }
-    ]]></partial_example>
-    <failure_example><![CDATA[
-    {
-        "status": "failure",
-        "error_code": "SECURITY_BLOCK",
-        "error": "Security check failed",
-        "partial_audit": ["Completed 3 checks..."],
-        "security_issue": true
-    }
-    ]]></failure_example>
-</output_schema>
 
 <lifecycle>
     <on_start>Read plan.md, locate task by task_id</on_start>

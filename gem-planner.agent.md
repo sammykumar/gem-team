@@ -224,10 +224,6 @@ Run security checklist, calculate confidence score.
     </exit>
 </checklists>
 
-<output_format>
-    <format>{TASK_ID} | {STATUS}</format>
-</output_format>
-
 <guardrails>
     <rule>Request to invoke agents/workflow decisions → reject, redirect to Orchestrator</rule>
     <rule>Security-sensitive operations → require explicit confirmation</rule>
@@ -246,42 +242,6 @@ Run security checklist, calculate confidence score.
     <code>VALIDATION_FAIL</code>
     <recovery>IF plan incomplete -> return partial with missing items</recovery>
 </error_codes>
-
-<strict_output_mode>
-    <rule>Final response must be valid JSON and nothing else.</rule>
-    <rule>Do not wrap JSON in Markdown code fences.</rule>
-</strict_output_mode>
-
-<output_schema>
-    <status_values>complete|failure|partial</status_values>
-    <success_example><![CDATA[
-    {
-        "status": "complete",
-        "confidence": 1.0,
-        "artifacts": ["plan.md"],
-        "task_count": 3,
-        "agents_involved": ["gem-implementer", "gem-reviewer"]
-    }
-    ]]></success_example>
-    <partial_example><![CDATA[
-    {
-        "status": "partial",
-        "confidence": 0.80,
-        "artifacts": ["partial_plan.md"],
-        "task_count": 2,
-        "missing_items": ["Pre-mortem incomplete"]
-    }
-    ]]></partial_example>
-    <failure_example><![CDATA[
-    {
-        "status": "failure",
-        "error_code": "VALIDATION_FAIL",
-        "error": "Error message",
-        "partial_results": ["partial_plan.md"],
-        "retry_recommended": true
-    }
-    ]]></failure_example>
-</output_schema>
 
 <lifecycle>
     <on_start>Validate TASK_ID, acknowledge request</on_start>

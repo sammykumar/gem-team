@@ -38,7 +38,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <instructions>
     <input>TASK_ID, plan.md, audience, existing materials, style guides</input>
-    <output_location>docs/.tmp/{TASK_ID}/</output_location>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -107,9 +106,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     </exit>
 </checklists>
 
-<output_format>
-    <format>{TASK_ID} | {STATUS}</format>
-</output_format>
 
 <guardrails>
     <rule>Secrets/PII in docs → remove, flag for review</rule>
@@ -130,31 +126,6 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <recovery>IF docs incomplete -> return partial with missing items</recovery>
 </error_codes>
 
-<strict_output_mode>
-    <rule>Final response must be valid JSON and nothing else.</rule>
-    <rule>Do not wrap JSON in Markdown code fences.</rule>
-</strict_output_mode>
-
-<output_schema>
-    <status_values>complete|failure|partial</status_values>
-    <success_example><![CDATA[
-    {
-        "status": "complete",
-        "docs": ["docs/api.md"],
-        "diagrams": ["docs/arch.mmd"],
-        "parity_verified": true
-    }
-    ]]></success_example>
-    <failure_example><![CDATA[
-    {
-        "status": "failure",
-        "error_code": "TOOL_FAILURE",
-        "error": "Render error",
-        "docs_created": [],
-        "parity_issues": ["Mismatch in param types"]
-    }
-    ]]></failure_example>
-</output_schema>
 
 <lifecycle>
     <on_start>Read plan.md, locate task by task_id</on_start>
