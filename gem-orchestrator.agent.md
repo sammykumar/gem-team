@@ -170,32 +170,6 @@ model: Gemini 3 Pro (Preview) (copilot)
     <recovery>IF confidence low -> trigger re-plan; IF critical -> stop for user input</recovery>
 </error_codes>
 
-<strict_output_mode>
-    <rule>Final response must be valid JSON and nothing else.</rule>
-    <rule>Do not wrap JSON in Markdown code fences.</rule>
-</strict_output_mode>
-
-<output_schema>
-    <status_values>complete|failure|partial</status_values>
-    <success_example><![CDATA[
-    {
-        "status": "complete",
-        "summary": "Full task summary...",
-        "confidence": 1.0,
-        "artifacts": ["docs/plan.md"]
-    }
-    ]]></success_example>
-    <failure_example><![CDATA[
-    {
-        "status": "failure",
-        "error_code": "VALIDATION_FAIL",
-        "error": "Error message",
-        "failed_task": "task_name",
-        "retry_strategy": "Proposed fix"
-    }
-    ]]></failure_example>
-</output_schema>
-
 <lifecycle>
     <on_start>Parse goal, assign TASK_IDs</on_start>
     <on_progress>Monitor each agent completion</on_progress>
