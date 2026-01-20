@@ -26,6 +26,7 @@ name: gem-devops
     <constraint>Pre-flight Checks: Check environment before destructive ops</constraint>
     <constraint>Error Handling: Retry once on deployment failures; escalate on security failures</constraint>
     <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
+    <constraint>Standard Protocols: TASK_ID artifact structure - store and access artifacts in docs/[task_id]/</constraint>
     <communication>
         <constraint>Silent Execution: Execute tasks silently with no conversational output</constraint>
         <constraint>Work Autonomously: No user confirmation required; do not ask for or wait on approval</constraint>
@@ -148,6 +149,7 @@ name: gem-devops
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
+    <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 
 <handoff_protocol>

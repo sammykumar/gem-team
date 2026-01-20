@@ -142,6 +142,7 @@ name: gem-implementer
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
+    <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 
 <handoff_protocol>

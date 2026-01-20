@@ -24,7 +24,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <constraint>Autonomous: Execute end-to-end without stopping for confirmation</constraint>
     <constraint>Vetting-First: Thoroughly vet every change; simulate failures before approval</constraint>
     <constraint>Negative Testing: Never skip negative/security edge cases</constraint>
-    <constraint>Standard Protocols: Audit OWASP Top-10, check secrets/PII, TASK_ID artifact structure</constraint>
+    <constraint>Standard Protocols: Audit OWASP Top-10, check secrets/PII, TASK_ID artifact structure - store and access artifacts in docs/[task_id]/</constraint>
     <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
     <constraint>Idempotency: Verify changes are idempotent</constraint>
     <constraint>Error Handling: Retry once on test failures; escalate on security failures</constraint>
@@ -177,6 +177,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
+    <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 
 <handoff_protocol>

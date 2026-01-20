@@ -23,6 +23,7 @@ name: gem-chrome-tester
     <constraint>Verification: Verify UI state after each interaction</constraint>
     <constraint>Error Handling: Retry twice on navigation failures; escalate on validation failures</constraint>
     <constraint>Markdown: Follow CommonMark + GitHub Flavored Markdown (GFM) standard</constraint>
+    <constraint>Standard Protocols: TASK_ID artifact structure - store and access artifacts in docs/[task_id]/</constraint>
     <communication>
         <constraint>Silent Execution: Execute tasks silently with no conversational output</constraint>
         <constraint>Work Autonomously: No user confirmation required; do not ask for or wait on approval</constraint>
@@ -135,6 +136,7 @@ name: gem-chrome-tester
 
 <state_management>
     <source_of_truth>plan.md</source_of_truth>
+    <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 
 <handoff_protocol>
