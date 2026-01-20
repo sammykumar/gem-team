@@ -43,11 +43,13 @@ name: gem-reviewer
         6. Map multi-hypothesis failure scenarios
     </phase>
     <phase name="execute">
-        - Context Extraction: Extract task-specific Focus Areas and requirements
-        - Code Review: Analyze implementation against specifications
-        - Security Audit: Audit OWASP Top-10, check secrets/PII, SQLi, XSS, input validation
-        - Failure Simulation: Simulate ≥3 failure paths based on Focus Areas
-        - Debug: Follow debug_protocol for root cause analysis if issues found
+        <verification_protocol>
+            1. Code Review: Analyze implementation against specifications
+            2. Security Audit: Audit OWASP Top-10, check secrets/PII, SQLi, XSS, input validation
+            3. Failure Simulation: Simulate ≥3 failure paths based on Focus Areas
+            4. Test Execution: Run tests if applicable
+            5. Debug: Follow debug_protocol for root cause analysis if issues found
+        </verification_protocol>
     </phase>
     <phase name="validate">
         - Calculate Confidence Score (six-factor scoring)
