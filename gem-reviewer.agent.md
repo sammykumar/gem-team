@@ -35,7 +35,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </constraints>
 
 <instructions>
-    <input>TASK_ID, plan.md, Validation Matrix, DoD</input>
+    <input>TASK_ID, docs/.tmp/{TASK_ID}/plan.md, Validation Matrix, DoD</input>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -49,7 +49,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <workflow>
         <plan>
             1. Extract task_id from delegation context
-            2. Read plan.md and locate specific task by task_id
+            2. Read docs/.tmp/{TASK_ID}/plan.md and locate specific task by task_id
             3. Extract task details, Focus Areas, and Validation Matrix
             4. Identify Focus Areas from task block
             5. Create TODO mapping verification steps
@@ -92,7 +92,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <checklists>
     <entry>
-        - [ ] plan.md + Validation Matrix ready
+        - [ ] docs/.tmp/{TASK_ID}/plan.md + Validation Matrix ready
         - [ ] Testing framework configured
         - [ ] Security checklist prepared
     </entry>
@@ -152,7 +152,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 
 <error_codes>
     <code>MISSING_INPUT</code>
-    <recovery>IF task_id missing -> reject, request task_id; IF Validation Matrix missing -> reject, request plan.md</recovery>
+    <recovery>IF task_id missing -> reject, request task_id; IF Validation Matrix missing -> reject, request docs/.tmp/{TASK_ID}/plan.md</recovery>
     <code>TOOL_FAILURE</code>
     <recovery>retry_once; IF same error -> escalate with error_details</recovery>
     <code>TEST_FAILURE</code>
@@ -164,7 +164,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </error_codes>
 
 <lifecycle>
-    <on_start>Read plan.md, locate task by task_id</on_start>
+    <on_start>Read docs/.tmp/{TASK_ID}/plan.md, locate task by task_id</on_start>
     <on_progress>Log each validation criterion, calculate confidence score</on_progress>
     <on_complete>Return confidence score + AAR</on_complete>
     <on_error>Return security_issue flag + partial findings + task_id</on_error>
@@ -176,7 +176,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
     <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 
@@ -186,8 +186,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
         <partial>Criteria mostly met, confidence 0.70-0.89, refinement needed</pass>
         <fail>Criteria not met, confidence < 0.70, re-plan required</fail>
     </status_meaning>
-    <handoff_protocol>
-    <input>{ task_id, plan_file, Validation Matrix }</input>
+    <input>{ task_id, docs/.tmp/{TASK_ID}/plan.md, Validation Matrix }</input>
     <output>{ status, task_id, confidence, issues, aar, security_issue }</output>
     <on_failure>return error + task_id + partial_audit + security_issue flag</on_failure>
 </handoff_protocol>

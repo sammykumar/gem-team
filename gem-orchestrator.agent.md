@@ -78,6 +78,11 @@ model: Gemini 3 Pro (Preview) (copilot)
                 - IF Standard: Auto-approve and proceed immediately to Execution
             </action_protocol>
         </approval>
+        <execute>
+            <step>Enter execution_loop to process all pending tasks</step>
+            <step>Iterate through cycle until all tasks marked [x] in plan.md</step>
+            <step>Upon completion, synthesize final summary using walkthrough_review</step>
+        </execute>
         <execution_loop>
             <cycle>
                 1. Select independent pending tasks from plan.md (Batch, respecting @agent assignments and Parallel=true)
@@ -88,14 +93,14 @@ model: Gemini 3 Pro (Preview) (copilot)
                     a. Task Identification: Extract task_id and context for each pending task
                     b. Parallel Execution: Invoke runSubagent for each independent task simultaneously
                         (Max 4 parallel agents, respect "Parallel: true" in task metadata)
-                    c. Standard Delegation Format:
-                        {
-                            "task_id": "TASK-123-1",
-                            "plan_file": "docs/plan.md",
-                            "context": "Task-specific context from plan.md",
-                            "expected_output": "Expected result description"
-                        }
-                        gem-reviewer (TASK-123-2, plan.md, context) - for audit and confidence scoring
+                     c. Standard Delegation Format:
+                         {
+                             "task_id": "TASK-123-1",
+                             "plan_file": "docs/.tmp/{TASK_ID}/plan.md",
+                             "context": "Task-specific context from plan.md",
+                             "expected_output": "Expected result description"
+                         }
+                         gem-reviewer (TASK-123-2, docs/.tmp/{TASK_ID}/plan.md, context) - for audit and confidence scoring
                     d. Await all results
                     e. For tasks with confidence 0.70-0.89: Return to Specialist for refinement (Optimization Loop)
                     f. For tasks with confidence < 0.70: Trigger Re-planning (delegate to gem-planner)
@@ -103,6 +108,7 @@ model: Gemini 3 Pro (Preview) (copilot)
                    - IF confidence >= 0.90: Orchestrator marks task [x] in plan.md, status="completed"
                    - IF confidence 0.70-0.89: Task remains pending, return to worker for refinement
                    - IF confidence < 0.70: Delegate to gem-planner for re-plan, update task to "needs_replan"
+                5. Completion Check: IF any tasks remain pending → REPEAT cycle; ELSE → Proceed to synthesis
             </cycle>
             <completion>
                 Repeat cycle until all tasks marked [x] in plan.md
@@ -161,7 +167,7 @@ model: Gemini 3 Pro (Preview) (copilot)
 <lifecycle>
     <on_start>Parse goal, assign TASK_IDs</on_start>
     <on_progress>Monitor each agent completion</on_progress>
-    <on_complete>Synthesize final summary</on_complete>
+    <on_complete>Read docs/.tmp/{TASK_ID}/plan.md, synthesize final summary using walkthrough_review tool, report to user</on_complete>
     <on_error>Return failed_task + retry_strategy</on_error>
     <specialization>
         <verification_method>workflow_coordination_and_delegation</verification_method>
@@ -172,7 +178,7 @@ model: Gemini 3 Pro (Preview) (copilot)
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
     <note>Orchestrator tracks progress in plan.md. Agent results returned via handoff protocol.</note>
 </state_management>
 
@@ -187,7 +193,7 @@ model: Gemini 3 Pro (Preview) (copilot)
     <delegation_format>
         runSubagent(agentName, {
             "task_id": "TASK-123-1",
-            "plan_file": "docs/plan.md",
+            "plan_file": "docs/.tmp/{TASK_ID}/plan.md",
             "context": "Task-specific context from plan.md",
             "expected_output": "Expected result description"
         })

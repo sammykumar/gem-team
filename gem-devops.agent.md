@@ -34,7 +34,7 @@ name: gem-devops
 </constraints>
 
 <instructions>
-    <input>TASK_ID, plan.md, platform docs</input>
+    <input>TASK_ID, docs/.tmp/{TASK_ID}/plan.md, platform docs</input>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -48,7 +48,7 @@ name: gem-devops
     <workflow>
         <plan>
             1. Extract task_id from delegation context
-            2. Read plan.md and locate specific task by task_id
+            2. Read docs/.tmp/{TASK_ID}/plan.md and locate specific task by task_id
             3. Extract task details, deployment requirements, and platform docs
             4. Research platform docs for deployment requirements
             5. Create TODO with deployment steps
@@ -136,7 +136,7 @@ name: gem-devops
 </error_codes>
 
 <lifecycle>
-    <on_start>Read plan.md, locate task by task_id</on_start>
+    <on_start>Read docs/.tmp/{TASK_ID}/plan.md, locate task by task_id</on_start>
     <on_progress>Log each operation</on_progress>
     <on_complete>Health check verification complete</on_complete>
     <on_error>Return error + operations_completed + health_state + task_id</on_error>
@@ -148,7 +148,7 @@ name: gem-devops
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
     <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 

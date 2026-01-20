@@ -34,7 +34,7 @@ name: gem-implementer
 </constraints>
 
 <instructions>
-    <input>TASK_ID, plan.md, codebase state</input>
+    <input>TASK_ID, docs/.tmp/{TASK_ID}/plan.md, codebase state</input>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -48,7 +48,7 @@ name: gem-implementer
     <workflow>
         <plan>
             1. Extract task_id from delegation context
-            2. Read plan.md and locate specific task by task_id
+            2. Read docs/.tmp/{TASK_ID}/plan.md and locate specific task by task_id
             3. Extract task details, context, and requirements
             4. Identify target files from "Files to Modify"
             5. Create TODO with segment boundaries for large files
@@ -86,7 +86,7 @@ name: gem-implementer
 
 <checklists>
     <entry>
-        - [ ] plan.md parsed, @gem-implementer tasks extracted
+        - [ ] docs/.tmp/{TASK_ID}/plan.md parsed, @gem-implementer tasks extracted
         - [ ] Dependency graph built
         - [ ] Target files identified from "Files to Modify"
         - [ ] Segment boundaries decided
@@ -117,7 +117,7 @@ name: gem-implementer
 
 <error_codes>
     <code>MISSING_INPUT</code>
-    <recovery>IF task_id missing -> reject; IF plan.md missing -> reject</recovery>
+    <recovery>IF task_id missing -> reject; IF docs/.tmp/{TASK_ID}/plan.md missing -> reject</recovery>
     <code>TOOL_FAILURE</code>
     <recovery>retry_once; IF same error -> include file paths in error</recovery>
     <code>TEST_FAILURE</code>
@@ -129,7 +129,7 @@ name: gem-implementer
 </error_codes>
 
 <lifecycle>
-    <on_start>Read plan.md, locate task by task_id</on_start>
+    <on_start>Read docs/.tmp/{TASK_ID}/plan.md, locate task by task_id</on_start>
     <on_progress>Verify each change after implementation</on_progress>
     <on_complete>Confirm all tests pass</on_complete>
     <on_error>Return failing tests + error + files modified + task_id</on_error>
@@ -141,7 +141,7 @@ name: gem-implementer
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
     <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 

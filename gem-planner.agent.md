@@ -87,6 +87,7 @@ name: gem-planner
     </structure>
     <task_block>
         <header_format>### TASK-ID</header_format>
+        <file_location>docs/.tmp/{TASK_ID}/plan.md</file_location>
         <metadata>
             <field name="WBS-Code">WBS code (e.g., 1.0, 1.1, 1.1.1) for hierarchical tracking</field>
             <field name="Agent">gem-implementer | gem-chrome-tester | gem-devops | gem-documentation-writer | gem-reviewer | gem-planner</field>
@@ -111,6 +112,7 @@ name: gem-planner
         </optional_fields>
         <separator>Task blocks separated by "---"</separator>
     </task_block>
+    <file_location>docs/.tmp/{TASK_ID}/plan.md</file_location>
     <example><![CDATA[
 ---
 task_id: TASK-123
@@ -254,7 +256,7 @@ Run security checklist, calculate confidence score.
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
 </state_management>
 
 <handoff_protocol>

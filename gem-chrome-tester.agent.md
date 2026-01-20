@@ -31,7 +31,7 @@ name: gem-chrome-tester
 </constraints>
 
 <instructions>
-    <input>TASK_ID, plan.md, Validation Matrix, target URLs</input>
+    <input>TASK_ID, docs/.tmp/{TASK_ID}/plan.md, Validation Matrix, target URLs</input>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -45,7 +45,7 @@ name: gem-chrome-tester
     <workflow>
         <plan>
             1. Extract task_id from delegation context
-            2. Read plan.md and locate specific task by task_id
+            2. Read docs/.tmp/{TASK_ID}/plan.md and locate specific task by task_id
             3. Extract task details, test scenarios, and target URLs
             4. Identify test scenarios from Acceptance Criteria
             5. Extract target URLs from task description
@@ -123,7 +123,7 @@ name: gem-chrome-tester
 </error_codes>
 
 <lifecycle>
-    <on_start>Read plan.md, locate task by task_id</on_start>
+    <on_start>Read docs/.tmp/{TASK_ID}/plan.md, locate task by task_id</on_start>
     <on_progress>Execute each test scenario</on_progress>
     <on_complete>Return test results</on_complete>
     <on_error>Return error + partial_results + browser_state + task_id</on_error>
@@ -135,7 +135,7 @@ name: gem-chrome-tester
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
     <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 

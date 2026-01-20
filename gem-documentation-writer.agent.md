@@ -36,7 +36,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </constraints>
 
 <instructions>
-    <input>TASK_ID, plan.md, audience, existing materials, style guides</input>
+    <input>TASK_ID, docs/.tmp/{TASK_ID}/plan.md, audience, existing materials, style guides</input>
     <instruction_protocol>
         <thinking>
             <entry>Before taking action, output a <thought> block analyzing the request, context, and potential risks.</entry>
@@ -50,7 +50,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
     <workflow>
         <plan>
             1. Extract task_id from delegation context
-            2. Read plan.md and locate specific task by task_id
+            2. Read docs/.tmp/{TASK_ID}/plan.md and locate specific task by task_id
             3. Extract task details, audience, scope, and requirements
             4. Analyze audience and scope from Description
             5. Review existing materials if referenced
@@ -125,7 +125,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </error_codes>
 
 <lifecycle>
-    <on_start>Read plan.md, locate task by task_id</on_start>
+    <on_start>Read docs/.tmp/{TASK_ID}/plan.md, locate task by task_id</on_start>
     <on_progress>Draft each section, verify parity</on_progress>
     <on_complete>Final review + parity check complete</on_complete>
     <on_error>Return error + docs_created + parity_issues + task_id</on_error>
@@ -137,7 +137,7 @@ model: Deepseek v3.1 Terminus (oaicopilot)
 </lifecycle>
 
 <state_management>
-    <source_of_truth>plan.md</source_of_truth>
+    <source_of_truth>docs/.tmp/{TASK_ID}/plan.md</source_of_truth>
     <artifacts>Store and access all artifacts in docs/[task_id]/</artifacts>
 </state_management>
 
