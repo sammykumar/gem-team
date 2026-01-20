@@ -36,8 +36,7 @@ name: gem-devops
         2. Read plan.md and locate specific task by task_id
         3. Extract task details, deployment requirements, and platform docs
         4. Research platform docs for deployment requirements
-        5. Create TODO with deployment steps
-        6. Perform pre-flight checks
+        5. Perform pre-flight checks
     </phase>
     <phase name="execute">
         - Context Extraction: Extract task-specific deployment requirements
@@ -87,7 +86,7 @@ name: gem-devops
         <ci_cd>github-actions workflows, gitlab-ci pipelines</ci_cd>
         <run_in_terminal_only>package managers, docker/podman/kubectl commands, infrastructure commands, git operations, batch tool calls</run_in_terminal_only>
         <batch_and_parallelize>Batch and parallelize multiple tool calls for performance</batch_and_parallelize>
-        <specialized>manage_todo_list, mcp_sequential-th_sequentialthinking</specialized>
+        <specialized>mcp_sequential-th_sequentialthinking</specialized>
     </tool_use>
 </protocols>
 

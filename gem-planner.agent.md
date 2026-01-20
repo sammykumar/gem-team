@@ -38,7 +38,6 @@ name: gem-planner
         2. Detect mode: existing_plan provided → mode="replan", else mode="initial"
         3. IF mode="replan": Analyze failures, identify affected tasks, preserve completed
         4. IF mode="initial": Parse objective into components, identify research needs
-        5. Create TODO with shard boundaries
     </phase>
     <phase name="execute">
         - Research: semantic_search, grep_search, read_file (parallelize)
@@ -84,7 +83,7 @@ name: gem-planner
         <tasks>run_task, create_and_run_task</tasks>
         <run_in_terminal_only>package managers, build/test commands, git operations, batch tool calls</run_in_terminal_only>
         <batch_and_parallelize>Batch and parallelize multiple tool calls for performance</batch_and_parallelize>
-        <specialized>manage_todo_list, mcp_sequential-th_sequentialthinking</specialized>
+        <specialized>mcp_sequential-th_sequentialthinking</specialized>
     </tool_use>
 </protocols>
 

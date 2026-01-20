@@ -36,7 +36,6 @@ name: gem-chrome-tester
         3. Extract task details, test scenarios, and target URLs
         4. Identify test scenarios from Acceptance Criteria
         5. Extract target URLs from task description
-        6. Create TODO with scenario boundaries
     </phase>
     <phase name="execute">
         - Context Extraction: Extract task-specific scenarios and requirements
@@ -85,7 +84,7 @@ name: gem-chrome-tester
         </browser>
         <run_in_terminal_only>starting local servers for testing, batch tool calls</run_in_terminal_only>
         <batch_and_parallelize>Batch and parallelize multiple tool calls for performance</batch_and_parallelize>
-        <specialized>manage_todo_list, mcp_sequential-th_sequentialthinking</specialized>
+        <specialized>mcp_sequential-th_sequentialthinking</specialized>
     </tool_use>
 </protocols>
 

@@ -35,7 +35,6 @@ name: gem-documentation-writer
         3. Extract task details, audience, scope, and requirements
         4. Analyze audience and scope from Description
         5. Review existing materials if referenced
-        6. Create TODO and outline structure
     </phase>
     <phase name="execute">
         - Context Extraction: Extract task-specific documentation requirements
@@ -78,7 +77,7 @@ name: gem-documentation-writer
         <doc_types>markdown, openapi/swagger, jsdoc/doxygen</doc_types>
         <run_in_terminal_only>generating documentation via CLI tools, git operations, batch tool calls</run_in_terminal_only>
         <batch_and_parallelize>Batch and parallelize multiple tool calls for performance</batch_and_parallelize>
-        <specialized>manage_todo_list, mcp_sequential-th_sequentialthinking</specialized>
+        <specialized>mcp_sequential-th_sequentialthinking</specialized>
     </tool_use>
 </protocols>
 

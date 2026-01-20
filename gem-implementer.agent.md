@@ -35,12 +35,12 @@ name: gem-implementer
         2. Read plan.md and locate specific task by task_id
         3. Extract task details, context, and requirements
         4. Identify target files from "Files to Modify"
-        5. Create TODO with segment boundaries for large files
-        6. Sort tasks by dependency order
+        5. Sort tasks by dependency order
     </phase>
     <phase name="execute">
         - Context Extraction: Extract task-specific context and requirements
         - Implementation: Execute task according to plan.md specifications
+        - Orchestrator updates TODO via manage_todo_list
     </phase>
     <phase name="validate">
         - Run verification
@@ -75,7 +75,6 @@ name: gem-implementer
         <tasks>run_task, create_and_run_task</tasks>
         <run_in_terminal_only>package managers, build/test commands, git operations, batch tool calls</run_in_terminal_only>
         <batch_and_parallelize>Batch and parallelize multiple tool calls for performance</batch_and_parallelize>
-        <specialized>manage_todo_list</specialized>
     </tool_use>
 </protocols>
 

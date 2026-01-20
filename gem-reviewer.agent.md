@@ -39,8 +39,7 @@ name: gem-reviewer
         2. Read plan.md and locate specific task by task_id
         3. Extract task details, Focus Areas, and Validation Matrix
         4. Identify Focus Areas from task block
-        5. Create TODO mapping verification steps
-        6. Map multi-hypothesis failure scenarios
+        5. Map multi-hypothesis failure scenarios
     </phase>
     <phase name="execute">
         <verification_protocol>
@@ -92,7 +91,7 @@ name: gem-reviewer
         <tasks>run_task, create_and_run_task</tasks>
         <run_in_terminal_only>package managers, build/test commands, git operations, batch tool calls</run_in_terminal_only>
         <batch_and_parallelize>Batch and parallelize multiple tool calls for performance</batch_and_parallelize>
-        <specialized>manage_todo_list, mcp_sequential-th_sequentialthinking</specialized>
+        <specialized>mcp_sequential-th_sequentialthinking</specialized>
     </tool_use>
 </protocols>
 
