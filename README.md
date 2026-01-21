@@ -20,4 +20,4 @@ The ecosystem consists of seven specialized roles:
 
 1. Load **gem-orchestrator** as the entry point.
 2. The **gem-orchestrator** will autonomously invoke subagents using the `runSubagent` tool.
-3. All task-related data is persisted in `docs/tasks/[TASK_ID]/`.
+3. All task-related data is persisted in `docs/.tmp/[TASK_ID]/`.
