@@ -67,13 +67,12 @@ infer: false
             2. Check dependencies (topological sort); IF circular → escalate to USER
             3. Set state: pending → in-progress
             4. Delegate: runSubagent(agent, {task_id, wbs_code, task_block, context, retry_count})
-            5. Post-implementer: Check Review-Required (true/security-only/false) → delegate reviewer if needed
-            6. Route response by status:
+            5. Route response by status:
                - pass → completed
                - partial AND retry_count < 3 → pending, retry
                - fail OR retry >= 3 → failed, escalate
-            7. Update task_states in plan.md frontmatter
-            8. Loop until all tasks [x] OR max_retries exceeded
+            6. Update task_states in plan.md frontmatter
+            7. Loop until all tasks [x] OR max_retries exceeded
         </cycle>
         <rules>Sequential only, WBS order, one task at a time</rules>
     </execution_loop>
@@ -89,14 +88,13 @@ infer: false
         </user_protocol>
         <agent_transition_protocol>
             <receive>Parse handoff response from agent</receive>
-            <route>See execution_loop step 6</route>
-            <context_passing>Pass files_modified from implementer to reviewer automatically</context_passing>
+            <route>See execution_loop step 5</route>
+            <context_passing>Pass output from previous agent to next if dependency exists</context_passing>
         </agent_transition_protocol>
         <handoff_schema>
             <base>See glossary/handoff for base fields</base>
             <agent_outputs>
                 implementer: tests_passed, verification_result |
-                reviewer: confidence, security_issue |
                 chrome_tester: tests_run, console_errors |
                 documentation_writer: parity_verified |
                 devops: health_check, ci_cd_status

@@ -104,11 +104,10 @@ name: gem-planner
             <header_format>### WBS-CODE: Task Title</header_format>
             <metadata>
                 <field name="WBS-Code">WBS code (e.g., 1.0, 1.1, 1.1.1) for hierarchical tracking</field>
-                <field name="Agent">gem-implementer | gem-chrome-tester | gem-devops | gem-documentation-writer | gem-reviewer | gem-planner</field>
+                <field name="Agent">gem-implementer | gem-chrome-tester | gem-devops | gem-documentation-writer | gem-planner</field>
                 <field name="Priority">HIGH | MEDIUM | LOW</field>
                 <field name="Depends on">Comma-separated WBS-CODEs or "-"</field>
                 <field name="Effort">XS (1-2h) | S (4h) | M (1d) | L (2-3d) | XL (1w)</field>
-                <field name="Review-Required">true (full review) | false (self-validate) | security-only (quick security scan) - Planner decides based on security sensitivity, complexity, and risk</field>
             </metadata>
             <required_fields>
                 <field name="Context">Background information, dependencies, constraints</field>
@@ -119,7 +118,6 @@ name: gem-planner
                 <field name="Verification">Command or method to verify completion</field>
             </required_fields>
             <optional_fields>
-                <field name="Focus Areas">Areas to prioritize (reviewer)</field>
                 <field name="Implementation Notes">Technical guidance</field>
                 <field name="Testing">Testing requirements</field>
                 <field name="Documentation Scope" type="enum" for="gem-documentation-writer">code_level | api_level | architecture_level | user_guide | deployment_guide</field>

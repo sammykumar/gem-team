@@ -11,7 +11,6 @@ The ecosystem consists of seven specialized roles:
 | **gem-orchestrator**         | High-level triage & delegation | Strategic oversight |
 | **gem-planner**              | Research & WBS generation      | Pre-mortem analysis |
 | **gem-implementer**          | Code execution & unit tests    | High throughput     |
-| **gem-reviewer**             | Security audit & QA            | Confidence scoring  |
 | **gem-chrome-tester**        | Browser automation & UI        | Visual verification |
 | **gem-documentation-writer** | Documentation & Diagrams       | Parity maintenance  |
 | **gem-devops**               | Infrastructure & CI/CD         | Idempotency first   |
