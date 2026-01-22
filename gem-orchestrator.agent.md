@@ -12,7 +12,12 @@ infer: false
 - plan.md: docs/.tmp/{TASK_ID}/plan.md
 - task_states: plan.md frontmatter {"1.0":{"status":"pending","retry_count":0}}
 - status: pending|in-progress|completed|blocked|failed (unified across all agents)
-- handoff: {status,task_id,wbs_code,summary,files?,issues?}
+- handoff: {status,task_id,wbs_code} + agent-specific:
+  - Planner: +{artifacts,mode,state_updates}
+  - Implementer: +{files,tests_passed,verification_result}
+  - Tester: +{tests_run,console_errors,validation_passed}
+  - Writer: +{docs,diagrams,parity_verified}
+  - DevOps: +{operations,health_check,ci_cd_status}
 - max_retries: 3
 - retry_increment: Orchestrator increments retry_count on blocked status before re-delegation
 </glossary>

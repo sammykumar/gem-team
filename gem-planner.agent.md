@@ -8,9 +8,10 @@ infer: false
 
 <glossary>
 - TASK_ID: TASK-{YYMMDD-HHMM} format (from Orchestrator)
+- wbs_code: "0.0" (planning phase marker)
 - plan.md: docs/.tmp/{TASK_ID}/plan.md
 - mode: "initial" | "replan"
-- handoff: {status,task_id,artifacts,mode,state_updates}
+- handoff: {status,task_id,wbs_code,artifacts,mode,state_updates}
 - Validation_Matrix: Security[HIGH],Functionality[HIGH],Usability[MED],Quality[MED],Performance[LOW]
 </glossary>
 
@@ -39,9 +40,9 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 5. IF mode="initial": Parse objective into components, identify research needs
 
 ### Execute
-1. Research: Use `semantic_search` for architecture mapping, then `grep`/`read_file` for details. Scan `tasks.json` for existing project tasks.
-2. Analysis (Pre-Mortem): Use `sequentialthinking` to simulate ≥2 failure paths and define mitigations.
-3. Decomposition: Use `sequentialthinking` to break objective into 3-7 atomic subtasks with DAG dependencies.
+1. Research: Use `semantic_search` for architecture mapping, then `grep_search`/`read_file` for details. Scan `tasks.json` for existing project tasks.
+2. Analysis (Pre-Mortem): Use `mcp_sequential-th_sequentialthinking` to simulate ≥2 failure paths and define mitigations.
+3. Decomposition: Use `mcp_sequential-th_sequentialthinking` to break objective into 3-7 atomic subtasks with DAG dependencies.
 4. IF replan: Modify only affected tasks, preserve completed status.
 5. IF initial: Generate full `plan.md` with WBS structure.
 6. Verification Design: Define a concrete, executable verification command/method for EVERY task.
@@ -102,29 +103,33 @@ Frontmatter: task_id, objective, agents[], task_states{}
 
 Task Block:
 ### {WBS}: {Title}
-- Agent: gem-{implementer|chrome-tester|devops|documentation-writer|planner}
+- Agent: gem-{implementer|chrome-tester|devops|documentation-writer}
 - Priority: HIGH|MED|LOW
 - Depends: WBS-CODEs or "-"
 - Effort: XS|S|M|L|XL
 - Context: background, constraints
-- Files: [paths]
+- Files: [paths] (implementer/writer)
+- URLs: [test URLs] (chrome-tester)
+- Scope: doc scope (writer)
+- Audience: target audience (writer)
+- Operations: [ops list] (devops)
+- Environment: local|staging|prod (devops)
 - Description: what task accomplishes
-- Sub-tasks: WBS sub-codes
 - Acceptance: [- ] checkboxes
-- Verification: [MANDATORY] executable command or specific check method
+- Verification: [MANDATORY] executable command or check method
 
 Location: docs/.tmp/{TASK_ID}/plan.md
 </plan_format>
 
 <handoff_examples>
 Completed:
-{"status":"completed","task_id":"TASK-260122-1430","mode":"initial","artifacts":{"plan_path":"docs/.tmp/TASK-260122-1430/plan.md"},"state_updates":{"1.0":"pending"}}
+{"status":"completed","task_id":"TASK-260122-1430","wbs_code":"0.0","mode":"initial","artifacts":{"plan_path":"docs/.tmp/TASK-260122-1430/plan.md"},"state_updates":{"1.0":{"status":"pending","retry_count":0}}}
 
 Blocked:
-{"status":"blocked","task_id":"TASK-260122-1430","mode":"replan","missing":["dep clarity for 2.1"],"artifacts":{"plan_path":"docs/.tmp/TASK-260122-1430/plan.md"}}
+{"status":"blocked","task_id":"TASK-260122-1430","wbs_code":"0.0","mode":"replan","missing":["dep clarity for 2.1"],"artifacts":{"plan_path":"docs/.tmp/TASK-260122-1430/plan.md"}}
 
 Failed:
-{"status":"failed","task_id":"TASK-260122-1430","error":"circular dependency detected","retry_suggestion":"flatten WBS 1.2-1.4"}
+{"status":"failed","task_id":"TASK-260122-1430","wbs_code":"0.0","error":"circular dependency detected","retry_suggestion":"flatten WBS 1.2-1.4"}
 </handoff_examples>
 
 </agent>

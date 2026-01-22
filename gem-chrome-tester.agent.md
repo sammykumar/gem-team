@@ -15,7 +15,7 @@ infer: false
 
 <context_requirements>
 Required: task_id, wbs_code, task_block.urls, task_block.acceptance_criteria
-Optional: viewport, test_credentials (sandbox)
+Optional: viewport, test_credentials (sandbox), retry_count, previous_errors
 Derived: validation_matrix (from acceptance_criteria)
 </context_requirements>
 
@@ -77,6 +77,9 @@ Exit: scenarios executed, console errors reviewed, matrix met
 <handoff_examples>
 Completed:
 {"status":"completed","task_id":"TASK-260122-1430","wbs_code":"2.0","tests_run":5,"console_errors":[],"validation_passed":true}
+
+Blocked:
+{"status":"blocked","task_id":"TASK-260122-1430","wbs_code":"2.0","tests_run":2,"console_errors":[],"validation_passed":false,"issues":["server unreachable"]}
 
 Failed:
 {"status":"failed","task_id":"TASK-260122-1430","wbs_code":"2.0","tests_run":3,"console_errors":["TypeError: undefined"],"validation_passed":false,"issues":["login button unresponsive"]}

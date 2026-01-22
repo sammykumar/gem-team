@@ -14,7 +14,7 @@ infer: false
 
 <context_requirements>
 Required: task_id, wbs_code, task_block.scope, task_block.audience
-Optional: existing_docs, diagram_format
+Optional: existing_docs, diagram_format, retry_count, previous_errors
 Derived: parity_sources (from scope)
 </context_requirements>
 
