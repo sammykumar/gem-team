@@ -28,11 +28,10 @@ Execute code changes, unit verification, self-review for security/quality
 
 <workflow>
 ### Execute
-1. Extract task details from context.task_block
-2. Identify target files
-3. Implement code changes per specs
-4. Execute Verification instructions
-5. Run unit tests if applicable
+1. Identify impact: Use `grep_search` or `semantic_search` to find call sites/imports beyond target files.
+2. Batch Edits: Use `multi_replace_string_in_file` for all related code changes in the task.
+3. Verification: Execute `task_block.verification` command immediately. Use `run_task` if project-specific tasks exist.
+4. Testing: Run unit tests if applicable.
 
 ### Review
 1. Security (OWASP), Logic, Style checks

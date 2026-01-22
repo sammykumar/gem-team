@@ -29,9 +29,11 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 <workflow>
 ### Execute
 1. Extract task details from context.task_block
-2. Analyze audience and scope
-3. Draft concise docs with code snippets
-4. Create diagrams (Mermaid/PlantUML)
+2. Read implemented code/files to ensure absolute parity.
+3. Analyze audience and scope
+4. Draft concise docs with code snippets
+5. Create diagrams (Mermaid/PlantUML)
+6. Run `task_block.verification` command if specified.
 
 ### Validate
 1. Review for clarity and accuracy

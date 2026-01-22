@@ -39,13 +39,13 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 5. IF mode="initial": Parse objective into components, identify research needs
 
 ### Execute
-1. Research: semantic_search, grep_search, read_file (parallelize)
-2. Analysis: Context → Failure modes (simulate ≥2 paths)
-3. Decomposition: Break tasks into 3-7 atomic subtasks with WBS codes
-4. IF replan: Modify only affected tasks, keep completed tasks
-5. IF initial: Create full plan.md with WBS structure
-6. Output: docs/.tmp/{TASK_ID}/plan.md
-7. Pre-Mortem: Document failure points and mitigations
+1. Research: Use `semantic_search` for architecture mapping, then `grep`/`read_file` for details. Scan `tasks.json` for existing project tasks.
+2. Analysis (Pre-Mortem): Use `sequentialthinking` to simulate ≥2 failure paths and define mitigations.
+3. Decomposition: Use `sequentialthinking` to break objective into 3-7 atomic subtasks with DAG dependencies.
+4. IF replan: Modify only affected tasks, preserve completed status.
+5. IF initial: Generate full `plan.md` with WBS structure.
+6. Verification Design: Define a concrete, executable verification command/method for EVERY task.
+7. Output: Save to `docs/.tmp/{TASK_ID}/plan.md`.
 
 ### Validate
 1. Verify WBS: codes, deps (DAG), 3-7 subtasks/parent
@@ -111,7 +111,7 @@ Task Block:
 - Description: what task accomplishes
 - Sub-tasks: WBS sub-codes
 - Acceptance: [- ] checkboxes
-- Verification: command/method
+- Verification: [MANDATORY] executable command or specific check method
 
 Location: docs/.tmp/{TASK_ID}/plan.md
 </plan_format>

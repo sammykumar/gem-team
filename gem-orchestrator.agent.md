@@ -37,7 +37,6 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 1. Parse goal, check input completeness
 2. Generate TASK_ID using timestamp: TASK-{YYMMDD-HHMM}
 3. Delegate to gem-planner → plan.md
-4. Validate plan: check for circular deps; IF found → reject, request fix
 
 ### Approval
 - Critical (security/system-blocking) → stop for user input
@@ -58,6 +57,7 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 
 ### Execute
 - Enter execution_loop → process pending tasks → mark completed → synthesize summary
+- Update `manage_todo_list` as tasks progress.
 
 ### Execution Loop
 1. Select next pending task (task_block) by WBS order from plan.md

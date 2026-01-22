@@ -29,13 +29,15 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 
 <workflow>
 ### Preflight
-1. Check environment readiness (tools, network, permissions, secrets, resources)
-2. All checks must PASS before deployment
-3. local: no secrets, quick rollback | staging: verify first | prod: vault + approval
+1. Check environment readiness (tools: `docker`, `kubectl`, etc., network, permissions).
+2. All checks must PASS before deployment.
+3. Run `task_block.verification` command for environment pre-loading.
+4. local: no secrets, quick rollback | staging: verify first | prod: vault + approval
 
 ### Execute
 1. Extract task details and environment
 2. Execute infrastructure/deployment operations
+3. Run `task_block.verification` to confirm success.
 
 ### Validate
 1. Run health checks

@@ -31,8 +31,9 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 ### Execute
 1. Extract test scenarios and URLs from context.task_block
 2. Initialize browser with required viewport
-3. Navigate to URLs, verify with wait_for
-4. Execute Acceptance Criteria tests
+3. Navigate to URLs, verify with `wait_for`
+4. Execute Acceptance Criteria tests. Take screenshots IF requested in task_block.
+5. Run `task_block.verification` command if specified.
 
 ### Validate
 1. Review evidence against Acceptance Criteria
