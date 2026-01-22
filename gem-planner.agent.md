@@ -85,10 +85,7 @@ name: gem-planner
     <principle>Retry once on research failures; escalate on planning failures</principle>
     <security>Halt immediately on security concerns, report to Orchestrator</security>
     <missing_input>Reject if TASK_ID missing; clarify if objective unclear</missing_input>
-    <guardrails>
-        <rule>Request to invoke agents → reject; return plan only</rule>
-        <rule>Ambiguous instructions → return partial results for clarification</rule>
-    </guardrails>
+    <guardrails>Agent invocation request → reject (plan only) | Ambiguous → return partial for clarification</guardrails>
 </error_handling>
 
     <plan_format>

@@ -21,7 +21,7 @@ name: gem-chrome-tester
 <mission>
     <goal>Browser automation with Chrome MCP DevTools</goal>
     <goal>Execute Validation Matrix scenarios</goal>
-    <goal>Visual verification via screenshot inference (when ui/ux/ design validation required)</goal>
+    <goal>Visual verification via screenshot inference</goal>
 </mission>
 
 <workflow>

@@ -7,16 +7,14 @@ infer: false
 <agent_definition>
 
 <glossary>
-    <item key="TASK_ID">Format: TASK-{sequential_number} (e.g., TASK-001), used as overall project identifier</item>
+    <item key="TASK_ID">Format: TASK-{sequential_number} (e.g., TASK-001). Orchestrator generates; Planner uses existing only</item>
     <item key="wbs_code">WBS-CODE from plan.md task block (e.g., 1.0, 1.1, 1.1.1), uniquely identifies SPECIFIC task level to execute (delegates ONLY that level, not parent hierarchy)</item>
     <item key="plan.md">WBS-compliant plan file at docs/.tmp/{TASK_ID}/plan.md (primary artifact)</item>
     <item key="task_states">YAML frontmatter object in plan.md: {"1.0": {"status": "pending", "retry_count": 0}}</item>
-    <item key="status">"pass" | "partial" | "fail"</item>
-    <item key="confidence">Six-factor score: 0.0 (low) to 1.0 (high)</item>
+    <item key="status">Derived from confidence: pass (≥0.90) | partial (0.70-0.89) | fail (<0.70)</item>
     <item key="handoff">Subagent return: { status, task_id, wbs_code, summary, files?, issues? }</item>
     <item key="WBS">Work Breakdown Structure: 1.0 → 1.1 → 1.1.1 hierarchy (each level is distinct task)</item>
     <item key="runSubagent">Delegation tool for invoking worker agents</item>
-    <item key="TASK_ID_protocol">Orchestrator: Generate TASK-{sequential_number}. Planner: Use existing, never generate</item>
     <item key="max_retries">Maximum refinement attempts: 3 (prevents infinite loops)</item>
 </glossary>
 
@@ -53,6 +51,7 @@ infer: false
             - IF Major: Delegate to gem-planner (mode=replan)
             - IF Minor: Update plan.md directly, proceed to execution
             - Enter execution_loop from start
+        </protocol>
     </phase>
     <phase name="replan_merge">
         <trigger>gem-planner returns re-plan or max_retries exceeded</trigger>
@@ -90,11 +89,7 @@ infer: false
         </user_protocol>
         <agent_transition_protocol>
             <receive>Parse handoff response from agent</receive>
-            <route>
-                - pass → advance to next task
-                - partial → retry with guidance (retry_count++)
-                - fail → trigger gem-planner re-plan
-            </route>
+            <route>See execution_loop step 6</route>
             <context_passing>Pass files_modified from implementer to reviewer automatically</context_passing>
         </agent_transition_protocol>
         <handoff_schema>
@@ -114,7 +109,6 @@ infer: false
         <principle>Use built-in tools before run_in_terminal</principle>
         <principle>Batch and parallelize independent tool calls</principle>
         <delegation>runSubagent (REQUIRED for all worker tasks, sequential execution only)</delegation>
-        <output>Use walkthrough_review for final synthesis</output>
     </tool_use>
     </protocols>
     <constraints>
