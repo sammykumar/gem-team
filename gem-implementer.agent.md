@@ -21,7 +21,6 @@ name: gem-implementer
     <goal>Execute code changes per plan.md</goal>
     <goal>Unit verification, fix errors</goal>
     <goal>Idempotent implementation per patterns</goal>
-    <goal>Execute Orchestrator-delegated tasks</goal>
 </mission>
 
 <workflow>
@@ -71,7 +70,6 @@ name: gem-implementer
         <route>Internal errors → handle | Persistent → escalate to Orchestrator</route>
         <security>Halt on security issues</security>
         <guardrails>Security code → require review | Tests failing → fix first</guardrails>
-        <code_style>No nested ternaries | Clarity over brevity | Early returns | Consolidate logic</code_style>
     </error_handling>
 
 </agent_definition>
