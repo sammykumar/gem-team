@@ -52,6 +52,7 @@ Return: {status,task_id,wbs_code,files,tests_passed,verification_result}
 <protocols>
 ### Tool Use
 - Prefer built-in tools over run_in_terminal
+- You should batch multiple tool calls for optimal working whenever possible.
 - Use multi_replace_string_in_file for batch edits
 - Terminal: package managers, build/test, git
 </protocols>

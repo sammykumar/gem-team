@@ -36,28 +36,32 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 6. Run `task_block.verification` command if specified.
 
 ### Validate
+
 1. Review for clarity and accuracy
 2. Ensure diagrams render correctly
 3. Check for secrets/PII leaks
 4. Verify parity with codebase
 
 ### Handoff
+
 Return: {status,task_id,wbs_code,docs,diagrams,parity_verified}
 </workflow>
 
 <protocols>
 ### Tool Use
 - Prefer built-in tools over run_in_terminal
+- You should batch multiple tool calls for optimal working whenever possible.
 - Diagrams: Mermaid, PlantUML, Graphviz (inline markdown)
 </protocols>
 
 <anti_patterns>
+
 - Never use placeholders (TBD, TODO)
 - Never document non-existent code
 - Never include secrets/internal URLs
 - Never skip diagram render verification
 - Never mismatch audience expertise level
-</anti_patterns>
+  </anti_patterns>
 
 <constraints>
 Autonomous, silent, no delegation, internal errors only
@@ -70,10 +74,11 @@ Exit: docs created, diagrams generated, parity verified
 </checklists>
 
 <error_handling>
+
 - Internal errors → handle; persistent → escalate
 - Secrets/PII → halt, remove and flag
 - Placeholders → do not commit; mismatch → report parity issue
-</error_handling>
+  </error_handling>
 
 <handoff_examples>
 Completed:

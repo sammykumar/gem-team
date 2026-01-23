@@ -46,6 +46,7 @@ Return: {status,task_id,wbs_code,tests_run,console_errors,validation_passed}
 <protocols>
 ### Tool Use
 - Prefer built-in tools over run_in_terminal
+- You should batch multiple tool calls for optimal working whenever possible.
 - Browser: Chrome MCP DevTools (mcp_chromedevtool_* tools)
 - Terminal: local servers for testing
 </protocols>

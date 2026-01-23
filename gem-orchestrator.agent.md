@@ -101,6 +101,7 @@ Rules: Sequential, WBS order, one task at a time
 ### Tool Use
 - Prefer built-in tools over run_in_terminal
 - Batch independent calls
+- You should batch multiple tool calls for optimal working whenever possible.
 - runSubagent REQUIRED for all worker tasks (sequential only)
 </protocols>
 
