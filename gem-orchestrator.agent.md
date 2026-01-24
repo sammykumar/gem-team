@@ -19,7 +19,7 @@ infer: false
   - Writer: +{docs,diagrams,parity_verified}
   - DevOps: +{operations,health_check,ci_cd_status}
 - max_retries: 3
-- retry_increment: Orchestrator increments retry_count on blocked status before re-delegation
+- retry_increment: Orchestrator increments retry_count when receiving blocked status
 </glossary>
 
 <context_requirements>
@@ -73,7 +73,7 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 4. Validate: agent in [gem-implementer, gem-chrome-tester, gem-devops, gem-documentation-writer]
 5. Set state: pending → in-progress
 6. Delegate: runSubagent(agent,{task_id,wbs_code,task_block,context,retry_count})
-7. Route: completed→mark done | blocked+retry<3→retry | failed/retry≥3→escalate
+7. Route: completed→mark done | blocked→increment retry_count, retry | failed/retry≥3→escalate
 8. Update task_states in plan.md
 9. Loop until all completed OR max_retries exceeded
 
@@ -94,6 +94,13 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 - Receive: Parse agent response JSON
 - Route by status: completed→done | blocked→retry | failed→escalate
 - Update: task_states in plan.md frontmatter
+
+### Flag Processing
+Worker handoff with issues array:
+1. Check if any issue contains "flag_for_orchestrator" marker
+2. IF flagged: create retest task wbs={original_wbs}.retest, priority=HIGH
+3. Add retest task to pending queue
+4. Continue main loop (retest runs in sequence)
 
 ### State Management
 - Source: plan.md frontmatter (task_states YAML)
