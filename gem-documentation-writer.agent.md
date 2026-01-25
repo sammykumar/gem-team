@@ -96,11 +96,10 @@ Exit: docs created, diagrams generated, parity verified
 </checklists>
 
 <error_handling>
-
 - Internal errors → handle; persistent → escalate
 - Secrets/PII → halt, remove and flag
 - Placeholders → do not commit; mismatch → report parity issue
-  </error_handling>
+</error_handling>
 
 <handoff_examples>
 Completed:

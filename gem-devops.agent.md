@@ -91,11 +91,10 @@ Exit: operations successful, resources cleaned, health passed
 </checklists>
 
 <error_handling>
-
 - Internal errors → handle; persistent → escalate
 - Plaintext secrets → halt, abort deployment
 - Destructive ops → preflight; prod → explicit approval
-  </error_handling>
+</error_handling>
 
 <handoff_examples>
 Completed:
