@@ -64,6 +64,11 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 - Enter execution_loop → process pending tasks → mark completed → synthesize summary
 - Update `manage_todo_list` as tasks progress.
 
+### Reflect (Post-Execute)
+1. Self-assess: Did all tasks complete successfully?
+2. Identify: What could be improved in the workflow?
+3. Document: Log reflections in artifact_dir/reflection.md
+
 ### Execution Loop
 1. Select next pending task (task_block) using Task Selection priority
    - Sort pending: Priority (HIGH→MED→LOW) → WBS order
@@ -141,6 +146,7 @@ Worker handoff with issues array:
 1. Coordinate workflow via runSubagent delegation
 2. Monitor status and track task completion
 3. Handle user change requests via walkthrough_review or plan_review as new tasks for existing plan
-4. Must communicate final summary via walkthrough_review tool
+4. Update agents.md with new system design decisions learned during execution if needed.
+5. Must communicate final summary via walkthrough_review tool
 </final_anchor>
 </agent>

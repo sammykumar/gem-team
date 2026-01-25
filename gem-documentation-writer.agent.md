@@ -48,6 +48,11 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 3. Check for secrets/PII leaks
 4. Verify parity with codebase (MANDATORY - always run)
 
+### Reflect (Post-Execute)
+1. Self-assess: Did documentation match codebase exactly?
+2. Identify: Any missing entities or unclear explanations?
+3. Self-correct: Fix documentation issues before handoff
+
 ### Handoff
 
 Return: {status,task_id,wbs_code,docs,diagrams,parity_verified,issues?}
@@ -91,7 +96,7 @@ Exit: docs created, diagrams generated, parity verified
 
 <handoff_examples>
 Completed:
-{"status":"completed","task_id":"TASK-260122-1430","wbs_code":"4.0","docs":["docs/API.md"],"diagrams":["docs/arch.mermaid"],"parity_verified":true}
+{"status":"completed","task_id":"TASK-260122-1430","wbs_code":"4.0","docs":["docs/API.md"],"diagrams":["docs/arch.mermaid"],"parity_verified":true,"reflection":"Documentation complete, all public APIs documented, parity verified"}
 
 Blocked:
 {"status":"blocked","task_id":"TASK-260122-1430","wbs_code":"4.0","docs":["docs/API.md"],"parity_verified":false,"issues":["missing endpoint /v2/users"]}
@@ -99,5 +104,14 @@ Blocked:
 Failed:
 {"status":"failed","task_id":"TASK-260122-1430","wbs_code":"4.0","error":"secrets detected in doc","docs":[]}
 </handoff_examples>
+
+<memory>
+Before starting any task:
+1. Read agents.md
+2. Apply learned patterns
+
+After successful completion:
+1. update agents.md with new documentation insights if needed.
+</memory>
 
 </agent>

@@ -46,6 +46,11 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 2. Verify infrastructure state matches expected
 3. Check for security leaks
 
+### Reflect (Post-Execute)
+1. Self-assess: Did all operations complete successfully?
+2. Identify: Any resource leaks or security concerns?
+3. Document: Log operations summary and improvements
+
 ### Handoff
 
 Return: {status,task_id,wbs_code,operations,health_check,ci_cd_status,issues?}
@@ -86,7 +91,7 @@ Exit: operations successful, resources cleaned, health passed
 
 <handoff_examples>
 Completed:
-{"status": "completed", "task_id": "TASK-260122-1430", "wbs_code": "3.0", "operations": ["docker build", "push to registry"], "health_check": "passed", "ci_cd_status": "pipeline green"}
+{"status": "completed", "task_id": "TASK-260122-1430", "wbs_code": "3.0", "operations": ["docker build", "push to registry"], "health_check": "passed", "ci_cd_status": "pipeline green", "reflection": "All operations completed successfully, health checks passing, no resource leaks"}
 
 Blocked:
 {"status": "blocked", "task_id": "TASK-260122-1430", "wbs_code": "3.0", "operations": ["docker build"], "health_check": "pending", "issues": ["registry auth failed"]}
@@ -94,5 +99,14 @@ Blocked:
 Failed:
 {"status": "failed", "task_id": "TASK-260122-1430", "wbs_code": "3.0", "operations": ["docker build"], "error": "preflight failed: missing SECRET_KEY", "health_check": "skipped"}
 </handoff_examples>
+
+<memory>
+Before starting any task:
+1. Read agents.md
+2. Apply learned patterns
+
+After successful completion:
+1. update agents.md with new DevOps insights if needed.
+</memory>
 
 </agent>

@@ -42,6 +42,11 @@ Execute code changes, unit verification, self-review for security/quality
 ### Validate
 1. Verify all Acceptance Criteria met (includes security & tests)
 
+### Reflect (Post-Execute)
+1. Self-assess: Did implementation meet all acceptance criteria?
+2. Identify: Are there any security issues or code quality concerns?
+3. Self-correct: Fix issues before handoff if detected
+
 ### Handoff
 Return: {status,task_id,wbs_code,files,tests_passed,verification_result}
 - completed: verification_result="all passed"
@@ -87,7 +92,7 @@ Exit: implementation done, security passed, acceptance met
 
 <handoff_examples>
 Completed:
-{"status": "completed", "task_id": "TASK-260122-1430", "wbs_code": "1.1", "files": ["src/auth.ts"], "tests_passed": true, "verification_result": "all checks passed"}
+{"status": "completed", "task_id": "TASK-260122-1430", "wbs_code": "1.1", "files": ["src/auth.ts"], "tests_passed": true, "verification_result": "all checks passed", "reflection": "Self-assessment: implementation complete, all tests passing, no security issues identified"}
 
 Blocked:
 {"status": "blocked", "task_id": "TASK-260122-1430", "wbs_code": "1.1", "files": ["src/auth.ts"], "tests_passed": false, "verification_result": "2/5 tests failing", "issues": ["token expiry edge case"]}
@@ -95,5 +100,14 @@ Blocked:
 Failed:
 {"status": "failed", "task_id": "TASK-260122-1430", "wbs_code": "1.1", "error": "OWASP violation: SQL injection risk", "files": ["src/db.ts"]}
 </handoff_examples>
+
+<memory>
+Before starting any task:
+1. Read agents.md for similar past implementation tasks
+2. Apply learned patterns
+
+After successful completion:
+1. update agents.md with new implementation insights if needed.
+</memory>
 
 </agent>

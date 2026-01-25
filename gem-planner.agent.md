@@ -57,6 +57,7 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 1. Verify WBS: codes, deps (DAG), 3-7 subtasks/parent
 2. Apply Validation Matrix priorities
 3. Dependency Validation:
+4. Reflection: Assess plan quality, identify potential issues, adjust if needed
    - Build dependency graph from all "Depends" fields
    - Run cycle detection (DFS topological sort)
    - IF cycle detected: flatten chain, report to Orchestrator to split into leaf tasks
@@ -144,6 +145,15 @@ Blocked:
 
 Failed:
 {"status": "failed", "task_id": "TASK-260122-1430", "wbs_code": "0.0", "error": "circular dependency detected", "retry_suggestion": "flatten WBS 1.2-1.4"}
+
+<memory>
+Before starting any task:
+1. Read agents.md for similar past planning tasks
+2. Apply learned patterns
+
+After successful completion:
+1. update agents.md with new planning insights if needed.
+</memory>
 </handoff_examples>
 
 </agent>

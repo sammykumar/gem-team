@@ -46,6 +46,11 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 1. Review evidence against Acceptance Criteria
 2. Check console for errors
 
+### Reflect (Post-Execute)
+1. Self-assess: Did all test scenarios pass?
+2. Identify: Any UI/UX issues or accessibility concerns?
+3. Document: Log test findings and improvements needed
+
 ### Handoff
 Return: {status,task_id,wbs_code,tests_run,console_errors,validation_passed,issues?}
 - completed: validation_passed=true, issues=[]
@@ -96,7 +101,7 @@ Exit: scenarios executed, console errors reviewed, matrix met
 
 <handoff_examples>
 Completed:
-{"status": "completed", "task_id": "TASK-260122-1430", "wbs_code": "2.0", "tests_run": 5, "console_errors": [], "validation_passed": true}
+{"status": "completed", "task_id": "TASK-260122-1430", "wbs_code": "2.0", "tests_run": 5, "console_errors": [], "validation_passed": true, "reflection": "All test scenarios passed, no console errors, UI verified"}
 
 Blocked:
 {"status": "blocked", "task_id": "TASK-260122-1430", "wbs_code": "2.0", "tests_run": 2, "console_errors": [], "validation_passed": false, "issues": ["server unreachable"]}
@@ -104,5 +109,14 @@ Blocked:
 Failed:
 {"status": "failed", "task_id": "TASK-260122-1430", "wbs_code": "2.0", "tests_run": 3, "console_errors": ["TypeError: undefined"], "validation_passed": false, "issues": ["login button unresponsive"]}
 </handoff_examples>
+
+<memory>
+Before starting any task:
+1. Read agents.md
+2. Apply learned patterns
+
+After successful completion:
+1. update agents.md with new testing insights if needed.
+</memory>
 
 </agent>
