@@ -20,6 +20,11 @@ Maintain reasoning consistency across turns for complex tasks only.
   - reasoning: {approach,why,confidence}
   - reflection: {self_assessment,issues_identified,self_corrected}
   - artifacts: {files,tests_passed,verification_result}
+- parallel_context: {parallel_group_size, concurrent_index, total_batch_tasks, max_parallel_agents}
+  - parallel_group_size: Number of tasks in current parallel batch
+  - concurrent_index: This task's index in batch (0-based)
+  - total_batch_tasks: Total tasks being processed in current batch
+  - max_parallel_agents: Always 4 (hard limit)
 </glossary>
 
 <context_requirements>

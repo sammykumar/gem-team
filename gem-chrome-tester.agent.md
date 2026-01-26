@@ -20,6 +20,11 @@ Maintain reasoning consistency across turns for complex tasks only
   - reflection: {self_assessment,issues_identified,self_corrected}
   - artifacts: {tests_run,console_errors,validation_passed}
 - validation_matrix: Security[HIGH],Functionality[HIGH],Usability[MED]
+- parallel_context: {parallel_group_size, concurrent_index, total_batch_tasks, max_parallel_agents}
+  - parallel_group_size: Number of tasks in current parallel batch
+  - concurrent_index: This task's index in batch (0-based)
+  - total_batch_tasks: Total tasks being processed in current batch
+  - max_parallel_agents: Always 4 (hard limit)
 </glossary>
 
 <context_requirements>

@@ -20,6 +20,7 @@ Maintain reasoning consistency across turns for complex tasks only
 - status: pending|in-progress|completed|blocked|failed (unified across all agents)
 - handoff: {status,task_id,wbs_code,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
 - max_parallel_agents: 4 (hard limit on concurrent agent executions)
+- parallel_context: {parallel_group_size, concurrent_index, total_batch_tasks, max_parallel_agents} - Context passed to workers for parallel execution awareness
   - metadata: {timestamp,model_used,retry_count,duration_ms}
   - reasoning: {approach,why,confidence}
   - reflection: {self_assessment,issues_identified,self_corrected}
@@ -130,13 +131,6 @@ A task is critical if ANY of the following:
 - Concurrent Handling: Orchestrator may process multiple handoffs in parallel
 - Route by status: completed→done | blocked→retry | failed→escalate
 - Update: task_states in plan.md frontmatter
-
-### Flag Processing
-Worker handoff with issues array:
-1. Check if any issue contains "flag_for_orchestrator" marker
-2. IF flagged: create retest task wbs={original_wbs}.retest, priority=HIGH
-3. Add retest task to pending queue
-4. Continue main loop (retest task will be picked up in the next available batch)
 
 ### State Management
 - Source: plan.md frontmatter (task_states YAML)
