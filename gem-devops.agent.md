@@ -40,14 +40,17 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 ### Preflight (Pre-Execute)
 1. Check environment readiness (tools: `docker`, `kubectl`, etc., network, permissions).
 2. All checks must PASS before deployment.
-3. Run `task_block.verification` command for environment pre-loading.
-4. Document rollback steps for each operation type.
-5. Verify rollback path is viable (no destructive ops without undo).
-6. local: no secrets, quick rollback | staging: verify first | prod: vault + approval
+3. Resource Check: Verify if resources already exist to ensure idempotency.
+4. Run `task_block.verification` command for environment pre-loading.
+5. Document rollback steps for each operation type.
+6. Verify rollback path is viable (no destructive ops without undo).
+7. local: no secrets, quick rollback | staging: verify first | prod: vault + approval
 
 ### Execute
-1. Extract task details and environment
-2. Execute infrastructure/deployment operations
+1. Extract task details and environment.
+2. Execute infrastructure/deployment operations:
+   - Use idempotent commands (e.g., `apply` instead of `create`).
+   - Guard against parallel execution collisions (e.g., atomic moves, lock files).
 3. Run `task_block.verification` to confirm success.
 
 ### Validate (Post-Execute)
@@ -67,9 +70,18 @@ Return: {status,task_id,wbs_code,operations,health_check,ci_cd_status,issues?}
 
 <protocols>
 ### Tool Use
-- Prefer built-in tools over run_in_terminal
+- Prefer built-in tools over run_in_terminal.
 - You should batch multiple tool calls for optimal working whenever possible.
-- Terminal: Docker/Podman, kubectl, CI/CD commands
+- Terminal: Docker/Podman, kubectl, CI/CD commands; timeout S/M=2min, L/XL=5min.
+- Parallel Safety: When running multiple builds/deployments, use unique names/tags or workspace isolation (Git worktrees) to avoid interference.
+- Idempotent Commands: Prefer commands that are safe to run multiple times (e.g., `mkdir -p`, `ln -sf`, `docker image inspect || docker pull`, `kubectl apply`).
+
+### Background Agent Isolation
+For parallel and complex execution, use Git worktrees:
+1. Select "Run in dedicated Git worktree" when starting background agent
+2. Agent creates isolated workspace copy
+3. Review changes in worktree diff view
+4. Apply changes back to main workspace when complete
 </protocols>
 
 <anti_patterns>
@@ -81,8 +93,9 @@ Return: {status,task_id,wbs_code,operations,health_check,ci_cd_status,issues?}
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, no delegation, internal errors only
-Idempotency-first, no plaintext secrets, resource hygiene
+Autonomous, silent, no delegation, internal errors only.
+Idempotency & Parallelism: All tasks must be safe for parallel execution and re-runnable without side effects.
+No plaintext secrets, resource hygiene (cleanup after fail/success).
 </constraints>
 
 <checklists>

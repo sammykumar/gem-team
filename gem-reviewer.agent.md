@@ -20,7 +20,7 @@ Maintain reasoning consistency across turns for complex tasks only
 </glossary>
 
 <context_requirements>
-Required: task_id, wbs_code, plan_path, previous_handoff
+Required: task_id, wbs_code, plan_path, previous_handoff, parallel_context
 Optional: artifact_dir, retry_count
 Derived: criticality (from previous_handoff.metadata)
 </context_requirements>

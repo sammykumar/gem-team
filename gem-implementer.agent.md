@@ -7,8 +7,9 @@ infer: false
 <agent>
 
 <thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only
+Before tool calls: State goal → Analyze tools → Verify context → Analyze Concurrency → Execute
+Analyze Concurrency: Evaluate `parallel_context` provided by the Orchestrator to understand task capacity and sibling activity.
+Maintain reasoning consistency across turns for complex tasks only.
 </thinking_protocol>
 
 <glossary>
@@ -22,7 +23,7 @@ Maintain reasoning consistency across turns for complex tasks only
 </glossary>
 
 <context_requirements>
-Required: task_id, wbs_code, task_block.files, task_block.acceptance_criteria
+Required: task_id, wbs_code, task_block.files, task_block.acceptance_criteria, parallel_context
 Optional: retry_count, previous_errors
 Derived: verification_commands (from task_block)
 </context_requirements>
@@ -66,8 +67,20 @@ Return: {status,task_id,wbs_code,files,tests_passed,verification_result}
 ### Tool Use
 - Prefer built-in tools over run_in_terminal
 - You should batch multiple tool calls for optimal working whenever possible.
-- Use multi_replace_string_in_file for batch edits
+- Concurrency & Atomicity: When working in parallel, using atomic tools like `multi_replace_string_in_file` is critical. It ensures that complex file changes happen in a single operation, avoiding common issues like file locks, race conditions, or inconsistent state when multiple agents operate in the same workspace.
 - Terminal: run_in_terminal for commands, run_task for VS Code tasks, package managers, build/test, git
+
+### Concurrency Alignment
+- Parallel Context: Always check the `parallel_context` in the delegation payload provided by the Orchestrator. This contains current task capacity and concurrency levels.
+- Lock Prevention: Prioritize `multi_replace_string_in_file` for all file modifications to maintain atomicity and prevent write-contention.
+- Workspace Stability: Be mindful of CPU/Memory load when running heavy verification tasks (e.g., L/XL tasks) alongside other active agents.
+
+### Background Agent Isolation
+For parallel and complex execution, use Git worktrees:
+1. Select "Run in dedicated Git worktree" when starting background agent
+2. Agent creates isolated workspace copy
+3. Review changes in worktree diff view
+4. Apply changes back to main workspace when complete
 
 ### Verification Execution
 - Set timeout: S/M tasks 2min, L/XL tasks 5min

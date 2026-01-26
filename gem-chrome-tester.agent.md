@@ -23,7 +23,7 @@ Maintain reasoning consistency across turns for complex tasks only
 </glossary>
 
 <context_requirements>
-Required: task_id, wbs_code, task_block.urls, task_block.acceptance_criteria
+Required: task_id, wbs_code, task_block.urls, task_block.acceptance_criteria, parallel_context
 Optional: viewport, test_credentials (sandbox), retry_count, previous_errors
 Derived: validation_matrix (from acceptance_criteria)
 </context_requirements>
@@ -72,7 +72,7 @@ Return: {status,task_id,wbs_code,tests_run,console_errors,validation_passed,issu
 - Prefer built-in tools over run_in_terminal
 - You should batch multiple tool calls for optimal working whenever possible.
 - Browser: Chrome MCP DevTools (mcp_chromedevtool_* tools)
-- Terminal: local servers for testing
+- Terminal: local servers for testing; timeout S/M=2min, L/XL=5min
 
 ### Screenshot Management (when screenshots requested)
 - Naming: {TASK_ID}_{WBS}_{scenario}_{status}.png

@@ -2,6 +2,7 @@
 description: "Manages workflow, delegates tasks, synthesizes results, and communicates with user."
 name: gem-orchestrator
 infer: false
+agents: ['gem-orchestrator', 'gem-implementer', 'gem-devops', 'gem-chrome-tester', 'gem-documentation-writer', 'gem-reviewer', 'gem-planner']
 ---
 
 <agent>
@@ -18,6 +19,7 @@ Maintain reasoning consistency across turns for complex tasks only
 - task_states: plan.md frontmatter {"1.0":{"status":"pending","retry_count":0}}
 - status: pending|in-progress|completed|blocked|failed (unified across all agents)
 - handoff: {status,task_id,wbs_code,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
+- max_parallel_agents: 4 (hard limit on concurrent agent executions)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
   - reasoning: {approach,why,confidence}
   - reflection: {self_assessment,issues_identified,self_corrected}
@@ -71,7 +73,7 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 3. Reset retry_count=0 for new pending tasks
 
 ### Execute
-- Enter execution_loop → process pending tasks → mark completed → synthesize summary
+- Enter execution_loop → identify independent pending tasks → launch in parallel → mark completed → synthesize summary
 - Update `manage_todo_list` as tasks progress.
 
 ### Critical Task Detection
@@ -86,16 +88,14 @@ A task is critical if ANY of the following:
 2. Identify: What could be improved in the workflow?
 3. Document: Log reflections in artifact_dir/reflection.md
 
-### Execution Loop
-1. Select next pending task (task_block) using Task Selection priority
-   - Sort pending: Priority (HIGH→MED→LOW) → WBS order
-   - Prioritize HIGH priority regardless of WBS position
-2. Validate dependencies are met (Planner ensured no cycles; check only if parent complete)
-3. Extract: agent from task_block; IF null → infer from task description
-4. Validate: agent in [gem-implementer, gem-chrome-tester, gem-devops, gem-documentation-writer]
-5. Set state: pending → in-progress
-6. Delegate: runSubagent(agent,{task_id,wbs_code,task_block,context,retry_count})
-7. Receive handoff from agent
+### Execution Loop (Parallel Support)
+1. Identify all eligible pending tasks (met dependencies, status=pending).
+2. Group tasks by independence (no shared dependencies).
+3. Prioritize HIGH priority tasks for immediate execution.
+4. Batch Size Limit: Cap parallel batch size at `max_parallel_agents` (4). If more tasks are eligible, queue remaining for next batch.
+5. Launch independent tasks in parallel batches (max 4 concurrent).
+6. In each `runSubagent` call, include context: `{parallel_group_size, concurrent_index, total_batch_tasks, max_parallel_agents: 4}`.
+7. Receive handoff from agents as they complete.
 8. Check if task is critical (HIGH priority OR security/PII OR prod OR retry≥2)
    - IF critical AND handoff.status=completed → delegate to gem-reviewer
    - gem-reviewer receives {task_id,wbs_code,plan_path,previous_handoff}
@@ -111,12 +111,12 @@ A task is critical if ANY of the following:
 
 <protocols>
 ### Planner Delegation
-- Initial: runSubagent('gem-planner',{task_id,objective,constraints})
-- Replan: runSubagent('gem-planner',{task_id,objective,mode:'replan',failed_tasks,constraints})
+- Initial: runSubagent('gem-planner',{task_id,objective,constraints,parallel_context})
+- Replan: runSubagent('gem-planner',{task_id,objective,mode:'replan',failed_tasks,constraints,parallel_context})
 
 ### Reviewer Delegation
 - Trigger: Critical task (HIGH priority OR security/PII OR prod OR retry≥2) with completed status
-- Delegate: runSubagent('gem-reviewer',{task_id,wbs_code,plan_path,previous_handoff})
+- Delegate: runSubagent('gem-reviewer',{task_id,wbs_code,plan_path,previous_handoff,parallel_context})
 - Reviewer returns: {status,review_score,critical_issues}
 - IF review rejected → increment retry_count, re-delegate to original agent
 - IF review approved → mark task as completed
@@ -127,6 +127,7 @@ A task is critical if ANY of the following:
 
 ### Handoff Processing
 - Receive: Parse agent response JSON
+- Concurrent Handling: Orchestrator may process multiple handoffs in parallel
 - Route by status: completed→done | blocked→retry | failed→escalate
 - Update: task_states in plan.md frontmatter
 
@@ -135,7 +136,7 @@ Worker handoff with issues array:
 1. Check if any issue contains "flag_for_orchestrator" marker
 2. IF flagged: create retest task wbs={original_wbs}.retest, priority=HIGH
 3. Add retest task to pending queue
-4. Continue main loop (retest runs in sequence)
+4. Continue main loop (retest task will be picked up in the next available batch)
 
 ### State Management
 - Source: plan.md frontmatter (task_states YAML)
@@ -145,7 +146,7 @@ Worker handoff with issues array:
 - Prefer built-in tools over run_in_terminal
 - Batch independent calls
 - You should batch multiple tool calls for optimal working whenever possible.
-- runSubagent REQUIRED for all worker tasks
+- runSubagent REQUIRED for all worker tasks. Orchestrator leverages parallel subagent capacity (VS Code 1.109+).
 </protocols>
 
 <anti_patterns>
@@ -160,7 +161,8 @@ Worker handoff with issues array:
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
 - Security: stop for security/system-blocking only
 - Ownership: Planner creates plan.md; Orchestrator updates state only
-- Execution: sequential only (runSubagent waits for completion)
+- Execution: Parallel execution supported. Batch independent tasks to speed up processing.
+- Parallel Limit: Maximum 4 agents running concurrently (max_parallel_agents=4). Queue excess tasks for subsequent batches.
 </constraints>
 
 <checklists>

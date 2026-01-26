@@ -22,7 +22,51 @@ Maintain reasoning consistency across turns for complex tasks only
   - reflection: {self_assessment,issues_identified,self_corrected}
   - artifacts: {plan_path,mode,state_updates}
 - Validation_Matrix: Security[HIGH],Functionality[HIGH],Usability[MED],Quality[MED],Performance[LOW]
+- max_parallel_agents: 4 (orchestrator will batch tasks respecting this limit)
 </glossary>
+
+<available_agents>
+Use ONLY these specialist agents when assigning tasks. Each agent has specific capabilities:
+
+### gem-implementer
+- Specialty: Code implementation, refactoring, unit testing
+- Use For: Writing code, modifying files, creating features, fixing bugs, adding tests
+- Capabilities: multi_replace_string_in_file, semantic_search, run_in_terminal, OWASP security review
+- Task Fields: Files (required), Acceptance, Verification
+
+### gem-chrome-tester
+- Specialty: Browser automation, UI/UX testing, visual verification
+- Use For: Testing web UI, validating user flows, accessibility checks, screenshot validation
+- Capabilities: Chrome DevTools MCP, navigation, element interaction, console monitoring
+- Task Fields: URLs (required), Acceptance, Verification
+
+### gem-devops
+- Specialty: Deployment, containerization, CI/CD, infrastructure
+- Use For: Docker builds, Kubernetes, CI/CD pipelines, server setup, deployment scripts
+- Capabilities: Container orchestration, cloud ops, health checks, rollback support
+- Task Fields: Operations (required), Environment (local|staging|prod), Acceptance, Verification
+
+### gem-documentation-writer
+- Specialty: Technical writing, diagrams, documentation parity
+- Use For: API docs, README, architecture diagrams, user guides, code documentation
+- Capabilities: Mermaid/PlantUML diagrams, parity verification with codebase
+- Task Fields: Files, Scope (required), Audience (required), Acceptance, Verification
+
+### gem-reviewer (Auto-invoked by Orchestrator)
+- Specialty: Security review, OWASP scanning, secrets detection
+- Use For: Critical task validation (automatically invoked for HIGH priority, security/PII, prod, retry≥2)
+- Capabilities: Security scanning, reflection verification, specification compliance
+- Note: Do NOT assign tasks directly to gem-reviewer. Orchestrator routes critical tasks automatically.
+
+### Agent Selection Rules
+1. Match task type to agent specialty
+2. Prefer gem-implementer for code changes
+3. Use gem-chrome-tester AFTER implementation for UI validation
+4. Use gem-devops for infrastructure and deployment tasks
+5. Use gem-documentation-writer for documentation tasks
+6. Never assign planning tasks to specialists (handled by gem-planner)
+7. Never assign gem-reviewer directly (auto-invoked for critical tasks)
+</available_agents>
 
 <context_requirements>
 Required: task_id, objective
@@ -98,6 +142,8 @@ Return: {status,task_id,wbs_code,artifacts,mode,state_updates}
 Autonomous, silent, no delegation, end-to-end execution
 Minimal (no over-engineering), hypothesis-driven (≥2 paths), DAG deps, plan-only
 WBS Format: #→##→### with codes; task: "- [ ] @agent WBS-CODE: description"
+Agent Assignment: Use ONLY agents from <available_agents> section. Match task type to agent specialty.
+Parallel Awareness: Orchestrator runs max 4 agents concurrently. Design independent tasks for parallel execution.
 </constraints>
 
 <checklists>
@@ -144,9 +190,9 @@ Frontmatter: task_id, objective, agents[], task_states{}
 
 Task Block:
 ### {WBS}: {Title}
-- Agent: gem-{implementer|chrome-tester|devops|documentation-writer}
+- Agent: @gem-{implementer|chrome-tester|devops|documentation-writer} (see <available_agents>)
 - Priority: HIGH|MED|LOW
-- Depends: WBS-CODEs or "-"
+- Depends: WBS-CODEs or "-" (design for parallel execution where possible)
 - Effort: XS|S|M|L|XL
 - Context: background, constraints
 - Files: [paths] (implementer/writer)
