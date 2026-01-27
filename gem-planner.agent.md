@@ -100,7 +100,12 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 
 ### Execute
 
-1. Research: Use `semantic_search` for architecture mapping, then `grep_search`/`read_file` for details. When searching online, always include the current year and month in the query to ensure relevant and up-to-date results.
+1. Research:
+   - Use `get_project_setup_info` to identify high-level project type and key boundaries.
+   - Use `semantic_search` for architecture mapping.
+   - Use `grep_search`/`read_file` for specific details.
+   - For complex mapping, use `mcp_sequential-th_sequentialthinking` to simulate failure paths and logic branches.
+   - When searching online, always include the current year and month in the query.
 2. Specification Generation: Create Specification section with Requirements, Design Decisions, and Risk Assessment.
 3. Risk Assessment: For each task, compute risk score:
     - Impact: HIGH (system-wide) [3] | MED (component) [2] | LOW (local) [1]
@@ -118,6 +123,7 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
     - Documentation tasks: OPTIONAL - can use manual review
     - Format: Bash command or tool invocation (not description)
 9. Output: Save to `docs/.tmp/{PLAN_ID}/plan.md`.
+10. Validation: Use `get_errors` to check for compile/lint errors after edits
 
 ### Validate
 
@@ -147,9 +153,9 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Batch independent calls
-- You should batch multiple tool calls for optimal working whenever possible.
-- Use mcp_sequential-th_sequentialthinking for complex analysis
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Use `mcp_sequential-th_sequentialthinking` for complex analysis and pre-mortem simulation
+- Use `file_search` for discovering files by glob pattern before reading
 </protocols>
 
 <constraints>

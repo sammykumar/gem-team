@@ -77,9 +77,18 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- You should batch multiple tool calls for optimal working whenever possible.
-- Browser: Chrome MCP DevTools (mcp_chromedevtool_* tools)
-- Terminal: local servers for testing; timeout S/M=2min, L/XL=5min
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Browser: Use MCP Chrome DevTools tools:
+  - `mcp_chromedevtool_navigate_page` - Navigate to URLs
+  - `mcp_chromedevtool_click` - Click elements
+  - `mcp_chromedevtool_fill` - Fill form inputs
+  - `mcp_chromedevtool_hover` - Hover interactions
+  - `mcp_chromedevtool_select_option` - Select dropdowns
+  - `mcp_chromedevtool_screenshot` - Capture screenshots
+  - `mcp_chromedevtool_list_console_messages` - Check console errors
+  - `mcp_chromedevtool_network_get_response_body` - Inspect network responses
+  - `mcp_chromedevtool_evaluate_javascript` - Execute JS in page context
+- Terminal: `run_in_terminal` for local servers; timeout S/M=2min, L/XL=5min
 
 ### Screenshot Management (when screenshots requested)
 

@@ -38,11 +38,12 @@ Execute code changes, unit verification, self-review for security/quality
 
 <workflow>
 ### Execute
-1. Impact Analysis: Use `semantic_search` for call sites/imports
+1. Impact Analysis: Use `semantic_search` for call sites/imports, `list_code_usages` for deep tracing.
 2. Identify side effects: shared state, config, env vars
-3. Batch Edits: Iterate through `tasks`. Open files ONCE. Use atomic file editing tools for all changes across all tasks in the batch.
-4. Verification: Execute verification commands for ALL tasks (sequence or combined).
-5. Testing: Run unit tests if applicable
+3. Batch Edits: Iterate through `tasks`. Open files ONCE. Use `multi_replace_string_in_file` as PRIMARY edit method for batch changes.
+4. Validation: Use `get_errors` to check for compile/lint errors after edits.
+5. Verification: Use `get_changed_files` to verify modifications align with acceptance criteria, then execute verification commands.
+6. Testing: Run unit tests if applicable
 
 ### Review
 
@@ -73,7 +74,10 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- You should batch multiple tool calls for optimal working whenever possible.
+- PRIMARY EDIT METHOD: Use `multi_replace_string_in_file` for all batch edits (multiple changes in single call)
+- Use `replace_string_in_file` only for single isolated changes
+- Use `get_errors` after edits to validate no compile/lint errors introduced
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Concurrency & Atomicity: When working in parallel, using atomic file editing tools is critical. It ensures that complex file changes happen in a single operation, avoiding common issues like file locks, race conditions, or inconsistent state when multiple agents operate in the same workspace.
 - Terminal: run_in_terminal for commands, run_task for VS Code tasks, package managers, build/test, git
 

@@ -75,7 +75,9 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal.
-- You should batch multiple tool calls for optimal working whenever possible.
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution.
+- Use `get_errors` after configuration file edits to validate syntax
+- Use `file_search` to discover existing CI/CD configs, Dockerfiles, k8s manifests
 - Terminal: Docker/Podman, kubectl, CI/CD commands; timeout S/M=2min, L/XL=5min.
 - Parallel Safety: When running multiple builds/deployments, use unique names/tags or workspace isolation (Git worktrees) to avoid interference.
 - Idempotent Commands: Prefer commands that are safe to run multiple times (e.g., `mkdir -p`, `ln -sf`, `docker image inspect || docker pull`, `kubectl apply`).

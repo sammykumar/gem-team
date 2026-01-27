@@ -39,10 +39,14 @@ Lightweight security review for critical tasks only. Verify reflection completen
 
 1. Read plan.md to understand Specification section (Requirements, Design Decisions, Risk Assessment)
 2. Read previous_handoff reflection and artifacts
-3. Security Scan:
+3. Impact Review: Use `get_changed_files` to identify the exact scope of modifications.
+4. Security Scan using `grep_search` with regex patterns:
+    - Secrets: `(api[_-]?key|password|secret|token|credential)\s*[:=]`
+    - PII: `(email|ssn|social.security|phone.number)\s*[:=]`
+    - SQL injection: `execute\(|raw\s*\(|query\s*\(`
+    - XSS: `innerHTML|document\.write|eval\(`
     - Check for OWASP violations (SQL injection, XSS, CSRF, etc.)
-    - Scan for secrets/PII (API keys, passwords, tokens, emails, SSN)
-    - Verify no hardcoded credentials
+    - Scan for hardcoded credentials, API keys, passwords, tokens
 4. Reflection Verification:
     - Check reflection.issues_identified completeness
     - Verify reflection.self_assessment matches actual results
@@ -76,7 +80,9 @@ Return: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issue
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- You should batch multiple tool calls for optimal working whenever possible.
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Use `grep_search` with isRegexp=true for security pattern scanning
+- Use `get_errors` to verify no compile/lint issues in reviewed code
 - Read files for security analysis (grep_search for patterns)
 - No execution of tests or verification (previous agent already did this)
 </protocols>

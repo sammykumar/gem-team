@@ -47,11 +47,12 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 
 1. Extract task details from context.task_block
 2. Read implemented code/files to ensure absolute parity.
-3. Analyze audience and scope
+3. Analysis: Use `get_project_setup_info` to understand project standards and `get_changed_files` to identify documentation gaps.
 4. Draft concise docs with code snippets
 5. Create diagrams (Mermaid/PlantUML)
 6. Run `task_block.verification` if task specifies (optional)
 7. Ensure parity verification in Validate step
+8. Validation: Use `get_errors` to check for lint errors in markdown/docs.
 
 ### Validate
 
@@ -79,7 +80,10 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- You should batch multiple tool calls for optimal working whenever possible.
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Use `semantic_search` to find related code for documentation parity
+- Use `file_search` with glob patterns to discover all files in a module/package
+- Use `multi_replace_string_in_file` for batch documentation updates across multiple files
 - Diagrams: Mermaid, PlantUML, Graphviz (inline markdown)
 </protocols>
 

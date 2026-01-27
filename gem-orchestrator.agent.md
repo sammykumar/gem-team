@@ -32,7 +32,8 @@ Maintain reasoning consistency across turns for complex tasks only
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
 - max_parallel_agents: 4 (hard limit on concurrent agent executions)
 - running_agents: Count of currently executing agents (0-4)
-- Parallel execution: Concurrent runSubagent calls
+- Parallel execution: Batch independent tool calls in SINGLE `<function_calls>` block for concurrent execution
+  - Example: Call multiple grep_search, read_file, semantic_search in one block
   - metadata: {timestamp,model_used,retry_count,duration_ms}
   - reasoning: {approach,why,confidence}
   - reflection: {self_assessment,issues_identified,self_corrected}
@@ -66,12 +67,13 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 ### Init
 1. Parse goal, check input completeness
 2. Generate PLAN_ID using timestamp: PLAN-{YYMMDD-HHMM}
-3. IF embedded_plan or plan_path provided:
+3. **Project Context:** Call `get_project_setup_info` to identify language, project type, and key configuration.
+4. IF embedded_plan or plan_path provided:
    a. Load/parse plan
    b. Transform to standard format (wbs_code hierarchy, frontmatter task_states, task_blocks)
    c. Save to docs/.tmp/{PLAN_ID}/plan.md
    d. Use plan directly (skip gem-planner)
-4. ELSE → Delegate to gem-planner → plan.md
+5. ELSE → Delegate to gem-planner → plan.md
 
 ### Approval
 
@@ -154,13 +156,34 @@ All agents forward to Orchestrator. Orchestrator decides based on retry_count:
 <protocols>
 ### Planner Delegation
 
-- Initial: runSubagent('gem-planner',{plan_id,objective,constraints})
-- Replan: runSubagent('gem-planner',{plan_id,objective,mode:'replan',failed_tasks,constraints})
+- Initial:
+  ```
+  runSubagent({
+    agentName: "gem-planner",
+    description: "Create WBS plan",
+    prompt: "PLAN_ID: {plan_id}\nObjective: {objective}\nConstraints: {constraints}\n\nCreate WBS-compliant plan.md. Return JSON: {status, plan_path, state_updates}"
+  })
+  ```
+- Replan:
+  ```
+  runSubagent({
+    agentName: "gem-planner",
+    description: "Replan failed tasks",
+    prompt: "PLAN_ID: {plan_id}\nMode: replan\nFailed tasks: {failed_tasks}\nConstraints: {constraints}\n\nReplan failed tasks. Return JSON: {status, plan_path, state_updates}"
+  })
+  ```
 
 ### Reviewer Delegation
 
 - Trigger: Critical task (HIGH priority OR security/PII OR prod OR retry≥2) with completed status
-- Delegate: runSubagent('gem-reviewer',{plan_id,wbs_code,plan_path,previous_handoff})
+- Delegate:
+  ```
+  runSubagent({
+    agentName: "gem-reviewer",
+    description: "Security review task",
+    prompt: "PLAN_ID: {plan_id}\nWBS: {wbs_code}\nPlan path: {plan_path}\nPrevious handoff: {previous_handoff}\n\nPerform security review. Return JSON: {status, review_score, critical_issues}"
+  })
+  ```
 - Reviewer returns: {status,review_score,critical_issues}
 - IF review rejected → increment retry_count, re-delegate to original agent with review findings (critical_issues, review_score)
 - IF review approved → mark task as completed
@@ -188,9 +211,11 @@ All agents forward to Orchestrator. Orchestrator decides based on retry_count:
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Batch independent calls
-- You should batch multiple tool calls for optimal working whenever possible.
+- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Use `manage_todo_list` to track task progress visibly during execution loop
+- Use `get_errors` after implementation tasks to validate no compile/lint errors
 - runSubagent REQUIRED for all worker tasks. Orchestrator leverages parallel subagent capacity.
+- runSubagent signature: `runSubagent({ agentName: string, description: string, prompt: string })`
 </protocols>
 
 <anti_patterns>
