@@ -38,7 +38,7 @@ This agent system follows modern agentic AI design patterns:
 | Context Engineering   | `<context_requirements>` defines input contracts                |
 | Critical-Task Gating | gem-reviewer for security review of critical tasks              |
 | Safety Protocols      | `<error_handling>` with escalation routes                       |
-| Web Research Integration | All agents use `vscode-websearchforcopilot_webSearch` and `fetch_webpage` |
+| Web Research Integration | All agents use `mcp_tavily-remote_tavily_search` and `fetch_webpage` |
 | Parallel Execution | Batch independent tool calls for maximum throughput            |
 | Timeout Strategy | Effort-based timeouts (XS: 30s → XL: 10min)                    |
 
@@ -57,7 +57,7 @@ All agents integrate web research for real-time knowledge:
 
 Tools Used:
 
-- `vscode-websearchforcopilot_webSearch` - Primary search for current information
+- `mcp_tavily-remote_tavily_search` - Primary search for current information
 - `fetch_webpage` - Retrieve specific documentation pages
 
 Query Best Practices:
@@ -92,7 +92,7 @@ YAML frontmatter (name, description, infer)
 
 ### CMP v2.0 Handoff Format
 
-All agents use the standardized Concise Messaging Protocol v2.0:
+All agents use the standardized Concise Messaging Protocol v2.0 (see detailed glossary in individual agents):
 
 ```json
 {

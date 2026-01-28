@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
 - artifact_dir: docs/.tmp/{PLAN_ID}/
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
@@ -38,7 +38,7 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 
 <workflow>
 ### Parity Verification (Pre-Write)
-1. Research Phase: Use `vscode-websearchforcopilot_webSearch` and `fetch_webpage` for:
+1. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Current documentation standards for target framework
    - Best practices for audience type (developer, user, admin)
    - Diagram notation and rendering requirements
@@ -92,7 +92,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for Documentation (CRITICAL)
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for documentation standards
+- Primary Tool: `mcp_tavily-remote_tavily_search` for documentation standards
 - Secondary Tool: `fetch_webpage` for official style guides and references
 - ALWAYS use web search for:
   - Documentation best practices and style guides (Google, Microsoft)
@@ -107,22 +107,22 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Example:
   ```
   // Before writing API docs
-  vscode-websearchforcopilot_webSearch("API documentation best practices 2026")
+  mcp_tavily-remote_tavily_search("API documentation best practices 2026")
   fetch_webpage("https://developers.google.com/style")
 
   // Mermaid diagram syntax
-  vscode-websearchforcopilot_webSearch("Mermaid sequence diagram syntax examples 2026")
+  mcp_tavily-remote_tavily_search("Mermaid sequence diagram syntax examples 2026")
   fetch_webpage("https://mermaid.js.org/syntax/sequenceDiagram.html")
 
   // README structure
-  vscode-websearchforcopilot_webSearch("README best practices GitHub 2026")
+  mcp_tavily-remote_tavily_search("README best practices GitHub 2026")
   ```
 
 ### Parallel Tool Batching Examples
 
 ```
 // Research phase - batch these:
-vscode-websearchforcopilot_webSearch("${framework} documentation conventions 2026")
+mcp_tavily-remote_tavily_search("${framework} documentation conventions 2026")
 fetch_webpage("https://jsdoc.app/")    // JSDoc reference
 semantic_search("public API functions") // Find code to document
 file_search("/*.md")                 // Find existing docs

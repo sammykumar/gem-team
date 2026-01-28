@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
 - artifact_dir: docs/.tmp/{PLAN_ID}/
 - environment: local|staging|prod
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
@@ -41,7 +41,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 ### Preflight (Pre-Execute)
 1. Check environment readiness (tools: `docker`, `kubectl`, etc., network, permissions).
 2. Container Config: Use `container-tools_get-config` to inspect current container state.
-3. Research Phase: Use `vscode-websearchforcopilot_webSearch` and `fetch_webpage` for:
+3. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Latest security advisories for base images
    - Best practices for target infrastructure
    - Known issues with specific versions
@@ -90,7 +90,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for Infrastructure (CRITICAL)
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for infrastructure docs
+- Primary Tool: `mcp_tavily-remote_tavily_search` for infrastructure docs
 - Secondary Tool: `fetch_webpage` for official documentation
 - ALWAYS use web search for:
   - Cloud provider documentation (AWS, GCP, Azure)
@@ -104,11 +104,11 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Example:
   ```
   // Before Kubernetes deployment
-  vscode-websearchforcopilot_webSearch("Kubernetes HPA best practices 2026")
+  mcp_tavily-remote_tavily_search("Kubernetes HPA best practices 2026")
   fetch_webpage("https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/")
 
   // Docker optimization
-  vscode-websearchforcopilot_webSearch("Docker multi-stage build security best practices 2026")
+  mcp_tavily-remote_tavily_search("Docker multi-stage build security best practices 2026")
   ```
 
 ### Parallel Tool Batching Examples
@@ -118,7 +118,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 container-tools_get-config()           // Container config
 file_search("/Dockerfile*")          // Find Dockerfiles
 file_search("/*.yaml")               // Find K8s manifests
-vscode-websearchforcopilot_webSearch("${tool} security best practices 2026")
+mcp_tavily-remote_tavily_search("${tool} security best practices 2026")
 
 // Validation phase - batch these:
 run_in_terminal("docker images")       // List images

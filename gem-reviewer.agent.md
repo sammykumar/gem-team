@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
 - artifact_dir: docs/.tmp/{PLAN_ID}/
 - handoff: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issues,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
 - critical_task: HIGH priority OR security/PII involved OR environment=prod OR retry_count≥2
@@ -41,13 +41,13 @@ Lightweight security review for critical tasks only. Verify reflection completen
 2. Read previous_handoff reflection and artifacts
 3. Impact Review: Use `get_changed_files` to identify the exact scope of modifications.
 4. Deep Impact Analysis: Use `list_code_usages` to trace how changes affect other components.
-5. Security Research: Use `vscode-websearchforcopilot_webSearch` and `fetch_webpage` for:
+5. Security Research: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Current OWASP vulnerabilities relevant to detected patterns
    - CVE lookups for any dependencies involved
    - Security best practices for implementation patterns
 6. Security Scan using `grep_search` with regex patterns:
-    - Secrets: `(api[_-]?key|password|secret|token|credential)\s*[:=]`
-    - PII: `(email|ssn|social.security|phone.number)\s*[:=]`
+    - Secrets: `(api[_-]?key|password|secret|token|credential|private_key|auth_token|access_token|refresh_token|api_secret|client_secret|bearer_token|jwt_secret|encryption_key|signing_key)\s*[:=]`
+    - PII: `(email|ssn|social.security|phone.number|credit_card|cvv|cc_number|address|dob|date_of_birth|passport|driver_license|tax_id|bank_account)\s*[:=]`
     - SQL injection: `execute\(|raw\s*\(|query\s*\(`
     - XSS: `innerHTML|document\.write|eval\(`
     - Check for OWASP violations (SQL injection, XSS, CSRF, etc.)
@@ -94,7 +94,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issue
 
 ### Web Research for Security Review (CRITICAL)
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for security advisories
+- Primary Tool: `mcp_tavily-remote_tavily_search` for security advisories
 - Secondary Tool: `fetch_webpage` for official security documentation
 - ALWAYS use web search for:
   - OWASP Top 10 current vulnerabilities and mitigations
@@ -108,15 +108,15 @@ Return: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issue
 - Example:
   ```
   // OWASP reference check
-  vscode-websearchforcopilot_webSearch("OWASP Top 10 2026 injection prevention")
+  mcp_tavily-remote_tavily_search("OWASP Top 10 2026 injection prevention")
   fetch_webpage("https://owasp.org/Top10/")
 
   // CVE lookup for dependencies
-  vscode-websearchforcopilot_webSearch("CVE ${package_name} 2026 vulnerability")
+  mcp_tavily-remote_tavily_search("CVE ${package_name} 2026 vulnerability")
   fetch_webpage("https://nvd.nist.gov/vuln/search")
 
   // Framework security
-  vscode-websearchforcopilot_webSearch("${framework} security best practices 2026")
+  mcp_tavily-remote_tavily_search("${framework} security best practices 2026")
   ```
 
 ### Parallel Tool Batching Examples
@@ -126,7 +126,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issue
 grep_search("(api[_-]?key|password|secret|token)\\s*[:=", isRegexp=true)
 grep_search("eval\\(|innerHTML|document\\.write", isRegexp=true)
 grep_search("execute\\(|raw\\s*\\(|query\\s*\\(", isRegexp=true)
-vscode-websearchforcopilot_webSearch("OWASP ${detected_pattern} mitigation 2026")
+mcp_tavily-remote_tavily_search("OWASP ${detected_pattern} mitigation 2026")
 
 // Impact analysis - batch these:
 list_code_usages(changed_symbol)       // Trace usage

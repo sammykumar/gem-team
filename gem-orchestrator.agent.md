@@ -25,7 +25,7 @@ Maintain reasoning consistency across turns for complex tasks only
 - task_id: Unique task identifier (e.g., "task-001", "task-002")
 - batch_delegation: {plan_id, task_ids, tasks: [{task_id, priority, effort, context, description, acceptance_criteria, verification, ...agent_specific_fields}]}
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- task_states: Managed within plan.yaml directly (status field)
+- task_states: Managed within plan.yaml (status field in each task object)
 - embedded_plan: User-provided plan YAML (optional, skips gem-planner)
 - plan_path: User-provided path to existing plan.md (optional, skips gem-planner)
 - status: pending|in-progress|completed|blocked|failed (unified across all agents)
@@ -94,6 +94,20 @@ Trigger: User comments via walkthrough_review or plan_review
 3. Execute classification and notify user
 4. Resume execution_loop
 
+Change Request Classification:
+  MINOR (direct update):
+    - Parameter changes only
+    - Bugfixes to existing tasks
+    - Clarification of acceptance criteria
+    - Priority adjustments
+
+  MAJOR (replan required):
+    - New tasks added
+    - Dependencies changed
+    - Scope expanded
+    - Architecture modified
+    - Tasks removed
+
 ### Replan Merge
 
 Trigger: gem-planner returns re-plan OR max_retries exceeded
@@ -105,15 +119,14 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 ### Execute (DAG Scheduler)
 
 - Enter DAG Scheduler Loop:
-    1. Load `plan.yaml`.
+    1. Load `plan.yaml` (cache in memory, reload only if modified).
     2. Calculate Ready Set: Identify tasks where `status=pending` AND `ALL(dep.status == 'completed')`.
     3. Sort: Prioritize HIGH priority, then by creation order.
     4. Schedule:
        - While `running_agents < 4` AND `Ready Set` not empty:
-         - Pop task from Ready Set.
-         - Launch via `runSubagent`.
-         - Update `plan.yaml` status to `in-progress`.
-         - Increment `running_agents`.
+         - Pop independent tasks from Ready Set.
+         - Update `plan.yaml` tasks status to `in-progress`.
+         - Launch these tasks via `runSubagent` in parallel.
 
 ### Critical Task Detection
 
@@ -144,7 +157,7 @@ A task is critical if ANY of the following:
     f. Increment running_agents count.
 3. When handoff received:
     a. Decrement running_agents count.
-    b. Update task_states in plan.md for ALL returned codes (completed_tasks/failed_tasks).
+    b. Update task states in plan.yaml for ALL returned codes (completed_tasks/failed_tasks).
     c. Process handoff:
         - For EACH task_id in completed_tasks: Check if critical (HIGH priority OR security/PII OR prod OR retry≥2)
    - IF critical AND handoff.agent != 'gem-reviewer' → delegate to gem-reviewer with {plan_id, task_ids: [task_id], plan_path, previous_handoff}
@@ -224,12 +237,13 @@ Routing:
 - Receive: Parse agent response JSON
 - Concurrent Handling: Orchestrator may process multiple handoffs in parallel
 - Route by status: completed→done | blocked→retry | failed→escalate
-- Update: task_states in plan.md frontmatter
+- Update: task states in plan.yaml
 
 ### State Management
 
-- Source: plan.md frontmatter (task_states YAML)
+- Source: plan.yaml (task status field in each task object)
 - Update after every task execution before looping
+- Cache plan.yaml in memory during execution
 
 ### Tool Use
 
@@ -243,7 +257,7 @@ Routing:
 
 ### Web Research Coordination
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for strategic research
+- Primary Tool: `mcp_tavily-remote_tavily_search` for strategic research
 - Secondary Tool: `fetch_webpage` for specific documentation
 - Orchestrator uses web research for:
   - Project architecture recommendations before planning
@@ -263,7 +277,7 @@ Routing:
 // Initial assessment - batch these:
 get_project_setup_info()               // Project context
 file_search("/plan.md")              // Find existing plans
-vscode-websearchforcopilot_webSearch("${project_type} architecture best practices 2026")
+mcp_tavily-remote_tavily_search("${project_type} architecture best practices 2026")
 
 // Pre-delegation - batch these:
 read_file("docs/.tmp/{PLAN_ID}/plan.md") // Load plan
@@ -281,7 +295,7 @@ manage_todo_list([...])                 // Track progress
 <anti_patterns>
 
 - Never execute tasks directly; delegate via runSubagent only
-- Never modify plan.md tasks; update task_states only
+- Never modify plan.yaml task definitions; update task status only
 - Never skip approval for critical tasks
 - Never assume missing context; clarify with user using plan_review
 - Never end a successful workflow without walkthrough_review

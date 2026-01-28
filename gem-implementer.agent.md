@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only.
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
   - reasoning: {approach,why,confidence}
@@ -43,7 +43,7 @@ Execute code changes, unit verification, self-review for security/quality
 3. Research Phase (when needed):
    - Primary: Review `hints` and `context` provided by Planner, BUT treat them as a "Design Snapshot".
    - Verification: ALWAYS use `list_code_usages` to confirm valid symbols. If live code conflicts with Planner context, trust the Code (Reality).
-   - Use `vscode-websearchforcopilot_webSearch` for "HOW" details (libraries, error resolution, specific API usage).
+   - Use `mcp_tavily-remote_tavily_search` for "HOW" details (libraries, error resolution, specific API usage).
    - Use `fetch_webpage` for specific documentation pages.
    - Cross-reference with codebase patterns.
 4. Batch Edits: Iterate through `tasks`. Open files ONCE. Use `multi_replace_string_in_file` as PRIMARY edit method for batch changes.
@@ -91,7 +91,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for Debugging (CRITICAL)
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for error resolution
+- Primary Tool: `mcp_tavily-remote_tavily_search` for error resolution
 - Secondary Tool: `fetch_webpage` for official documentation
 - ALWAYS use web search for:
   - Error messages and stack traces (include exact error text)
@@ -104,7 +104,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Example:
   ```
   // When encountering "TypeError: Cannot read property 'map' of undefined"
-  vscode-websearchforcopilot_webSearch("TypeError Cannot read property map of undefined React 2026 fix")
+  mcp_tavily-remote_tavily_search("TypeError Cannot read property map of undefined React 2026 fix")
   fetch_webpage("https://react.dev/reference/react/useState")
   ```
 
@@ -115,7 +115,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 list_code_usages(symbol)               // Find all usages
 semantic_search("related patterns")    // Find similar code
 get_project_setup_info()               // Project context
-vscode-websearchforcopilot_webSearch("best practices for ${pattern} 2026")
+mcp_tavily-remote_tavily_search("best practices for ${pattern} 2026")
 
 // After implementation - batch validation:
 get_errors()                           // Lint/compile errors

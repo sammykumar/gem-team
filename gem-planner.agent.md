@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format (from Orchestrator)
-- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (DAG structure)
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (DAG structure with task states)
 - task_id: Unique task identifier (e.g., "task-001", "task-002")
 - mode: "initial" | "replan"
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
@@ -56,13 +56,6 @@ Use ONLY these specialist agents when assigning tasks. Each agent has specific c
 - Capabilities: Mermaid/PlantUML diagrams, parity verification with codebase
 - Task Fields: Files, Scope (required), Audience (required), Acceptance, Verification
 
-### gem-reviewer (Auto-invoked by Orchestrator)
-
-- Specialty: Security review, OWASP scanning, secrets detection
-- Use For: Critical task validation (automatically invoked for HIGH priority, security/PII, prod, retry≥2)
-- Capabilities: Security scanning, reflection verification, specification compliance
-- Note: Do NOT assign tasks directly to gem-reviewer. Orchestrator routes critical tasks automatically.
-
 ### Agent Selection Rules
 
 1. Match task type to agent specialty
@@ -70,8 +63,6 @@ Use ONLY these specialist agents when assigning tasks. Each agent has specific c
 3. Use gem-chrome-tester AFTER implementation for UI validation
 4. Use gem-devops for infrastructure and deployment tasks
 5. Use gem-documentation-writer for documentation tasks
-6. Never assign planning tasks to specialists (handled by gem-planner)
-7. Never assign gem-reviewer directly (auto-invoked for critical tasks)
 </available_agents>
 
 <context_requirements>
@@ -101,14 +92,15 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 ### Execute
 
 1. Research:
-   - Use `search_subagent` for complex multi-file codebase exploration.
-   - Use `get_project_setup_info` to identify project type and structure.
-   - Context Gathering: `read_file` critical context found. In Task Block `Context`, include a Summary of findings (not just links) to reduce Implementer overhead.
-   - Use `semantic_search` for architecture mapping.
-   - Use `grep_search`/`read_file` for specific details.
+   - Use `semantic_search()` for architectural patterns and codebase exploration.
+   - Use `grep_search()` for specific patterns and code discovery.
+   - Use `file_search()` for finding files by glob pattern.
+   - Use `mcp_sequential-th_sequentialthinking()` for complex analysis.
+   - Use `get_project_setup_info()` to identify project type and structure.
+   - Context Gathering: `read_file()` critical context found. In Task Block `Context`, include a Summary of findings (not just links) to reduce Implementer overhead.
    - For complex mapping, use `mcp_sequential-th_sequentialthinking` to simulate failure paths and logic branches.
    - Web Research (MANDATORY for new tech/patterns):
-     - Use `vscode-websearchforcopilot_webSearch` with current year/month in query
+     - Use `mcp_tavily-remote_tavily_search` with current year/month in query
      - Use `fetch_webpage` to retrieve official documentation
      - Research best practices, security advisories, and recommended approaches
      - Cross-reference external findings with codebase patterns
@@ -172,7 +164,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research Protocol (CRITICAL)
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for all online research
+- Primary Tool: `mcp_tavily-remote_tavily_search` for all online research
 - Secondary Tool: `fetch_webpage` for retrieving specific documentation pages
 - ALWAYS use web search for:
   - Best practices and recommended approaches
@@ -186,7 +178,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Example Batch:
   ```
   // Parallel research calls
-  vscode-websearchforcopilot_webSearch("Next.js 15 middleware best practices 2026")
+  mcp_tavily-remote_tavily_search("Next.js 15 middleware best practices 2026")
   fetch_webpage("https://nextjs.org/docs/app/building-your-application/routing/middleware")
   semantic_search("middleware implementation")
   ```
@@ -198,7 +190,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 file_search("/*.config.*")           // Find configs
 grep_search("TODO|FIXME")              // Find existing issues
 semantic_search("authentication flow") // Architecture mapping
-vscode-websearchforcopilot_webSearch("auth best practices 2026")
+mcp_tavily-remote_tavily_search("auth best practices 2026")
 
 // Analysis phase - batch these calls:
 read_file("/path/to/file1.ts")

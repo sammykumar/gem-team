@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
 - artifact_dir: docs/.tmp/{PLAN_ID}/
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
@@ -39,7 +39,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 
 <workflow>
 ### Test Case Design (Pre-Execute)
-1. Research Phase: Use `vscode-websearchforcopilot_webSearch` and `fetch_webpage` for:
+1. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Current accessibility standards (WCAG 2.2)
    - UI testing best practices for target framework
    - Known browser compatibility issues
@@ -52,11 +52,18 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 
 ### Execute
 
-1. Extract test scenarios and URLs from context.task_block
-2. Initialize browser with required viewport
-3. Navigate to URLs, verify with `wait_for`
-4. Execute Acceptance Criteria tests. Take screenshots IF requested in task_block.
-5. Run `task_block.verification` command if specified.
+1. Activate required tools:
+   - activate_browser_navigation_tools()
+   - activate_element_interaction_tools()
+   - activate_form_input_tools()
+   - activate_visual_snapshot_tools()
+   - activate_console_logging_tools()
+   - activate_performance_analysis_tools()
+2. Extract test scenarios and URLs from context.task_block
+3. Initialize browser with required viewport
+4. Navigate to URLs, verify with wait functionality
+5. Execute Acceptance Criteria tests. Take screenshots IF requested in task_block.
+6. Run `task_block.verification` command if specified.
 
 ### Validate
 
@@ -83,20 +90,22 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 - Prefer built-in tools over run_in_terminal
 - Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
-- Browser: Use MCP Chrome DevTools tools:
-  - Navigation: `mcp_chromedevtool_navigate_page` - Navigate to URLs
-  - Interaction: `mcp_chromedevtool_click`, `mcp_chromedevtool_fill`, `mcp_chromedevtool_hover`, `mcp_chromedevtool_select_option`
-  - Evidence: `mcp_chromedevtool_screenshot` - Capture screenshots
-  - Debugging: `mcp_chromedevtool_list_console_messages` - Check console errors
-  - Network: `mcp_chromedevtool_network_get_response_body` - Inspect network responses
-  - JavaScript: `mcp_chromedevtool_evaluate_javascript` - Execute JS in page context
-  - Performance: `mcp_chromedevtool_get_pagespeed_metrics` - Core Web Vitals and performance metrics
-  - Emulation: `mcp_chromedevtool_emulate` - Device/viewport emulation for responsive testing
+- Browser: Use MCP Chrome DevTools tools (activate required tools first):
+  - Navigation: Use activate_browser_navigation_tools() for page navigation
+  - Interaction: Use activate_element_interaction_tools() for clicking, hovering, filling forms
+  - Evidence: Use activate_visual_snapshot_tools() for screenshots
+  - Debugging: Use activate_console_logging_tools() for console messages
+  - Network: `mcp_chrome-devtoo_get_network_request` - Inspect network requests
+  - JavaScript: `mcp_chrome-devtoo_evaluate_script` - Execute JS in page context
+  - Performance: Use activate_performance_analysis_tools() for Core Web Vitals
+  - Emulation: `mcp_chrome-devtoo_resize_page` - Device/viewport emulation
+  - Dialogs: `mcp_chrome-devtoo_handle_dialog` - Handle browser dialogs
+  - Upload: `mcp_chrome-devtoo_upload_file` - File uploads
 - Terminal: `run_in_terminal` for local servers
 
 ### Web Research for UI Testing (CRITICAL)
 
-- Primary Tool: `vscode-websearchforcopilot_webSearch` for testing best practices
+- Primary Tool: `mcp_tavily-remote_tavily_search` for testing best practices
 - Secondary Tool: `fetch_webpage` for accessibility and UX documentation
 - ALWAYS use web search for:
   - Accessibility standards (WCAG 2.2 guidelines)
@@ -110,26 +119,26 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Example:
   ```
   // Before accessibility testing
-  vscode-websearchforcopilot_webSearch("WCAG 2.2 accessibility testing checklist 2026")
+  mcp_tavily-remote_tavily_search("WCAG 2.2 accessibility testing checklist 2026")
   fetch_webpage("https://www.w3.org/WAI/WCAG22/quickref/")
 
   // Performance benchmarks
-  vscode-websearchforcopilot_webSearch("Core Web Vitals thresholds 2026 best practices")
+  mcp_tavily-remote_tavily_search("Core Web Vitals thresholds 2026 best practices")
   ```
 
 ### Parallel Tool Batching Examples
 
 ```
 // Pre-test research - batch these:
-vscode-websearchforcopilot_webSearch("${component} accessibility best practices 2026")
+  mcp_tavily-remote_tavily_search("${component} accessibility best practices 2026")
 fetch_webpage("https://developer.chrome.com/docs/lighthouse/")
 get_project_setup_info()               // Understand app structure
 
 // During test - batch independent checks:
-mcp_chromedevtool_screenshot()         // Visual state
-mcp_chromedevtool_list_console_messages() // Console errors
-mcp_chromedevtool_get_pagespeed_metrics() // Performance
-mcp_chromedevtool_evaluate_javascript("document.querySelectorAll('[aria-label]').length")
+  // Use activate_visual_snapshot_tools() for screenshots
+  // Use activate_console_logging_tools() for console messages
+  // Use activate_performance_analysis_tools() for metrics
+  // Use mcp_chrome-devtoo_evaluate_script() for JavaScript execution
 ```
 
 ### Timeout Strategy
