@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- wbs_codes: List of Task identifiers (["1.0", "1.1"])
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
 - artifact_dir: docs/.tmp/{PLAN_ID}/
 - handoff: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issues,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
 - critical_task: HIGH priority OR security/PII involved OR environment=prod OR retry_count≥2
@@ -21,7 +21,7 @@ Maintain reasoning consistency across turns for complex tasks only
 </glossary>
 
 <context_requirements>
-Required: plan_id, wbs_codes (list), plan_path, previous_handoff
+Required: plan_id, task_id, task_def (from YAML), plan_yaml, previous_handoff
 Optional: artifact_dir, retry_count
 Derived: criticality (from previous_handoff.metadata)
 </context_requirements>

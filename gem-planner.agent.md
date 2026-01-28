@@ -13,8 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format (from Orchestrator)
-- wbs_codes: ["0.0"] (planning phase marker)
-- plan.md: docs/.tmp/{PLAN_ID}/plan.md
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (DAG structure)
 - mode: "initial" | "replan"
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
@@ -103,6 +102,7 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 1. Research:
    - Use `search_subagent` for complex multi-file codebase exploration.
    - Use `get_project_setup_info` to identify project type and structure.
+   - Context Gathering: `read_file` critical context found. In Task Block `Context`, include a Summary of findings (not just links) to reduce Implementer overhead.
    - Use `semantic_search` for architecture mapping.
    - Use `grep_search`/`read_file` for specific details.
    - For complex mapping, use `mcp_sequential-th_sequentialthinking` to simulate failure paths and logic branches.
@@ -119,7 +119,12 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
     - Set Priority = HIGH if risk_score ≥7
 4. Analysis (Pre-Mortem): Use `mcp_sequential-th_sequentialthinking` to simulate ≥2 failure paths and define mitigations.
 5. Decomposition: Use `mcp_sequential-th_sequentialthinking` to break objective into 3-7 atomic subtasks with DAG dependencies.
-6. IF replan: Modify only affected tasks, preserve completed status.
+   - Strategy: Interface-First & Component-Based. Define shared interfaces/contracts (Task 1.0) before dependent components.
+   - Parallelism: Group tasks by file/module rather than feature flow to maximize parallel execution.
+6. IF replan:
+   - Analyze failures.
+   - Spec Rejection: If prior agent returned `spec_rejected`, analyze `artifacts.blocking_constraint` and `artifacts.suggested_fix` to correct the approach.
+   - Modify only affected tasks, preserve completed status.
 7. IF initial: Generate full `plan.md` with Specification section and WBS structure.
 8. Verification Design: Define verification command/method based on task type:
     - Code tasks (implementer): MANDATORY - test command (e.g., npm test, pytest)
@@ -228,54 +233,30 @@ Exit: plan.md created (WBS, frontmatter, task_states), pre-mortem done
 - Never create monolithic tasks; 3-7 subtasks required
 - Never create monolithic subtasks: >XL effort, >10 files, >5 deps
 - Never create atomic subtasks: <XS effort, single line change
+- Never provide specific line numbers or fragile code insertion points (Architect vs Builder)
+- Interface Tasks (contracts/definitions) MUST be XS/S effort to avoid blocking.
 - Target: 2-3 files per task, 1-2 deps, clear acceptance criteria
 </anti_patterns>
 
 <plan_format>
-Frontmatter: plan_id, objective, agents[], task_states{"WBS-CODE":{"status":"pending|in-progress|completed|blocked|failed","retry_count":0}}
-
-## Specification
-
-### Requirements
-
-- Functional: [user-facing requirements]
-- Non-functional: [performance, security, scalability]
-- Constraints: [tech stack, deadlines, resources]
-
-### Design Decisions
-
-- Architecture: [high-level design]
-- API Contracts: [interfaces between services]
-- Data Model: [schemas, relationships]
-
-### Risk Assessment
-
-- High: [impact 3, uncertainty 3, rollback difficulty 3]
-- Medium: [impact 2, uncertainty 2, rollback difficulty 2]
-
-Task Block:
-
-### {WBS}: {Title}
-
-- Agent: @gem-{implementer|chrome-tester|devops|documentation-writer} (see <available_agents>)
-- Priority: HIGH|MED|LOW
-- Depends: WBS-CODEs or "-" (design for parallel execution where possible)
-- Effort: XS|S|M|L|XL
-- Context: background, constraints
-- Files: [paths] (implementer/writer/devops)
-- URLs: [test URLs] (chrome-tester)
-- Scope: doc scope (writer)
-- Audience: target audience (writer)
-- Operations: [ops list] (devops)
-- Environment: local|staging|prod (devops)
-- Description: what task accomplishes
-- Hints: [optional implementation details, line ranges, function names]
-- acceptance_criteria: [- ] checkboxes
-- Verification: MANDATORY for code/DevOps tasks, OPTIONAL for UI/doc tasks. Format: bash command or tool invocation, not description.
-
-Note: These fields are mapped directly to the batch delegation payload {plan_id, wbs_codes, tasks: [...]}. Ensure all agent-specific fields are present.
-
-Location: docs/.tmp/{PLAN_ID}/plan.md
+# plan.yaml schema
+version: 2.0
+plan_id: "PLAN-..."
+objective: "..."
+design_decisions: |
+  Summary of architecture...
+tasks:
+  - id: "unique_id"
+    title: "Task Title"
+    agent: "gem-implementer"
+    priority: "HIGH"
+    status: "pending" # pending|in-progress|completed|blocked|spec_rejected|failed
+    dependencies: ["task_id_1"] # Empty [] if root task
+    effort: "S"
+    context: "Summary of relevant architectural decisions..."
+    files: ["path/to/file"]
+    acceptance_criteria: ["crit1", "crit2"]
+    verification: "npm test"
 </plan_format>
 
 <memory>

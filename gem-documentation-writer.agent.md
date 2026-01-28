@@ -13,7 +13,7 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
-- wbs_codes: List of Task identifiers (["1.0", "1.1"])
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
 - artifact_dir: docs/.tmp/{PLAN_ID}/
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
@@ -23,7 +23,7 @@ Maintain reasoning consistency across turns for complex tasks only
 </glossary>
 
 <context_requirements>
-Required: plan_id, wbs_codes, tasks (list of {wbs_code, scope, audience, files, verification, effort})
+Required: plan_id, task_id, task_def (from YAML)
 Optional: existing_docs, diagram_format, retry_count, previous_errors
 Derived: parity_sources (from scope)
 </context_requirements>

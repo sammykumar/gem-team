@@ -24,8 +24,8 @@ Maintain reasoning consistency across turns for complex tasks only
 - PLAN_ID: PLAN-{YYMMDD-HHMM} format, orchestrator generates
 - wbs_codes: List of Task identifiers (["1.0", "1.1"]), used in tracking.
 - batch_delegation: {plan_id, wbs_codes, tasks: [{wbs_code, priority, effort, context, description, acceptance_criteria, verification, ...agent_specific_fields}]}
-- plan.md: docs/.tmp/{PLAN_ID}/plan.md
-- task_states: plan.md frontmatter {"1.0":{"status":"pending","retry_count":0}}
+- plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
+- task_states: Managed within plan.yaml directly (status field)
 - embedded_plan: User-provided plan YAML (optional, skips gem-planner)
 - plan_path: User-provided path to existing plan.md (optional, skips gem-planner)
 - status: pending|in-progress|completed|blocked|failed (unified across all agents)
@@ -97,10 +97,18 @@ Trigger: gem-planner returns re-plan OR max_retries exceeded
 2. Validate no circular deps (Planner already validated; Orchestrator skips if plan fresh)
 3. Reset retry_count=0 for new pending tasks
 
-### Execute
+### Execute (DAG Scheduler)
 
-- Enter execution_loop → identify independent pending tasks → launch in parallel → mark completed → synthesize summary
-- Update `manage_todo_list` as tasks progress.
+- Enter DAG Scheduler Loop:
+    1. Load `plan.yaml`.
+    2. **Calculate Ready Set:** Identify tasks where `status=pending` AND `ALL(dep.status == 'completed')`.
+    3. **Sort:** Prioritize HIGH priority, then by creation order.
+    4. **Schedule:**
+       - While `running_agents < 4` AND `Ready Set` not empty:
+         - Pop task from Ready Set.
+         - Launch via `runSubagent`.
+         - Update `plan.yaml` status to `in-progress`.
+         - Increment `running_agents`.
 
 ### Critical Task Detection
 
@@ -141,6 +149,7 @@ A task is critical if ANY of the following:
     d. Route based on status:
         - completed→mark done
         - blocked→increment retry_count, retry (re-delegate to same agent with same parameters, updated retry_count, and previous errors)
+        - spec_rejected→escalate immediately (treat as failed architecture, skip retries, delegate to Planner)
         - failed/retry≥3→escalate
     e. Go to step 2 (launch next task if available).
 4. Loop until all tasks completed OR max_retries exceeded
