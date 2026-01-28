@@ -1,7 +1,7 @@
 ---
 description: "Browser automation specialist using Chrome MCP DevTools."
 name: gem-chrome-tester
-infer: false
+infer: agent
 ---
 
 <agent>

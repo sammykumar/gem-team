@@ -1,7 +1,7 @@
 ---
 description: "Manages workflow, delegates tasks, synthesizes results, and communicates with user."
 name: gem-orchestrator
-infer: false
+infer: user
 agents:
   [
     "gem-implementer",

@@ -1,7 +1,7 @@
 ---
 description: "Research, Pre-Mortem analysis, and consolidated plan generation."
 name: gem-planner
-infer: false
+infer: all
 ---
 
 <agent>
