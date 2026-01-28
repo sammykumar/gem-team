@@ -41,6 +41,7 @@ This agent system follows modern agentic AI design patterns:
 | Web Research Integration | All agents use `mcp_tavily-remote_tavily_search` and `fetch_webpage` |
 | Parallel Execution | Batch independent tool calls for maximum throughput            |
 | Timeout Strategy | Effort-based timeouts (XS: 30s → XL: 10min)                    |
+| System Constraints    | max_parallel_agents: 4 enforced by Orchestrator                 |
 
 ## 🌐 Web Research Protocol
 

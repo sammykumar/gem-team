@@ -89,7 +89,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch multiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Browser: Use MCP Chrome DevTools tools (activate required tools first):
   - Navigation: Use activate_browser_navigation_tools() for page navigation
   - Interaction: Use activate_element_interaction_tools() for clicking, hovering, filling forms

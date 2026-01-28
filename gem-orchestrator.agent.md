@@ -157,7 +157,7 @@ A task is critical if ANY of the following:
     f. Increment running_agents count.
 3. When handoff received:
     a. Decrement running_agents count.
-    b. Update task states in plan.yaml for ALL returned codes (completed_tasks/failed_tasks).
+    b. Update task states in plan.yaml and using `manage_todo_list` for ALL returned codes (completed_tasks/failed_tasks).
     c. Process handoff:
         - For EACH task_id in completed_tasks: Check if critical (HIGH priority OR security/PII OR prod OR retry≥2)
    - IF critical AND handoff.agent != 'gem-reviewer' → delegate to gem-reviewer with {plan_id, task_ids: [task_id], plan_path, previous_handoff}
@@ -248,7 +248,7 @@ Routing:
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch multiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Cleanup: Run `git worktree prune` periodically to remove stale isolation environments.
 - Use `manage_todo_list` to track task progress visibly during execution loop
 - Use `get_errors` after implementation tasks to validate no compile/lint errors

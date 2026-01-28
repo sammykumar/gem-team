@@ -84,7 +84,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch multiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Use `semantic_search` to find related code for documentation parity
 - Use `file_search` with glob patterns to discover all files in a module/package
 - Use `multi_replace_string_in_file` for batch documentation updates across multiple files

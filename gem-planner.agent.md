@@ -158,7 +158,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch multiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Use `mcp_sequential-th_sequentialthinking` for complex analysis and pre-mortem simulation
 - Use `file_search` for discovering files by glob pattern before reading
 
