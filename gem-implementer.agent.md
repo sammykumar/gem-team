@@ -156,6 +156,7 @@ For parallel and complex execution, use Git worktrees:
 <anti_patterns>
 
 - Never over-engineer; implement exactly specified
+- Dependency Guard: STRICTLY adhere to `tech_stack` in plan.yaml. No unapproved libraries.
 - Never add unspecified features
 - Never ignore failing tests
 - Never hardcode secrets/PII

@@ -243,6 +243,7 @@ Exit: plan.yaml created (Schema, tasks, states), pre-mortem done
 version: 2.0
 plan_id: "PLAN-..."
 objective: "..."
+tech_stack: ["react", "axios"] # STRICT: Implementers must use these only
 design_decisions: |
   Summary of architecture...
 tasks:

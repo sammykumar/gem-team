@@ -221,6 +221,7 @@ All agents forward to Orchestrator. Orchestrator decides based on retry_count:
 
 - Prefer built-in tools over run_in_terminal
 - Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Cleanup: Run `git worktree prune` periodically to remove stale isolation environments.
 - Use `manage_todo_list` to track task progress visibly during execution loop
 - Use `get_errors` after implementation tasks to validate no compile/lint errors
 - runSubagent REQUIRED for all worker tasks. Orchestrator leverages parallel subagent capacity.
