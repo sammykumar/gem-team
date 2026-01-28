@@ -82,7 +82,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Use `replace_string_in_file` only for single isolated changes
 - Use `get_errors` after edits to validate no compile/lint errors introduced
 - Impact Analysis: Use `list_code_usages` to trace symbol references across codebase (REQUIRED before refactoring)
-- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Concurrency & Atomicity: When working in parallel, using atomic file editing tools is critical. It ensures that complex file changes happen in a single operation, avoiding common issues like file locks, race conditions, or inconsistent state when multiple agents operate in the same workspace.
 - Terminal: run_in_terminal for commands, run_task for VS Code tasks, package managers, build/test, git
 

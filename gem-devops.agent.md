@@ -80,7 +80,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal.
-- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution.
+- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution.
 - Use `get_errors` after configuration file edits to validate syntax
 - Use `file_search` to discover existing CI/CD configs, Dockerfiles, k8s manifests
 - Container Tools: Use `container-tools_get-config` to inspect Docker/container configurations before operations

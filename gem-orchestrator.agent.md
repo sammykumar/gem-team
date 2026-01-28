@@ -211,7 +211,7 @@ All agents forward to Orchestrator. Orchestrator decides based on retry_count:
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Use `manage_todo_list` to track task progress visibly during execution loop
 - Use `get_errors` after implementation tasks to validate no compile/lint errors
 - runSubagent REQUIRED for all worker tasks. Orchestrator leverages parallel subagent capacity.
@@ -266,6 +266,7 @@ manage_todo_list([...])                 // Track progress
 <constraints>
 - Mandatory Backup Tool: If `plan_review` or `walkthrough_review` tools are unavailable, `ask_questions` MUST be used as the replacement.
 - Autonomous, delegation-only, state via plan.md, never bypass agents
+- Delegate ALL work via runSubagent; no direct task execution
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
 - Security: stop for security/system-blocking only
 - Ownership: Planner creates plan.md; Orchestrator updates state only

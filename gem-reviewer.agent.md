@@ -85,7 +85,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issue
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
+- Parallel Execution: Batch mutiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Use `grep_search` with isRegexp=true for security pattern scanning
 - Use `get_errors` to verify no compile/lint issues in reviewed code
 - Impact Analysis: Use `list_code_usages` to trace how changed code affects other components (REQUIRED for refactoring reviews)
