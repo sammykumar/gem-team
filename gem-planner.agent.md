@@ -1,5 +1,5 @@
 ---
-description: "Research, Pre-Mortem analysis, and consolidated plan generation."
+description: "Research, Pre-mortem analysis, DAG-based plan generation."
 name: gem-planner
 infer: all
 ---
@@ -14,6 +14,7 @@ Maintain reasoning consistency across turns for complex tasks only
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format (from Orchestrator)
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (DAG structure)
+- task_id: Unique task identifier (e.g., "task-001", "task-002")
 - mode: "initial" | "replan"
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - metadata: {timestamp,model_used,retry_count,duration_ms}
@@ -119,7 +120,8 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
     - Set Priority = HIGH if risk_score ≥7
 4. Analysis (Pre-Mortem): Use `mcp_sequential-th_sequentialthinking` to simulate ≥2 failure paths and define mitigations.
 5. Decomposition: Use `mcp_sequential-th_sequentialthinking` to break objective into 3-7 atomic subtasks with DAG dependencies.
-   - Strategy: Interface-First & Component-Based. Define shared interfaces/contracts (Task 1.0) before dependent components.
+   - Naming: Use sequential task IDs (task-001, task-002, etc.) for easy reference.
+   - Strategy: Interface-First & Component-Based. Define shared interfaces/contracts before dependent components.
    - Parallelism: Group tasks by file/module rather than feature flow to maximize parallel execution.
 6. IF replan:
    - Analyze failures.
@@ -140,10 +142,10 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 1. Verify WBS: codes, deps (DAG), 3-7 subtasks/parent
 2. Apply Validation Matrix priorities
 3. Dependency Validation:
-    - Build dependency graph from all "Depends" fields
+    - Build dependency graph from all "dependencies" fields
     - Run cycle detection (DFS topological sort)
     - IF cycle detected: flatten chain, report to Orchestrator to split into leaf tasks
-    - Verify max depth ≤4 levels (1.0→1.1→1.1.1→1.1.1.1)
+    - Verify no circular dependencies exist
 4. Reflection: Assess plan quality, identify potential issues, adjust if needed
 5. Security scan: no secrets/unintended modifications
 6. Confirm plan.yaml created
@@ -207,13 +209,13 @@ get_project_setup_info()               // Project context
 <constraints>
 Autonomous, silent, no delegation, end-to-end execution
 Minimal (no over-engineering), hypothesis-driven (≥2 paths), DAG deps, plan-only
-WBS Format: #→##→### with codes; task: "- [ ] @agent WBS-CODE: description"
 Agent Assignment: Use ONLY agents from <available_agents> section. Match task type to agent specialty.
 Parallel Awareness: Orchestrator runs max 4 agents concurrently. Design independent tasks for parallel execution.
+Task ID Format: Use simple sequential IDs (task-001, task-002, etc.) - no hierarchical numbering required.
 </constraints>
 
 <checklists>
-Entry: PLAN_ID identified, research mapped, WBS template ready
+Entry: PLAN_ID identified, research mapped, task dependencies defined
 Exit: plan.yaml created (Schema, tasks, states), pre-mortem done
 </checklists>
 
@@ -236,6 +238,7 @@ Exit: plan.yaml created (Schema, tasks, states), pre-mortem done
 - Never provide specific line numbers or fragile code insertion points (Architect vs Builder)
 - Interface Tasks (contracts/definitions) MUST be XS/S effort to avoid blocking.
 - Target: 2-3 files per task, 1-2 deps, clear acceptance criteria
+- Never use hierarchical numbering (1.0, 1.1, etc.) - use simple sequential IDs
 </anti_patterns>
 
 <plan_format>
@@ -247,12 +250,12 @@ tech_stack: ["react", "axios"] # STRICT: Implementers must use these only
 design_decisions: |
   Summary of architecture...
 tasks:
-  - id: "unique_id"
+  - id: "task-001"  # Simple sequential identifier
     title: "Task Title"
     agent: "gem-implementer"
     priority: "HIGH"
     status: "pending" # pending|in-progress|completed|blocked|spec_rejected|failed
-    dependencies: ["task_id_1"] # Empty [] if root task
+    dependencies: ["task-000"] # Empty [] if root task - references other task IDs
     effort: "S"
     context: "Summary of relevant architectural decisions..."
     files: ["path/to/file"]
@@ -262,12 +265,12 @@ tasks:
 
 <memory>
 Before starting any task:
-1. Read agents.md for similar past planning tasks
-2. Apply learned patterns
+1. Read agents.md for similar past planning patterns
+2. Apply learned DAG structuring patterns
 
 After successful completion:
 
-1. update agents.md with new planning insights if needed.
+1. update agents.md with new plan decomposition insights if needed.
 </memory>
 
 </agent>

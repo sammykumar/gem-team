@@ -21,7 +21,7 @@ Maintain reasoning consistency across turns for complex tasks only
 </glossary>
 
 <context_requirements>
-Required: plan_id, task_id, task_def (from YAML), plan_yaml, previous_handoff
+Required: plan_id, task_id, task_def (from YAML), plan.yaml, previous_handoff
 Optional: artifact_dir, retry_count
 Derived: criticality (from previous_handoff.metadata)
 </context_requirements>
@@ -163,8 +163,8 @@ Exit: security scan done, reflection verified, spec compliance checked
 <error_handling>
 
 - Security issues → must fail, detail critical_issues
-- Missing plan_id/wbs_codes → blocked, request from Orchestrator
-- Missing plan.md → blocked, request from Orchestrator
+- Missing plan_id or task_id → blocked, request from Orchestrator
+- Missing plan.yaml → blocked, request from Orchestrator
 - Invalid previous_handoff → blocked, request from Orchestrator
 </error_handling>
 

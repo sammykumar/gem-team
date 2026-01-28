@@ -9,7 +9,7 @@ The ecosystem consists of seven specialized roles:
 | Agent                        | Responsibility                 | Key Strength        |
 | :--------------------------- | :----------------------------- | :------------------ |
 | gem-orchestrator         | High-level triage & delegation | Strategic oversight |
-| gem-planner              | Research & WBS generation      | Pre-mortem analysis |
+| gem-planner              | Research & plan generation      | Pre-mortem analysis |
 | gem-implementer          | Code execution & unit tests    | High throughput     |
 | gem-chrome-tester        | Browser automation & UI        | Visual verification |
 | gem-documentation-writer | Documentation & Diagrams       | Parity maintenance  |
@@ -20,17 +20,18 @@ The ecosystem consists of seven specialized roles:
 
 1. Load gem-orchestrator as the entry point.
 2. The gem-orchestrator will autonomously invoke subagents using the `runSubagent` tool.
-3. All task-related data is persisted in `docs/.tmp/[TASK_ID]/`.
+3. All task-related data is persisted in `docs/.tmp/[PLAN_ID]/`.
+4. Tasks use simple sequential IDs (e.g., task-001, task-002) with DAG-based dependencies.
 
 ## 🧠 Design Principles
 
-This agent system follows best practices from 2025-2026 research on agentic AI:
+This agent system follows modern agentic AI design patterns:
 
 | Principle                 | Implementation                                                  |
 | ------------------------- | --------------------------------------------------------------- |
 | Clear Role Definition | Each agent has explicit `<role>`, `<mission>`, `<constraints>`  |
 | Interleaved Thinking | `<thinking_protocol>` for consistent reasoning quality          |
-| Spec-Driven Development | plan.md includes Specification section (Requirements, Design)  |
+| Spec-Driven Development | plan.yaml includes Specification section (Requirements, Design) |
 | Explicit Tool Guidance | `<protocols>` section defines tool preferences                  |
 | Anti-Patterns         | `<anti_patterns>` specifies what NOT to do                      |
 | Structured Handoffs   | CMP v2.0 with reasoning, reflection, metadata                   |
@@ -97,7 +98,8 @@ All agents use the standardized Concise Messaging Protocol v2.0:
 {
   "status": "completed|blocked|failed",
   "plan_id": "PLAN-YYMMDD-HHMM",
-  "wbs_codes": ["1.1"],
+  "completed_tasks": ["task-001", "task-002"],
+  "failed_tasks": ["task-003"],
   "agent": "gem-implementer",
   "metadata": {
     "timestamp": "2026-01-25T14:30:00Z",
@@ -121,6 +123,47 @@ All agents use the standardized Concise Messaging Protocol v2.0:
 ```
 
 ## 🔧 Customization
+
+## 📋 Task Structure
+
+Tasks in the system use:
+
+- **Simple Sequential IDs**: task-001, task-002, task-003 (no hierarchical numbering)
+- **DAG Dependencies**: Tasks reference other tasks by ID via `dependencies` field
+- **Status Tracking**: pending | in-progress | completed | blocked | failed | spec_rejected
+- **Priority Levels**: HIGH | MEDIUM | LOW (affects scheduling order)
+- **Effort Estimation**: XS | S | M | L | XL (guides timeout strategies)
+
+Example plan.yaml:
+
+```yaml
+plan_id: "PLAN-260128-1430"
+objective: "Add authentication feature"
+tech_stack: ["react", "typescript", "express"]
+
+tasks:
+  - id: "task-001"
+    title: "Create auth interfaces"
+    agent: "gem-implementer"
+    priority: "HIGH"
+    status: "pending"
+    dependencies: []
+    effort: "S"
+    acceptance_criteria: ["Interfaces exported", "TypeScript compiles"]
+    verification: "npm run type-check"
+
+  - id: "task-002"
+    title: "Implement login endpoint"
+    agent: "gem-implementer"
+    priority: "HIGH"
+    status: "pending"
+    dependencies: ["task-001"]
+    effort: "M"
+    acceptance_criteria: ["Login returns token", "Tests pass"]
+    verification: "npm test tests/login.test.ts"
+```
+
+## 🆕 Adding New Agents
 
 To add a new agent:
 

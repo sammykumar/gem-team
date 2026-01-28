@@ -22,14 +22,16 @@ Maintain reasoning consistency across turns for complex tasks only
 
 <glossary>
 - PLAN_ID: PLAN-{YYMMDD-HHMM} format, orchestrator generates
-- wbs_codes: List of Task identifiers (["1.0", "1.1"]), used in tracking.
-- batch_delegation: {plan_id, wbs_codes, tasks: [{wbs_code, priority, effort, context, description, acceptance_criteria, verification, ...agent_specific_fields}]}
+- task_id: Unique task identifier (e.g., "task-001", "task-002")
+- batch_delegation: {plan_id, task_ids, tasks: [{task_id, priority, effort, context, description, acceptance_criteria, verification, ...agent_specific_fields}]}
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
 - task_states: Managed within plan.yaml directly (status field)
 - embedded_plan: User-provided plan YAML (optional, skips gem-planner)
 - plan_path: User-provided path to existing plan.md (optional, skips gem-planner)
 - status: pending|in-progress|completed|blocked|failed (unified across all agents)
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
+  - completed_tasks: List of task_id strings
+  - failed_tasks: List of task_id strings
 - max_parallel_agents: 4 (hard limit on concurrent agent executions)
 - running_agents: Count of currently executing agents (0-4)
 - Parallel execution: Batch independent tool calls in SINGLE `<function_calls>` block for concurrent execution
@@ -70,8 +72,8 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 3. Project Context: Use `get_project_setup_info` to identify language, project type, and key configuration.
 4. IF embedded_plan or plan_path provided:
    a. Load/parse plan
-   b. Transform to standard format (wbs_code hierarchy, frontmatter task_states, task_blocks)
-   c. Save to docs/.tmp/{PLAN_ID}/plan.md
+   b. Transform to standard format (task_id references, task_states, task_definitions)
+   c. Save to docs/.tmp/{PLAN_ID}/plan.yaml
    d. Use plan directly (skip gem-planner)
 5. ELSE → Delegate to gem-planner → plan.md
 
@@ -141,8 +143,8 @@ A task is critical if ANY of the following:
     a. Decrement running_agents count.
     b. Update task_states in plan.md for ALL returned codes (completed_tasks/failed_tasks).
     c. Process handoff:
-        - For EACH wbs_code in completed_tasks: Check if critical (HIGH priority OR security/PII OR prod OR retry≥2)
-   - IF critical AND handoff.agent != 'gem-reviewer' → delegate to gem-reviewer with {plan_id, wbs_codes: [wbs_code], plan_path, previous_handoff}
+        - For EACH task_id in completed_tasks: Check if critical (HIGH priority OR security/PII OR prod OR retry≥2)
+   - IF critical AND handoff.agent != 'gem-reviewer' → delegate to gem-reviewer with {plan_id, task_ids: [task_id], plan_path, previous_handoff}
         - gem-reviewer returns: {status, review_score, critical_issues}
         - IF review rejected → increment retry_count, re-delegate to original agent with review findings
         - IF review approved → mark task as completed
@@ -190,7 +192,7 @@ All agents forward to Orchestrator. Orchestrator decides based on retry_count:
   runSubagent({
     agentName: "gem-reviewer",
     description: "Security review task",
-    prompt: "PLAN_ID: {plan_id}\nWBS: {wbs_code}\nPlan path: {plan_path}\nPrevious handoff: {previous_handoff}\n\nPerform security review. Return JSON: {status, review_score, critical_issues}"
+    prompt: "PLAN_ID: {plan_id}\nTask ID: {task_id}\nPlan path: {plan_path}\nPrevious handoff: {previous_handoff}\n\nPerform security review. Return JSON: {status, review_score, critical_issues}"
   })
   ```
 - Reviewer returns: {status,review_score,critical_issues}
