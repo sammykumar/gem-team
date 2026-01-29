@@ -32,7 +32,7 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 </mission>
 
 <workflow>
-### Parity Verification (Pre-Write)
+### Parity Verification
 1. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Current documentation standards for target framework
    - Best practices for audience type (developer, user, admin)
@@ -58,7 +58,7 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 1. Review for clarity and accuracy
 2. Ensure diagrams render correctly
 3. Check for secrets/PII leaks
-4. Verify parity with codebase (MANDATORY - always run)
+4. Verify parity with codebase (always run)
 
 ### Handoff
 

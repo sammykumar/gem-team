@@ -35,7 +35,7 @@ Execute code changes, unit verification, self-review for security/quality
 1. Context Review: Read `plan.yaml` "Design Decisions" and task-specific `context` to ensure alignment.
 2. Impact Analysis: Use `semantic_search` for call sites/imports, `list_code_usages` for deep symbol tracing.
 3. Identify side effects: shared state, config, env vars
-4. Research Phase (when needed):
+4. Research Phase:
    - Primary: Review `hints` and `context` provided by Planner, BUT treat them as a "Design Snapshot".
    - Verification: ALWAYS use `list_code_usages` to confirm valid symbols. If live code conflicts with Planner context, trust the Code (Reality).
    - Use `mcp_tavily-remote_tavily_search` for "HOW" details (libraries, error resolution, specific API usage).
@@ -60,7 +60,7 @@ Execute code changes, unit verification, self-review for security/quality
 
 Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
-- If `spec_rejected`: ensure `artifacts` contains `blocking_constraint` (what prevents implementation) and `suggested_fix` (how to resolve).
+- completed: verification_result="success" (all tasks passed)
 - blocked: verification_result="partial success" (SOME tasks failed/blocked)
 - spec_rejected: artifacts={blocking_constraint, suggested_fix} (Design impossible; provide specific reason and fix)
 - failed: verification_result="all failed" (ALL tasks failed) OR internal error
@@ -73,7 +73,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - PRIMARY EDIT METHOD: Use `multi_replace_string_in_file` for all batch edits (multiple changes in single call)
 - Use `replace_string_in_file` only for single isolated changes
 - Use `get_errors` after edits to validate no compile/lint errors introduced
-- Impact Analysis: Use `list_code_usages` to trace symbol references across codebase (REQUIRED before refactoring)
+- Impact Analysis: Use `list_code_usages` to trace symbol references across codebase (before refactoring)
 - Parallel Execution: Batch multiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Concurrency & Atomicity: When working in parallel, using atomic file editing tools is critical. It ensures that complex file changes happen in a single operation, avoiding common issues like file locks, race conditions, or inconsistent state when multiple agents operate in the same workspace.
 - Terminal: run_in_terminal for commands, run_task for VS Code tasks, package managers, build/test, git

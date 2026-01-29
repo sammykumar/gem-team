@@ -94,7 +94,7 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
    - Use `get_project_setup_info()` to identify project type and structure.
    - Context Gathering: `read_file()` critical context found. In Task Block `Context`, include a Summary of findings (not just links) to reduce Implementer overhead.
    - For complex mapping, use `mcp_sequential-th_sequentialthinking` to simulate failure paths and logic branches.
-   - Web Research (MANDATORY for new tech/patterns):
+   - Web Research for new tech/patterns:
      - Use `mcp_tavily-remote_tavily_search` with current year/month in query
      - Use `fetch_webpage` to retrieve official documentation
      - Research best practices, security advisories, and recommended approaches
@@ -116,11 +116,11 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
    - Modify only affected tasks, preserve completed status.
 7. IF initial: Generate full `plan.md` with Specification section and WBS structure.
 8. Verification Design: Define verification command/method based on task type:
-    - Code tasks (implementer): MANDATORY - test command (e.g., npm test, pytest, get_errors)
-    - UI tasks (chrome-tester): MANDATORY - automated check (screenshot, console, or automated test)
-    - DevOps tasks: MANDATORY - health check command (dry-run, validation)
-    - Documentation tasks: MANDATORY - linting or automated check (markdownlint, spell check)
-    - All verification MUST be automated - "manual review" is NOT a valid option
+    - Code tasks (implementer): test command (e.g., npm test, pytest, get_errors)
+    - UI tasks (chrome-tester): automated check (screenshot, console, or automated test)
+    - DevOps tasks: health check command (dry-run, validation)
+    - Documentation tasks: linting or automated check (markdownlint, spell check)
+    - All verification must be automated - "manual review" is not a valid option
     - Format: Bash command or tool invocation (not description)
 9. Output: Save to `docs/.tmp/{PLAN_ID}/plan.yaml`.
 10. Validation: Use `get_errors` to check for YAML syntax errors.
@@ -141,11 +141,13 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 
 Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
-- completed: artifacts={plan_path,mode,state_updates}
+- completed: plan.yaml created successfully, artifacts={plan_path,mode,state_updates}
+- blocked: specification rejection or missing context
+- failed: planning failure or internal error
 </workflow>
 
 <protocols>
-### Handoff
+### Handoff Protocol
 - Input: task_block from Orchestrator
 - Output: mode, state_updates, artifacts
 

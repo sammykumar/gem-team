@@ -33,7 +33,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 </mission>
 
 <workflow>
-### Test Case Design (Pre-Execute)
+### Test Case Design
 1. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Current accessibility standards (WCAG 2.2)
    - UI testing best practices for target framework

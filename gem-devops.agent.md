@@ -33,7 +33,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 </mission>
 
 <workflow>
-### Preflight (Pre-Execute)
+### Preflight
 1. Check environment readiness (tools: `docker`, `kubectl`, etc., network, permissions).
 2. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Latest security advisories for base images
@@ -53,7 +53,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
    - Guard against parallel execution collisions (e.g., atomic moves, lock files).
 3. Run `task_block.verification` to confirm success (post-execution health check).
 
-### Validate (Post-Execute)
+### Validate
 
 1. Run health checks on deployed resources
 2. Verify infrastructure state matches expected
@@ -62,6 +62,10 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 ### Handoff
 
 Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
+
+- completed: operations successful, health passed
+- blocked: partial success or resource conflicts
+- failed: all operations failed or internal error
 </workflow>
 
 <protocols>
