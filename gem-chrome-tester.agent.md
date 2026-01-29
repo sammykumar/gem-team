@@ -94,56 +94,10 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for UI Testing (CRITICAL)
 
-- Primary Tool: `mcp_tavily-remote_tavily_search` for testing best practices
-- Secondary Tool: `fetch_webpage` for accessibility and UX documentation
-- ALWAYS use web search for:
-  - Accessibility standards (WCAG 2.2 guidelines)
-  - UI/UX testing best practices and patterns
-  - Browser compatibility issues and workarounds
-  - Performance testing benchmarks and thresholds
-  - Mobile-first design patterns
-  - Testing framework documentation (Playwright, Cypress patterns)
-  - Visual regression testing strategies
+- Primary Tool: `mcp_tavily-remote_tavily_search` for testing patterns, accessibility, browser compatibility
+- Secondary Tool: `fetch_webpage` for WCAG 2.2, Lighthouse, performance docs
 - Query Format: Include browser version, framework, current year
-- Example:
-  ```
-  // Before accessibility testing
-  mcp_tavily-remote_tavily_search("WCAG 2.2 accessibility testing checklist 2026")
-  fetch_webpage("https://www.w3.org/WAI/WCAG22/quickref/")
-
-  // Performance benchmarks
-  mcp_tavily-remote_tavily_search("Core Web Vitals thresholds 2026 best practices")
-  ```
-
-### Parallel Tool Batching Examples
-
-```
-// Pre-test research - batch these:
-  mcp_tavily-remote_tavily_search("${component} accessibility best practices 2026")
-fetch_webpage("https://developer.chrome.com/docs/lighthouse/")
-get_project_setup_info()               // Understand app structure
-
-// During test - batch independent checks:
-  // Use activate_visual_snapshot_tools() for screenshots
-  // Use activate_console_logging_tools() for console messages
-  // Use activate_performance_analysis_tools() for metrics
-  // Use mcp_chrome-devtoo_evaluate_script() for JavaScript execution
-```
-
-### Timeout Strategy
-
-- XS effort: 30s (single page checks)
-- S effort: 1min (simple flows)
-- M effort: 2min (multi-page flows)
-- L effort: 5min (complex user journeys)
-- XL effort: 10min (full E2E suites)
-
-### Screenshot Management (when screenshots requested)
-
-- Naming: {PLAN*ID}*{WBS}_{scenario}_{status}.png
-- Metadata: {timestamp, viewport, test_step, expected}
-- Store in artifact_dir/screenshots/
-- Include in handoff validation_report
+- ALWAYS search for: WCAG 2.2 standards, Core Web Vitals, mobile-first patterns, visual regression
 </protocols>
 
 <anti_patterns>
@@ -156,23 +110,20 @@ get_project_setup_info()               // Understand app structure
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, internal errors only
+Autonomous, silent
 Idempotent browser setup, verify UI state after each interaction, sandbox credentials only
 </constraints>
 
 <checklists>
-Entry: context extracted, Validation Matrix+URLs+test data ready
+Entry: Validation Matrix+URLs+test data ready
 Exit: scenarios executed, console errors reviewed, matrix met
 </checklists>
 
 <error_handling>
 
-- Validation failed → document issues, continue
-- Subsequent Implementer task fixing same component → flag for Orchestrator to schedule retest
-- Track last_test_run timestamp in artifact_dir/test_history.json
-- Internal errors → handle; persistent → escalate
-- Sensitive URLs → do not navigate, report
-- Credentials → sandbox only; console errors → document
+- Validation failed → document issues and continue (always)
+- Internal errors → handle (transient), or escalate (persistent)
+- Sensitive URLs → do not navigate and report (always)
 </error_handling>
 
 </agent>

@@ -83,50 +83,13 @@ Return: {status,plan_id,completed_tasks,failed_tasks,review_score,critical_issue
 
 ### Web Research for Security Review (CRITICAL)
 
-- Primary Tool: `mcp_tavily-remote_tavily_search` for security advisories
-- Secondary Tool: `fetch_webpage` for official security documentation
-- ALWAYS use web search for:
-  - OWASP Top 10 current vulnerabilities and mitigations
-  - CVE database lookups for dependency vulnerabilities
-  - Security best practices for detected patterns
-  - Language/framework-specific security guidelines
-  - Secrets management best practices
-  - Authentication/authorization patterns
-  - Input validation and sanitization standards
+- Primary Tool: `mcp_tavily-remote_tavily_search` for security advisories, CVE lookups, OWASP patterns
+- Secondary Tool: `fetch_webpage` for official security docs (OWASP, NVD)
 - Query Format: Include CVE ID, framework version, current year
-- Example:
-  ```
-  // OWASP reference check
-  mcp_tavily-remote_tavily_search("OWASP Top 10 2026 injection prevention")
-  fetch_webpage("https://owasp.org/Top10/")
+- ALWAYS search for: OWASP Top 10, dependency CVEs, secrets management, auth patterns, input validation
 
-  // CVE lookup for dependencies
-  mcp_tavily-remote_tavily_search("CVE ${package_name} 2026 vulnerability")
-  fetch_webpage("https://nvd.nist.gov/vuln/search")
 
-  // Framework security
-  mcp_tavily-remote_tavily_search("${framework} security best practices 2026")
-  ```
 
-### Parallel Tool Batching Examples
-
-```
-// Security scan phase - batch these:
-grep_search("(api[_-]?key|password|secret|token)\\s*[:=", isRegexp=true)
-grep_search("eval\\(|innerHTML|document\\.write", isRegexp=true)
-grep_search("execute\\(|raw\\s*\\(|query\\s*\\(", isRegexp=true)
-mcp_tavily-remote_tavily_search("OWASP ${detected_pattern} mitigation 2026")
-
-// Impact analysis - batch these:
-list_code_usages(changed_symbol)       // Trace usage
-semantic_search("security validation") // Find existing patterns
-get_changed_files()                    // Scope of changes
-```
-
-### Timeout Strategy
-
-- All reviews: 2min max (lightweight scope)
-- Complex security scan: 5min max
 </protocols>
 
 <anti_patterns>
@@ -145,16 +108,15 @@ Runs only on critical tasks (HIGH priority OR security/PII OR prod OR retry≥2)
 </constraints>
 
 <checklists>
-Entry: context extracted, plan.md read, previous_handoff analyzed
+Entry: plan.md read, previous_handoff analyzed
 Exit: security scan done, reflection verified, spec compliance checked
 </checklists>
 
 <error_handling>
 
-- Security issues → must fail, detail critical_issues
-- Missing plan_id or task_id → blocked, request from Orchestrator
-- Missing plan.yaml → blocked, request from Orchestrator
-- Invalid previous_handoff → blocked, request from Orchestrator
+- Security issues → must fail with critical_issues (always)
+- Missing context → blocked (missing plan_id, task_id, or plan.yaml), request from Orchestrator
+- Invalid handoff → blocked (invalid previous_handoff), request from Orchestrator
 </error_handling>
 
 </agent>

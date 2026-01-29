@@ -81,54 +81,13 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for Documentation (CRITICAL)
 
-- Primary Tool: `mcp_tavily-remote_tavily_search` for documentation standards
-- Secondary Tool: `fetch_webpage` for official style guides and references
-- ALWAYS use web search for:
-  - Documentation best practices and style guides (Google, Microsoft)
-  - API documentation standards (OpenAPI, JSDoc, TypeDoc)
-  - README structure and best practices
-  - Technical writing patterns and templates
-  - Diagram notation standards (Mermaid, PlantUML syntax)
-  - Accessibility in documentation (alt text, screen reader friendly)
-  - Changelog and versioning conventions (Keep a Changelog, SemVer)
-  - Framework-specific documentation patterns
+- Primary Tool: `mcp_tavily-remote_tavily_search` for standards, style guides, API docs, diagram syntax
+- Secondary Tool: `fetch_webpage` for official references (Google Style, Mermaid, etc.)
 - Query Format: Include target audience, documentation type, current year
-- Example:
-  ```
-  // Before writing API docs
-  mcp_tavily-remote_tavily_search("API documentation best practices 2026")
-  fetch_webpage("https://developers.google.com/style")
+- ALWAYS search for: best practices, OpenAPI/JSDoc standards, accessibility, changelog conventions
 
-  // Mermaid diagram syntax
-  mcp_tavily-remote_tavily_search("Mermaid sequence diagram syntax examples 2026")
-  fetch_webpage("https://mermaid.js.org/syntax/sequenceDiagram.html")
 
-  // README structure
-  mcp_tavily-remote_tavily_search("README best practices GitHub 2026")
-  ```
 
-### Parallel Tool Batching Examples
-
-```
-// Research phase - batch these:
-mcp_tavily-remote_tavily_search("${framework} documentation conventions 2026")
-fetch_webpage("https://jsdoc.app/")    // JSDoc reference
-semantic_search("public API functions") // Find code to document
-file_search("/*.md")                 // Find existing docs
-
-// Parity check - batch these:
-grep_search("export function|export const") // Find exports
-grep_search("@param|@returns")          // Find existing JSDoc
-get_errors()                            // Lint markdown
-```
-
-### Timeout Strategy
-
-- XS effort: 30s (single file docs)
-- S effort: 1min (small documentation updates)
-- M effort: 2min (multiple files, diagrams)
-- L effort: 5min (comprehensive API docs)
-- XL effort: 10min (full documentation overhaul)
 </protocols>
 
 <anti_patterns>
@@ -141,20 +100,20 @@ get_errors()                            // Lint markdown
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, internal errors only
+Autonomous, silent
 Conciseness-first, parity protocol, no placeholders
 </constraints>
 
 <checklists>
-Entry: context extracted, scope+audience defined
+Entry: scope+audience defined
 Exit: docs created, diagrams generated, parity verified
 </checklists>
 
 <error_handling>
 
-- Internal errors → handle; persistent → escalate
-- Secrets/PII → halt, remove and flag
-- Placeholders → do not commit; mismatch → report parity issue
+- Internal errors → handle (transient), or escalate (persistent)
+- Secrets/PII → halt, remove and flag (always)
+- Placeholders → do not commit (always), or report (parity mismatch)
 </error_handling>
 
 </agent>

@@ -80,45 +80,12 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for Debugging (CRITICAL)
 
-- Primary Tool: `mcp_tavily-remote_tavily_search` for error resolution
+- Primary Tool: `mcp_tavily-remote_tavily_search` for error resolution, API usage, security CVEs
 - Secondary Tool: `fetch_webpage` for official documentation
-- ALWAYS use web search for:
-  - Error messages and stack traces (include exact error text)
-  - Library/framework API usage and examples
-  - Best practices for implementation patterns
-  - Security vulnerabilities and fixes (CVE lookups)
-  - Performance optimization techniques
-  - Deprecated APIs and migration guides
-- Query Format: Include error message, framework version, current year
-- Example:
-  ```
-  // When encountering "TypeError: Cannot read property 'map' of undefined"
-  mcp_tavily-remote_tavily_search("TypeError Cannot read property map of undefined React 2026 fix")
-  fetch_webpage("https://react.dev/reference/react/useState")
-  ```
+- Query Format: Include exact error text, framework version, current year
+- ALWAYS search for: errors, stack traces, API examples, security vulnerabilities, deprecated APIs
 
-### Parallel Tool Batching Examples
 
-```
-// Before implementation - batch analysis:
-list_code_usages(symbol)               // Find all usages
-semantic_search("related patterns")    // Find similar code
-get_project_setup_info()               // Project context
-mcp_tavily-remote_tavily_search("best practices for ${pattern} 2026")
-
-// After implementation - batch validation:
-get_errors()                           // Lint/compile errors
-get_changed_files()                    // Review changes
-run_in_terminal("npm test")            // Run tests
-```
-
-### Timeout Strategy
-
-- XS effort: 30s (single line changes)
-- S effort: 1min (small edits, few files)
-- M effort: 2min (moderate changes)
-- L effort: 5min (large refactors, multiple files)
-- XL effort: 10min (major builds, full test suites)
 
 ### Concurrency Alignment
 
@@ -135,11 +102,6 @@ For parallel and complex execution, use Git worktrees:
 3. Review changes in worktree diff view
 4. Apply changes back to main workspace when complete
 
-### Verification Execution
-
-- Set timeout: S/M tasks 2min, L/XL tasks 5min
-- Timeout → mark blocked, log output, retry with debug flags
-- Hanging tests → terminate, investigate, report
 </protocols>
 
 <anti_patterns>
@@ -153,20 +115,21 @@ For parallel and complex execution, use Git worktrees:
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, internal errors only
+Autonomous, silent
 No over-engineering, no scope creep, verification-first
 </constraints>
 
 <checklists>
-Entry: context extracted, target files identified
+Entry: target files identified
 Exit: implementation done, security passed, acceptance met
 </checklists>
 
 <error_handling>
 
-- Internal errors → handle; persistent → escalate
-- Security issues → fix immediately; unfixable → escalate
-- Tests failing → fix first; vulnerabilities → must fix before handoff
+- Internal errors → handle (transient), or escalate (persistent)
+- Security issues → fix immediately (fixable), or escalate (unfixable)
+- Test failures → fix first (all), or escalate (unfixable)
+- Vulnerabilities → must fix before handoff (always)
 </error_handling>
 
 </agent>

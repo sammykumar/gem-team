@@ -35,8 +35,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 <workflow>
 ### Preflight (Pre-Execute)
 1. Check environment readiness (tools: `docker`, `kubectl`, etc., network, permissions).
-2. Container Config: Use `container-tools_get-config` to inspect current container state.
-3. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
+2. Research Phase: Use `mcp_tavily-remote_tavily_search` and `fetch_webpage` for:
    - Latest security advisories for base images
    - Best practices for target infrastructure
    - Known issues with specific versions
@@ -79,49 +78,12 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research for Infrastructure (CRITICAL)
 
-- Primary Tool: `mcp_tavily-remote_tavily_search` for infrastructure docs
-- Secondary Tool: `fetch_webpage` for official documentation
-- ALWAYS use web search for:
-  - Cloud provider documentation (AWS, GCP, Azure)
-  - Kubernetes resource specifications and best practices
-  - Docker image security and optimization
-  - CI/CD pipeline patterns and examples
-  - Infrastructure security advisories
-  - Terraform/Helm chart references
-  - Service mesh configurations (Istio, Linkerd)
+- Primary Tool: `mcp_tavily-remote_tavily_search` for cloud docs, K8s specs, Docker security, CI/CD patterns
+- Secondary Tool: `fetch_webpage` for official documentation (AWS, GCP, Azure, K8s)
 - Query Format: Include tool version, cloud provider, current year
-- Example:
-  ```
-  // Before Kubernetes deployment
-  mcp_tavily-remote_tavily_search("Kubernetes HPA best practices 2026")
-  fetch_webpage("https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/")
+- ALWAYS search for: security advisories, Terraform/Helm charts, service mesh configs, optimization
 
-  // Docker optimization
-  mcp_tavily-remote_tavily_search("Docker multi-stage build security best practices 2026")
-  ```
 
-### Parallel Tool Batching Examples
-
-```
-// Preflight phase - batch these:
-container-tools_get-config()           // Container config
-file_search("/Dockerfile*")          // Find Dockerfiles
-file_search("/*.yaml")               // Find K8s manifests
-mcp_tavily-remote_tavily_search("${tool} security best practices 2026")
-
-// Validation phase - batch these:
-run_in_terminal("docker images")       // List images
-run_in_terminal("kubectl get pods")    // Check pods
-get_errors()                           // Config validation
-```
-
-### Timeout Strategy
-
-- XS effort: 30s (config changes)
-- S effort: 1min (small deployments)
-- M effort: 2min (moderate builds)
-- L effort: 5min (large deployments)
-- XL effort: 10min (full infrastructure provisioning)
 
 ### Background Agent Isolation
 
@@ -143,21 +105,21 @@ For parallel and complex execution, use Git worktrees:
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, internal errors only.
+Autonomous, silent
 Idempotency & Parallelism: All tasks must be safe for parallel execution and re-runnable without side effects.
 No plaintext secrets, resource hygiene (cleanup after fail/success).
 </constraints>
 
 <checklists>
-Entry: context extracted, environment identified
+Entry: environment identified
 Exit: operations successful, resources cleaned, health passed
 </checklists>
 
 <error_handling>
 
-- Internal errors → handle; persistent → escalate
-- Plaintext secrets → halt, abort deployment
-- Destructive ops → preflight; prod → explicit approval
+- Internal errors → handle (transient), or escalate (persistent)
+- Plaintext secrets → halt and abort deployment (always)
+- Destructive operations → verify preflight (always), require explicit approval (prod)
 </error_handling>
 
 </agent>

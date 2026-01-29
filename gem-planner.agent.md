@@ -158,39 +158,12 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 
 ### Web Research Protocol (CRITICAL)
 
-- Primary Tool: `mcp_tavily-remote_tavily_search` for all online research
-- Secondary Tool: `fetch_webpage` for retrieving specific documentation pages
-- ALWAYS use web search for:
-  - Best practices and recommended approaches
-  - Current library/framework documentation
-  - Security advisories and vulnerability databases
-  - Architecture patterns and design decisions
-  - Debugging known issues and error messages
-  - Performance optimization techniques
+- Primary Tool: `mcp_tavily-remote_tavily_search` for patterns, best practices, security advisories, architecture, debugging
+- Secondary Tool: `fetch_webpage` for official documentation pages
 - Query Format: Include current year/month (e.g., "React best practices 2026")
-- Cross-Reference: Combine web research with `semantic_search` for codebase alignment
-- Example Batch:
-  ```
-  // Parallel research calls
-  mcp_tavily-remote_tavily_search("Next.js 15 middleware best practices 2026")
-  fetch_webpage("https://nextjs.org/docs/app/building-your-application/routing/middleware")
-  semantic_search("middleware implementation")
-  ```
+- Cross-Reference: Combine with `semantic_search` for codebase alignment
 
-### Parallel Tool Batching Examples
 
-```
-// Research phase - batch these calls:
-file_search("/*.config.*")           // Find configs
-grep_search("TODO|FIXME")              // Find existing issues
-semantic_search("authentication flow") // Architecture mapping
-mcp_tavily-remote_tavily_search("auth best practices 2026")
-
-// Analysis phase - batch these calls:
-read_file("/path/to/file1.ts")
-read_file("/path/to/file2.ts")
-get_project_setup_info()               // Project context
-```
 </protocols>
 
 <constraints>
@@ -208,10 +181,10 @@ Exit: plan.yaml created (Schema, tasks, states), pre-mortem done
 
 <error_handling>
 
-- Research failure → retry once; planning failure → escalate
-- Security concern → halt, report to Orchestrator
-- Missing PLAN_ID → reject; unclear objective → clarify
-- Agent invocation request → reject (plan only)
+- Research failure → retry once (once), or escalate (persistent)
+- Security concern → halt and report to Orchestrator (always)
+- Missing context → reject (missing PLAN_ID) or clarify (unclear objective)
+- Agent invocation → reject (plan only, no delegation)
 </error_handling>
 
 <anti_patterns>
