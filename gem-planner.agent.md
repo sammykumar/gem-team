@@ -135,10 +135,9 @@ Create WBS-compliant plan.md, re-plan failed tasks, pre-mortem analysis
 1. Verify WBS: codes, deps (DAG), 3-7 subtasks/parent
 2. Apply Validation Matrix priorities
 3. Dependency Validation:
-    - Build dependency graph from all "dependencies" fields
-    - Run cycle detection (DFS topological sort)
-    - IF cycle detected: flatten chain, report to Orchestrator to split into leaf tasks
-    - Verify no circular dependencies exist
+    - Review all "dependencies" fields to build dependency graph
+    - Validate no circular dependencies exist
+    - IF circular dependency detected: flatten chain, report to Orchestrator to split into leaf tasks
 4. Reflection: Assess plan quality, identify potential issues, adjust if needed
 5. Security scan: no secrets/unintended modifications
 6. Confirm plan.yaml created

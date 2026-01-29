@@ -59,7 +59,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
    - activate_visual_snapshot_tools()
    - activate_console_logging_tools()
    - activate_performance_analysis_tools()
-2. Extract test scenarios and URLs from context.task_block
+2. Identify test scenarios and URLs from context.task_block
 3. Initialize browser with required viewport
 4. Navigate to URLs, verify with wait functionality
 5. Execute Acceptance Criteria tests. Take screenshots IF requested in task_block.

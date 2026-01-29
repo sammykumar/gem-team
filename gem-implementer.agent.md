@@ -46,7 +46,7 @@ Execute code changes, unit verification, self-review for security/quality
    - Use `mcp_tavily-remote_tavily_search` for "HOW" details (libraries, error resolution, specific API usage).
    - Use `fetch_webpage` for specific documentation pages.
    - Cross-reference with codebase patterns.
-5. Batch Edits: Iterate through `tasks`. Open files ONCE. Use `multi_replace_string_in_file` as PRIMARY edit method for batch changes.
+5. Batch Edits: Plan all changes before execution. Open files once per batch. Use `multi_replace_string_in_file` as PRIMARY edit method for batch changes.
 6. Validation: Use `get_errors` to check for compile/lint errors after edits.
 7. Verification: Use `get_changed_files` to review modifications, then execute verification commands.
 8. Testing: Run unit tests if applicable

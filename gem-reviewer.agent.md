@@ -58,7 +58,7 @@ Lightweight security review for critical tasks only. Verify reflection completen
 8. Specification Compliance:
     - Verify artifacts meet Requirements from Specification section
     - Check Design Decisions were followed
-9. Compute review_score (0.0-1.0) based on findings
+9. Determine review_score (0.0-1.0) based on findings
 
 ### Validate
 
