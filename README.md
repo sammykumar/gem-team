@@ -172,4 +172,4 @@ To add a new agent:
 2. Define unique `<role>` and `<mission>`
 3. Specify `<context_requirements>` for input contract
 4. Add relevant `<anti_patterns>` for your domain
-5. Include `<handoff_examples>` with JSON samples
+5. Include `<handoff_examples>` with samples

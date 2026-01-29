@@ -39,11 +39,11 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
    - Latest security advisories for base images
    - Best practices for target infrastructure
    - Known issues with specific versions
-4. All checks must PASS before deployment.
-5. Resource Check: Verify if resources already exist to ensure idempotency.
-6. Document rollback steps for each operation type.
-7. Verify rollback path is viable (no destructive ops without undo).
-8. local: no secrets, quick rollback | staging: verify first | prod: vault + approval
+3. All checks must PASS before deployment.
+4. Resource Check: Verify if resources already exist to ensure idempotency.
+5. Document rollback steps for each operation type.
+6. Verify rollback path is viable (no destructive ops without undo).
+7. local: no secrets, quick rollback | staging: verify first | prod: vault + approval
 
 ### Execute
 

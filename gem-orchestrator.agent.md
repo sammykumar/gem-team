@@ -122,7 +122,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
   runSubagent({
     agentName: "gem-planner",
     description: "Create WBS plan",
-    prompt: "PLAN_ID: {plan_id}\nObjective: {objective}\nConstraints: {constraints}\n\nCreate WBS-compliant plan.md. Return JSON: {status, plan_path, state_updates}"
+    prompt: "PLAN_ID: {plan_id}\nObjective: {objective}\nConstraints: {constraints}\n\nCreate WBS-compliant plan.md. Return: {status, plan_path, state_updates}"
   })
   ```
 - Replan:
@@ -130,7 +130,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
   runSubagent({
     agentName: "gem-planner",
     description: "Replan failed tasks",
-    prompt: "PLAN_ID: {plan_id}\nMode: replan\nFailed tasks: {failed_tasks}\nConstraints: {constraints}\n\nReplan failed tasks. Return JSON: {status, plan_path, state_updates}"
+    prompt: "PLAN_ID: {plan_id}\nMode: replan\nFailed tasks: {failed_tasks}\nConstraints: {constraints}\n\nReplan failed tasks. Return: {status, plan_path, state_updates}"
   })
   ```
 
@@ -142,7 +142,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
   runSubagent({
     agentName: "gem-reviewer",
     description: "Security review task",
-    prompt: "PLAN_ID: {plan_id}\nTask ID: {task_id}\nPlan path: {plan_path}\nPrevious handoff: {previous_handoff}\n\nPerform security review. Return JSON: {status, review_score, critical_issues}"
+    prompt: "PLAN_ID: {plan_id}\nTask ID: {task_id}\nPlan path: {plan_path}\nPrevious handoff: {previous_handoff}\n\nPerform security review. Return: {status, review_score, critical_issues}"
   })
   ```
 - Reviewer returns: {status,review_score,critical_issues}
@@ -159,7 +159,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 
 ### Handoff Processing
 
-- Receive: Parse all agent response JSONs from delegation round
+- Receive: Parse all agent responses from delegation round
 - Batch Processing: Process all handoffs together when they return
 - Route by status: completed→done | blocked→retry | failed→escalate
 - Update: task states in plan.yaml for all returned tasks
