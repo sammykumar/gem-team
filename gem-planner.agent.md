@@ -158,7 +158,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Use `mcp_sequential-th_sequentialthinking` for complex analysis and pre-mortem simulation
 - Use `file_search` for discovering files by glob pattern before reading
 
-### Web Research Protocol (CRITICAL)
+### Web Research Protocol
 
 - Primary Tool: `mcp_tavily-remote_tavily_search` for patterns, best practices, security advisories, architecture, debugging
 - Secondary Tool: `fetch_webpage` for official documentation pages
@@ -198,7 +198,7 @@ Exit: plan.yaml created (Schema, tasks, states), pre-mortem done
 - Never create monolithic subtasks: >XL effort, >10 files, >5 deps
 - Never create atomic subtasks: <XS effort, single line change
 - Never provide specific line numbers or fragile code insertion points (Architect vs Builder)
-- Interface Tasks (contracts/definitions) MUST be XS/S effort to avoid blocking.
+- Interface Tasks (contracts/definitions): XS/S effort to avoid blocking.
 - Target: 2-3 files per task, 1-2 deps, clear acceptance criteria
 - Never use hierarchical numbering (1.0, 1.1, etc.) - use simple sequential IDs
 </anti_patterns>

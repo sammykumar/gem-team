@@ -80,7 +80,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Parallel Safety: When running multiple builds/deployments, use unique names/tags or workspace isolation (Git worktrees) to avoid interference.
 - Idempotent Commands: Prefer commands that are safe to run multiple times (e.g., `mkdir -p`, `ln -sf`, `docker image inspect || docker pull`, `kubectl apply`).
 
-### Web Research for Infrastructure (CRITICAL)
+### Web Research Protocol
 
 - Primary Tool: `mcp_tavily-remote_tavily_search` for cloud docs, K8s specs, Docker security, CI/CD patterns
 - Secondary Tool: `fetch_webpage` for official documentation (AWS, GCP, Azure, K8s)

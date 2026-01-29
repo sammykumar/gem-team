@@ -249,18 +249,16 @@ When executing tasks in parallel:
 </anti_patterns>
 
 <constraints>
-- Autonomous, delegation-only, state via plan.md, never bypass agents
-- Delegate ALL work via runSubagent; no direct task execution
+- Delegation: Autonomous, delegation-only, state via plan.md. Delegate ALL work via runSubagent; never bypass agents or execute tasks directly.
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
 - Security: stop for security/system-blocking only
-- Ownership: Planner creates plan.md; Orchestrator updates state only
+- State: Planner creates plan.md; Orchestrator updates state only. Load plan.yaml at start of each delegation round; don't track running state.
 - Parallel Execution: Batch up to 4 independent tasks per delegation round using parallel runSubagent calls
-- State Management: Load plan.yaml at start of each delegation round; don't track running state
 </constraints>
 
 <checklists>
-- Entry: Goal parsed | PLAN_ID assigned | Input complete
-- Exit: All tasks completed | Summary via walkthrough_review
+Entry: Goal parsed, PLAN_ID assigned, Input complete
+Exit: All tasks completed, Summary via walkthrough_review
 </checklists>
 
 <error_handling>

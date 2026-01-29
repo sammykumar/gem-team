@@ -79,7 +79,7 @@ Return: {status,plan_id,completed_tasks,failed_tasks,artifacts}
 - Use `multi_replace_string_in_file` for batch documentation updates across multiple files
 - Diagrams: Mermaid, PlantUML, Graphviz (inline markdown)
 
-### Web Research for Documentation (CRITICAL)
+### Web Research Protocol
 
 - Primary Tool: `mcp_tavily-remote_tavily_search` for standards, style guides, API docs, diagram syntax
 - Secondary Tool: `fetch_webpage` for official references (Google Style, Mermaid, etc.)
