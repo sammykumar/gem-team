@@ -68,143 +68,55 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 ### Init
 1. Parse goal, check input completeness
 2. Generate PLAN_ID using timestamp: PLAN-{YYMMDD-HHMM}
-3. Project Context: Use `get_project_setup_info` to identify language, project type, and key configuration.
+3. Project Context: Use `get_project_setup_info` to identify language, project type, and key configuration
 4. IF embedded_plan or plan_path provided:
-   a. Load/parse plan
-   b. Transform to standard format (task_id references, task_states, task_definitions)
-   c. Save to docs/.tmp/{PLAN_ID}/plan.yaml
-   d. Use plan directly (skip gem-planner)
+   - Load/parse plan and transform to standard format
+   - Save to docs/.tmp/{PLAN_ID}/plan.yaml
+   - Use plan directly (skip gem-planner)
 5. ELSE → Delegate to gem-planner → plan.md
 
-### Approval
-
-- IF user input or clarification is required (Critical/Major) → stop for user input using plan_review tool.
-- Standard → auto-approve, execute
-
-### Change Request
-
-Trigger: User comments via walkthrough_review or plan_review
-
-1. Detect Intent: Extract user comments from review context
-2. Classify intent:
-   - Post-Completion Major: User requests changes AFTER walkthrough_review → Initiate new plan with fresh PLAN_ID
-   - Minor: Change/Remove → Update plan.yaml directly
-   - Major: Add/Clarify → Delegate to gem-planner (replan)
-   - Informational → No action needed
-3. Execute classification and notify user
-4. IF Post-Completion Major: Generate new PLAN_ID, restart orchestrator workflow
-5. ELSE: Resume execution_loop
-
-Change Request Classification:
-  POST-COMPLETION MAJOR (fresh start required):
-    - User requests changes AFTER walkthrough_review completion
-    - Significant scope changes that invalidate completed work
-    - Architecture modifications requiring re-planning
-    - Triggers new PLAN_ID generation and fresh orchestrator workflow
-
-  MINOR (direct update):
-    - Parameter changes only
-    - Bugfixes to existing tasks
-    - Clarification of acceptance criteria
-    - Priority adjustments
-
-  MAJOR (replan required):
-    - New tasks added
-    - Dependencies changed
-    - Scope expanded
-    - Architecture modified
-    - Tasks removed
-
-### Replan Merge
-
-Trigger: gem-planner returns re-plan OR max_retries exceeded
-
-1. Preserve completed tasks, replace failed/blocked with new pending tasks
-2. Validate no circular deps (Planner already validated; Orchestrator skips if plan fresh)
-3. Reset retry_count=0 for new pending tasks
-
-### Post-Completion Change Handling
-
-Trigger: User requests changes AFTER walkthrough_review completion
-
-1. Detect post-completion change intent from user comments
-2. Generate new PLAN_ID using timestamp: PLAN-{YYMMDD-HHMM}
-3. Delegate to gem-planner with new objective and context
-4. Start fresh orchestrator workflow with new plan
-5. Preserve learnings but treat as independent execution
-
-### Critical Task Detection
-
-A task is critical if ANY of the following:
-
-- Priority = HIGH
-- Task involves security/PII (check task_block Context or Description)
-- Environment = prod
-- retry_count ≥ 2 (escalation)
-
-### Execution Loop (Parallel Support)
-
-When delegating tasks, follow this decision-making process:
+### Execute Task Delegation
 
 1. **Identify Ready Tasks:**
    - Load plan.yaml to check current task states
-   - Find all tasks where status=pending AND all dependencies are completed
-   - Consider task priority (HIGH tasks first)
+   - Find pending tasks where all dependencies are completed
+   - Prioritize HIGH priority tasks
 
-2. **Group for Parallel Execution:**
-   - **Independent tasks:** Different agents working on different files → Can run in parallel
-   - **File-dependent tasks:** Tasks modifying the same file → Batch into one delegation
-   - **Component-dependent tasks:** Tasks in same component with dependencies → Sequential or grouped
-   - Aim to launch up to 4 independent tasks in a single delegation round
+2. **Determine Parallel Execution Strategy:**
+   - Identify independent tasks (different agents, different files)
+   - Group file-dependent tasks for batch delegation
+   - Select up to 4 independent tasks for parallel execution
 
-3. **Launch Delegation Batch:**
-   - Collect ready tasks (up to 4 independent ones)
-   - Update task_states in plan.yaml to mark launched tasks as "in-progress"
-   - Use manage_todo_list to track progress
-   - Launch all collected tasks via parallel runSubagent calls in a single tool invocation
+3. **Launch Delegation:**
+   - Use parallel runSubagent calls in single tool invocation
+   - Update task_states to "in-progress"
+   - Track progress with manage_todo_list
 
 4. **Process Handoff Results:**
    - When subagent handoffs are received, update task states in plan.yaml
-   - For each task in completed_tasks:
-     - Check if critical (HIGH priority OR security/PII OR prod OR retry≥2)
-     - IF critical AND agent != 'gem-reviewer' → delegate to gem-reviewer
-   - Route tasks based on status:
-     - completed → Mark as done
-     - blocked → Increment retry_count, retry with same agent (include error context)
-     - spec_rejected → Escalate to gem-planner (architecture issue, no retry)
-     - failed with retry≥3 → Escalate to gem-planner
+   - For critical tasks (HIGH priority OR security/PII OR prod OR retry≥2), review via gem-reviewer
+   - Route tasks based on status: completed/blocked/failed/spec_rejected
 
-5. **Continue Until Complete:**
-   - After processing handoffs, return to step 1
-   - Repeat until all tasks are completed or max_retries exceeded
-   - If max_retries exceeded, escalate remaining tasks to gem-planner
+5. **Handle Change Requests:**
+   - Detect user comments from walkthrough_review or plan_review
+   - Classify as Post-Completion Major, Major, or Minor:
+     - POST-COMPLETION MAJOR: User requests changes AFTER walkthrough_review → Generate new PLAN_ID, restart orchestrator
+     - MAJOR: New tasks, dependencies changed, scope expanded, architecture modified → Delegate to gem-planner (replan)
+     - MINOR: Parameter changes, bugfixes, acceptance criteria clarifications, priority adjustments → Update plan.yaml directly
+   - Execute changes and resume workflow
 
-### Escalation Protocol
+6. **Handle Errors and Escalation:**
+   - Transient errors (network timeout, rate limit): Retry with backoff (up to 5 attempts)
+   - Logic errors (implementation bug, test failure): Retry up to 2 times with fix analysis
+   - Specification errors (impossible requirement): Escalate to gem-planner for re-plan
+   - Resource errors (out of memory): Pause and notify user
+   - If retry_count ≥ 3 OR specification error: Delegate to gem-planner
 
-When handling errors from agents, consider the error type and context to determine the appropriate action:
+### Termination
 
-**Error Types and Handling:**
-
-- **Transient errors** (network timeout, rate limit, service unavailable):
-  - Retry with backoff strategy (up to 5 attempts)
-  - Include error context in retry
-
-- **Logic errors** (implementation bug, test failure, verification error):
-  - Retry up to 2 times with fix analysis
-  - Include error context and suggested fixes
-
-- **Specification errors** (impossible requirement, conflicting constraints):
-  - No retry needed - escalate to gem-planner for re-plan
-  - Include detailed explanation of the blocking constraint
-
-- **Resource errors** (out of memory, disk full):
-  - Pause execution and notify user
-  - Provide clear error details
-
-**Escalation Decision:**
-
-- If retry_count < 3: Retry with error context and any fix suggestions
-- If retry_count ≥ 3 OR specification error: Delegate to gem-planner for re-plan
+1. When all tasks completed, generate comprehensive summary
+2. Use walkthrough_review tool to present final outcomes
+3. Update agents.md with new system design decisions if needed
 </workflow>
 
 <protocols>
@@ -266,12 +178,50 @@ When handling errors from agents, consider the error type and context to determi
 ### Tool Use
 
 - Prefer built-in tools over run_in_terminal
-- Parallel Execution: Batch multiple independent tool calls in a SINGLE `<function_calls>` block for concurrent execution
 - Cleanup: Run `git worktree prune` periodically to remove stale isolation environments.
 - Use `manage_todo_list` to track task progress visibly during execution loop
 - Use `get_errors` after implementation tasks to validate no compile/lint errors
 - runSubagent REQUIRED for all worker tasks. Orchestrator leverages parallel subagent capacity.
 - runSubagent signature: `runSubagent({ agentName: string, description: string, prompt: string })`
+- Orchestrator Parallelism: Make multiple runSubagent calls in a SINGLE `<function_calls>` block to launch multiple agents concurrently
+  - Each runSubagent call launches one agent
+  - Batch up to 4 calls per delegation round for maximum parallelism
+  - This is different from worker agents, which batch their internal tool calls for efficiency
+
+### Parallel Execution Pattern
+
+When executing tasks in parallel:
+
+1. **Independence Check:**
+   - Verify tasks have no file conflicts (different files or read-only access)
+   - Confirm tasks use different agents (no resource contention)
+   - Check that task dependencies don't create ordering constraints
+
+2. **Batch runSubagent Calls:**
+   - Make multiple runSubagent calls in a SINGLE `<function_calls>` block
+   - Each call launches one agent with one task
+   - All calls execute concurrently (the platform handles parallelism)
+
+3. **Example Parallel Delegation:**
+   ```xml
+   <function_calls>
+     <invoke name="runSubagent">
+       <parameter name="agentName">gem-implementer</parameter>
+       <parameter name="description">Implement task-001</parameter>
+       <parameter name="prompt">Execute task-001: [context and details]</parameter>
+     </invoke>
+     <invoke name="runSubagent">
+       <parameter name="agentName">gem-chrome-tester</parameter>
+       <parameter name="description">Test task-002</parameter>
+       <parameter name="prompt">Execute task-002: [context and details]</parameter>
+     </invoke>
+   </function_calls>
+   ```
+
+4. **Batching Strategy:**
+   - Launch up to 4 independent tasks per delegation round
+   - Each task requires its own runSubagent call
+   - All calls are batched in one tool invocation for parallel execution
 
 ### Web Research Coordination
 
@@ -297,6 +247,10 @@ When handling errors from agents, consider the error type and context to determi
 - Never skip approval for critical tasks
 - Never assume missing context; clarify with user using plan_review
 - Never end a successful workflow without walkthrough_review
+- Never track state variables (running_agents, available capacity) - LLMs don't maintain state
+- Never use programmatic loops (while, for, iterate) - use delegation rounds instead
+- Never assume handoffs arrive individually - process them together when they return
+- Never calculate parallel capacity - simply batch up to 4 independent tasks
 </anti_patterns>
 
 <constraints>
@@ -305,8 +259,8 @@ When handling errors from agents, consider the error type and context to determi
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
 - Security: stop for security/system-blocking only
 - Ownership: Planner creates plan.md; Orchestrator updates state only
-- Execution: Parallel execution supported. Batch independent tasks to speed up processing.
-- Parallel Limit: Maximum 4 agents running concurrently (max_parallel_agents=4). Queue excess tasks for subsequent batches.
+- Parallel Execution: Batch up to 4 independent tasks per delegation round using parallel runSubagent calls
+- State Management: Load plan.yaml at start of each delegation round; don't track running state
 </constraints>
 
 <checklists>
