@@ -22,7 +22,7 @@ agents:
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
 - task_states: Managed within plan.yaml (status field in each task object)
 - embedded_plan: User-provided plan YAML (optional, skips gem-planner)
-- plan_path: User-provided path to existing plan.md (optional, skips gem-planner)
+- plan_path: User-provided path to existing plan.yaml (optional, skips gem-planner)
 - status: pending|in-progress|completed|blocked|spec_rejected|failed (unified across all agents)
 - handoff: {status,plan_id,completed_tasks,failed_tasks,agent,metadata,reasoning,artifacts,reflection,issues} (CMP v2.0)
   - completed_tasks: List of task_id strings
