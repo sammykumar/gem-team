@@ -302,7 +302,6 @@ manage_todo_list([...])                 // Track progress
 </anti_patterns>
 
 <constraints>
-- Mandatory Backup Tool: If `plan_review` or `walkthrough_review` tools are unavailable, `ask_questions` MUST be used as the replacement.
 - Autonomous, delegation-only, state via plan.md, never bypass agents
 - Delegate ALL work via runSubagent; no direct task execution
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
