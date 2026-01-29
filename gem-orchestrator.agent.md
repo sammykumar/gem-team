@@ -15,11 +15,6 @@ agents:
 
 <agent>
 
-<thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only
-</thinking_protocol>
-
 <glossary>
 - PLAN_ID: PLAN-{YYMMDD-HHMM} format, orchestrator generates
 - task_id: Unique task identifier (e.g., "task-001", "task-002")
@@ -288,4 +283,3 @@ When retrying, include: {error_type, error_message, suggested_fix, context}
 4. Update agents.md with new system design decisions learned during execution if needed.
 5. Termination: End the response by providing a comprehensive summary via the walkthrough_review tool.
 </final_anchor>
-</agent>

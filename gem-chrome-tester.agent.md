@@ -6,11 +6,6 @@ infer: agent
 
 <agent>
 
-<thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only
-</thinking_protocol>
-
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
@@ -161,7 +156,7 @@ get_project_setup_info()               // Understand app structure
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, no delegation, internal errors only
+Autonomous, silent, internal errors only
 Idempotent browser setup, verify UI state after each interaction, sandbox credentials only
 </constraints>
 
@@ -179,15 +174,5 @@ Exit: scenarios executed, console errors reviewed, matrix met
 - Sensitive URLs → do not navigate, report
 - Credentials → sandbox only; console errors → document
 </error_handling>
-
-<memory>
-Before starting any task:
-1. Read agents.md
-2. Apply learned patterns
-
-After successful completion:
-
-1. update agents.md with new testing insights if needed.
-</memory>
 
 </agent>

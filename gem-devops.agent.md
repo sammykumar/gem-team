@@ -6,11 +6,6 @@ infer: agent
 
 <agent>
 
-<thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only
-</thinking_protocol>
-
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
@@ -148,7 +143,7 @@ For parallel and complex execution, use Git worktrees:
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, no delegation, internal errors only.
+Autonomous, silent, internal errors only.
 Idempotency & Parallelism: All tasks must be safe for parallel execution and re-runnable without side effects.
 No plaintext secrets, resource hygiene (cleanup after fail/success).
 </constraints>
@@ -164,15 +159,5 @@ Exit: operations successful, resources cleaned, health passed
 - Plaintext secrets → halt, abort deployment
 - Destructive ops → preflight; prod → explicit approval
 </error_handling>
-
-<memory>
-Before starting any task:
-1. Read agents.md
-2. Apply learned patterns
-
-After successful completion:
-
-1. update agents.md with new DevOps insights if needed.
-</memory>
 
 </agent>

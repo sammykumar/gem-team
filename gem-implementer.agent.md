@@ -6,11 +6,6 @@ infer: agent
 
 <agent>
 
-<thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only.
-</thinking_protocol>
-
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
@@ -158,7 +153,7 @@ For parallel and complex execution, use Git worktrees:
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, no delegation, internal errors only
+Autonomous, silent, internal errors only
 No over-engineering, no scope creep, verification-first
 </constraints>
 
@@ -173,15 +168,5 @@ Exit: implementation done, security passed, acceptance met
 - Security issues → fix immediately; unfixable → escalate
 - Tests failing → fix first; vulnerabilities → must fix before handoff
 </error_handling>
-
-<memory>
-Before starting any task:
-1. Read agents.md for similar past implementation tasks
-2. Apply learned patterns
-
-After successful completion:
-
-1. update agents.md with new implementation insights if needed.
-</memory>
 
 </agent>

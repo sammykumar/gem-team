@@ -6,11 +6,6 @@ infer: agent
 
 <agent>
 
-<thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only
-</thinking_protocol>
-
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
@@ -144,7 +139,7 @@ get_changed_files()                    // Scope of changes
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, no delegation, review only
+Autonomous, silent, review only
 Lightweight scope: security + reflection + specification compliance
 Runs only on critical tasks (HIGH priority OR security/PII OR prod OR retry≥2)
 </constraints>
@@ -161,15 +156,5 @@ Exit: security scan done, reflection verified, spec compliance checked
 - Missing plan.yaml → blocked, request from Orchestrator
 - Invalid previous_handoff → blocked, request from Orchestrator
 </error_handling>
-
-<memory>
-Before starting any task:
-1. Read agents.md
-2. Apply learned patterns
-
-After successful completion:
-
-1. update agents.md with new review insights if needed.
-</memory>
 
 </agent>

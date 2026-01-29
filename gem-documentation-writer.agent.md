@@ -6,11 +6,6 @@ infer: agent
 
 <agent>
 
-<thinking_protocol>
-Before tool calls: State goal → Analyze tools → Verify context → Execute
-Maintain reasoning consistency across turns for complex tasks only
-</thinking_protocol>
-
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} format
 - plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml (task status in task objects)
@@ -146,7 +141,7 @@ get_errors()                            // Lint markdown
 </anti_patterns>
 
 <constraints>
-Autonomous, silent, no delegation, internal errors only
+Autonomous, silent, internal errors only
 Conciseness-first, parity protocol, no placeholders
 </constraints>
 
@@ -161,15 +156,5 @@ Exit: docs created, diagrams generated, parity verified
 - Secrets/PII → halt, remove and flag
 - Placeholders → do not commit; mismatch → report parity issue
 </error_handling>
-
-<memory>
-Before starting any task:
-1. Read agents.md
-2. Apply learned patterns
-
-After successful completion:
-
-1. update agents.md with new documentation insights if needed.
-</memory>
 
 </agent>
