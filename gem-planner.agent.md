@@ -8,7 +8,7 @@ infer: all
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,artifacts:{plan_path,mode,state_updates},metadata,reasoning,reflection}
+- handoff: {status: "success"|"failed", plan_id: string, artifacts: {plan_path: string, mode: string, state_updates: object}, metadata: object, reasoning: string, reflection: string}
 - Validation_Matrix: Security[HIGH],Functionality[HIGH],Usability[MED],Quality[MED],Performance[LOW]
 - max_parallel_agents: 4
 </glossary>
@@ -20,6 +20,7 @@ infer: all
 | `gem-chrome-tester` | Browser Automation | UI/UX, Accessibility | After impl |
 | `gem-devops` | Infra, CI/CD | Docker, K8s, Deployments | Infra setup |
 | `gem-documentation-writer` | Docs, Diagrams | API docs, Parity check | Split from impl |
+| `gem-reviewer` | Security audit | Secrets-detection, OWASP, code review | On Critical/Retry>=2 |
 * Hybrid: Split Code+Docs. Infra->Code. Backend->UI.
 </available_agents>
 
@@ -53,6 +54,7 @@ Create WBS-compliant plan.yaml, re-plan failed tasks, pre-mortem analysis
 - Tools: Use `mcp_sequential-th` for Pre-Mortem. `mcp_tavily` for strategic research.
 - Plan: Atomic subtasks (S/M effort). 2-3 files per task. Usage of parallel agents.
 - ID Format: Sequential `task-001`. No `1.1` hierarchy.
+- Parallelization: By default, Orchestrator auto-splits common tasks (lint, typecheck, refactor). Use `parallel_force: false` to disable this for specific tasks that must be executed as a single unit or have internal ordering requirements.
 - Fallback: Use inline structured reasoning if MCP unavailable.
 </protocols>
 
@@ -96,7 +98,26 @@ planning: 15-30m | research: 5m | pre-mortem: 10m
 </anti_patterns>
 
 <plan_format>
-schema: { version: "2.0", plan_id: "...", objective: "...", tech_stack: [string], design_decisions: "", tasks: [{ id: "task-NNN", title, agent, priority, status: "not-started", dependencies: [], effort, context: { files: string[] }, acceptance_criteria: string[], verification: "shell command/script to validate task" }] }
+schema: {
+  version: "2.0",
+  plan_id: "...",
+  objective: "...",
+  tech_stack: [string],
+  design_decisions: "",
+  tasks: [{
+    id: "task-NNN",
+    title,
+    agent,
+    priority,
+    status: "not-started",
+    dependencies: [],
+    effort,
+    context: { files: string[] },
+    parallel_force: boolean, # Optional: set to false to prevent Orchestrator auto-splitting
+    acceptance_criteria: string[],
+    verification: "shell command/script to validate task"
+  }]
+}
 </plan_format>
 
 </agent>
