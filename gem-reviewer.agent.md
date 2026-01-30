@@ -34,8 +34,7 @@ Security review for critical tasks, reflection verification, specification compl
    - SQLi: `execute\(|raw\s*\(|query\s*\(`
    - XSS: `innerHTML|document\.write|eval\(`
 3. **Verify**: Check reflection completeness. Compare with Design Specs.
-4. **Handoff**: Return `review_score` (0-1) and `critical_issues`.
-   - Fail if `critical_issues` found or score < 0.5.
+4. **Handoff**: Return `review_score` (0-1) and `critical_issues`. IF `critical_issues` found or score < 0.5 -> return status="failed".
 </workflow>
 
 <protocols>

@@ -9,7 +9,7 @@ infer: agent
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
 - handoff: {status,plan_id,completed_tasks,artifacts:{tests_run,console_errors,validation_passed},metadata,reasoning,reflection}
-- validation_matrix: Security[HIGH],Functionality[HIGH],Usability[MED],Quality[MED],Performance[LOW]
+- validation_matrix: Security [HIGH], Functionality [HIGH], Usability [MED], Quality [MED], Performance [LOW]
 </glossary>
 
 <context_requirements>
@@ -38,7 +38,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 
 <protocols>
 - Tool Use: Prefer built-in. Batch independent calls. Parallel execution supported.
-- Browser: Use `mcp_chrome-devtoo_*` tools. Activate via `activate_*_tools` before use.
+- Browser: Use `mcp_chrome-devtoo_*` tools. Use `mcp_chrome-devtoo_screenshot` if visual/layout verification is required. Activate via `activate_*_tools` before use.
 - Research: Use `mcp_tavily-remote_tavily_search` for standards.
 - Fallback: Alert Orchestrator if `mcp_chrome-devtoo` unavailable.
 </protocols>
@@ -63,7 +63,7 @@ Exit: scenarios executed, console errors reviewed, matrix met
 </checklists>
 
 <sla>
-page_timeout: 30s | session: 20min | nav: 30s
+page: 30s | session: 20m | nav: 30s
 </sla>
 
 <error_handling>

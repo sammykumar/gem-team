@@ -63,7 +63,7 @@ Exit: implementation done, security passed, acceptance met
 </checklists>
 
 <sla>
-task_timeout: 20m(S)-60m(XL) | verify: 5m | edit: 2m
+task: 20m (S) - 60m (XL) | verify: 5m | edit: 2m
 </sla>
 
 <error_handling>

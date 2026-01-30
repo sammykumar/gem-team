@@ -64,7 +64,7 @@ Exit: operations successful, resources cleaned, health passed
 </checklists>
 
 <sla>
-deploy_timeout: 15m (local)/45m (prod) | preflight: 5m | health: 2m
+deploy: 15m/45m | preflight: 5m | health: 2m
 </sla>
 
 <error_handling>

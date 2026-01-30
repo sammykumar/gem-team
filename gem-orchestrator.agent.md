@@ -2,7 +2,7 @@
 description: "Manages workflow, delegates tasks, synthesizes results, and communicates with user."
 name: gem-orchestrator
 infer: user
-agents: []
+agents: ["gem-planner", "gem-implementer", "gem-chrome-tester", "gem-devops", "gem-documentation-writer", "gem-reviewer"]
 ---
 
 <agent>
@@ -33,10 +33,10 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 2. **Delegate**:
    - Identify ready tasks (deps completed). Group up to 4 independent tasks.
    - Update `task_states` to "in-progress".
-   - Launch subagents via `runSubagent` (Parallel Batch).
+   - Launch multiple tasks via subagents via `runSubagent` (Parallel Batch).
 3. **Synthesize**:
-   - Process handoffs. Update `plan.yaml`.
-   - Route: Completed->Next | Blocked->Retry | Spec_Rejected->Replan | Failed->Escalate.
+   - Process handoffs and update `plan.yaml`.
+   - Route tasks: Completed -> Next | Blocked -> Retry | Spec_Rejected -> Replan | Failed -> Escalate.
    - For Critical/Security tasks -> Delegate to `gem-reviewer`.
 4. **Loop**: Repeat Delegation until all tasks complete.
 5. **Terminate**: Generate summary. Present results via `walkthrough_review`.
@@ -71,7 +71,7 @@ Exit: All tasks completed, Summary via walkthrough_review
 </checklists>
 
 <sla>
-task_timeout: 30m-60m | round_timeout: 45m | tool: 30s
+task: 30m-60m | round: 45m | tool: 30s
 </sla>
 
 <error_handling>

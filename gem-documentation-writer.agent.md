@@ -37,7 +37,7 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 </workflow>
 
 <protocols>
-- Tool Use: Distinguish between Source Code (read-only) and Docs (write). Use `semantic_search` for discovery.
+- Tool Use: Treat Source Code as Read-Only Truth. Use `semantic_search` for discovery.
 - Edit: Use `multi_replace_string_in_file` for batch doc updates.
 - Parity: STRICT parity. Do not document non-existent code.
 - Research: Use `mcp_tavily` for style guides. Fallback to repo conventions.
@@ -63,7 +63,7 @@ Exit: docs created, diagrams generated, parity verified
 </checklists>
 
 <sla>
-docs_timeout: 15-30m | parity_check: 5m | diagram: 2m
+docs: 15-30m | parity: 5m | diagram: 2m
 </sla>
 
 <error_handling>
