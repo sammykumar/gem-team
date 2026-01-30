@@ -8,7 +8,7 @@ infer: agent
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,artifacts:{docs,diagrams,parity_verified},metadata,reasoning,reflection}
+- handoff: {status: "success"|"failed", plan_id: string, task_id: string, artifacts: {docs: string[], diagrams: string[], parity_verified: boolean}, metadata: object, reasoning: string, reflection: string}
 </glossary>
 
 <context_requirements>

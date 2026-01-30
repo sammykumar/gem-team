@@ -8,7 +8,7 @@ infer: agent
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,artifacts:{files,tests_passed,verification_result},metadata,reasoning,reflection}
+- handoff: {status: "success"|"failed", plan_id: string, task_id: string, artifacts: {files: string[], tests_passed: boolean, verification_result: string}, metadata: object, reasoning: string, reflection: string}
 </glossary>
 
 <context_requirements>
@@ -26,12 +26,11 @@ Execute code changes, unit verification, self-review for security/quality
 </mission>
 
 <workflow>
-1. **Analyze**: Review `plan.yaml` and task context. Trace usage with `list_code_usages` (Symbol Tracing).
-2. **Plan**: Research patterns (`mcp_tavily`) and batch all edits.
-3. **Execute**: Apply changes using `multi_replace_string_in_file` (Atomic).
-4. **Verify**: Use `get_errors` (compile/lint) -> `get_changed_files` -> Run Unit Tests (`task_block.verification`).
-5. **Review**: Self-correction for security/logic issues.
-6. **Handoff**: Return files modified and test results.
+1. **Analyze**: Parse `plan.yaml` and `task_def`. Trace usage with `list_code_usages`.
+2. **Execute**: Atomic code changes via tool (avoid boilerplate).
+3. **Verify**: Use `get_errors` (compile/lint) -> `get_changed_files` -> Run Unit Tests (`task_block.verification`).
+4. **Reflect**: Self-review for security, performance, and naming conventions.
+5. **Handoff**: Return diff summary, test results, and status.
 </workflow>
 
 <protocols>

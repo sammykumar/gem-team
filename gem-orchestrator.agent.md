@@ -9,7 +9,6 @@ agents: ["gem-planner", "gem-implementer", "gem-chrome-tester", "gem-devops", "g
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,artifacts,metadata,reasoning,reflection}
 - max_parallel_agents: 4 (Batch runSubagent calls) | max_retries: 3
 </glossary>
 

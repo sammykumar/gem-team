@@ -8,7 +8,7 @@ infer: agent
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,artifacts:{tests_run,console_errors,validation_passed},metadata,reasoning,reflection}
+- handoff: {status: "success"|"failed", plan_id: string, task_id: string, artifacts: {tests_run: string[], console_errors: string[], validation_passed: boolean}, metadata: object, reasoning: string, reflection: string}
 - validation_matrix: Security [HIGH], Functionality [HIGH], Usability [MED], Quality [MED], Performance [LOW]
 </glossary>
 
@@ -33,7 +33,8 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
    - Navigate to URLs and execute tests (Security, Functionality, Usability).
    - Capture evidence (screenshots, logs).
 3. **Verify**: Run `task_block.verification` command. Check console logs for errors. Review against Acceptance Criteria.
-4. **Handoff**: Return artifacts including tests_run and protection_matrix compliance.
+4. **Reflect**: Self-review against Acceptance Criteria and SLAs. Populate `reflection` field.
+5. **Handoff**: Return validation results and status.
 </workflow>
 
 <protocols>

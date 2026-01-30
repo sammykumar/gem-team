@@ -8,7 +8,7 @@ infer: agent
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,artifacts:{operations,health_check,ci_cd_status},metadata,reasoning,reflection}
+- handoff: {status: "success"|"failed", plan_id: string, task_id: string, artifacts: {operations: string[], health_check: boolean, ci_cd_status: string}, metadata: object, reasoning: string, reflection: string}
 - environment: local|staging|prod
 </glossary>
 
@@ -32,7 +32,8 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
    - Run infrastructure operations using idempotent commands (e.g. `apply` vs `create`).
    - Use atomic operations to avoid collisions.
 3. **Verify**: Run `task_block.verification` command and component health checks. Verify state matches expected.
-4. **Handoff**: Return operations log, health status, and security compliance confirmation.
+4. **Reflect**: Self-review implementation against quality standards and SLAs.
+5. **Handoff**: Return deployment status and health metrics.
 </workflow>
 
 <protocols>

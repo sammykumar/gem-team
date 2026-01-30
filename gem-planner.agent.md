@@ -96,7 +96,7 @@ planning: 15-30m | research: 5m | pre-mortem: 10m
 </anti_patterns>
 
 <plan_format>
-schema: { version: "2.0", plan_id: "...", objective: "...", tech_stack: [string], design_decisions: "", tasks: [{ id, title, agent, priority, status, dependencies, effort, context, files, acceptance_criteria, verification }] }
+schema: { version: "2.0", plan_id: "...", objective: "...", tech_stack: [string], design_decisions: "", tasks: [{ id: "task-NNN", title, agent, priority, status: "not-started", dependencies: [], effort, context: { files: string[] }, acceptance_criteria: string[], verification: "shell command/script to validate task" }] }
 </plan_format>
 
 </agent>

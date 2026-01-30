@@ -8,7 +8,7 @@ infer: agent
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{PLAN_ID}/plan.yaml
-- handoff: {status,plan_id,completed_tasks,review_score,critical_issues,artifacts,metadata,reasoning,reflection}
+- handoff: {status: "success"|"failed", plan_id: string, task_id: string, review_score: number, critical_issues: string[], artifacts: object, metadata: object, reasoning: string, reflection: string}
 - critical: HIGH priority | Security/PII | Prod | Retries>=2
 </glossary>
 
@@ -28,13 +28,10 @@ Security review for critical tasks, reflection verification, specification compl
 
 <workflow>
 1. **Analyze**: Review `plan.yaml`, `previous_handoff`. Identify scope with `get_changed_files` + `list_code_usages`.
-2. **Scan**: Use `grep_search` with regex:
-   - Secrets: `(api[_-]?key|password|secret|token|credential|private_key|auth_token|access_token|refresh_token|api_secret|client_secret|bearer_token|jwt_secret|encryption_key|signing_key)\s*[:=]`
-   - PII: `(email|ssn|social.security|phone.number|credit_card|cvv|cc_number|address|dob|date_of_birth|passport|driver_license|tax_id|bank_account)\s*[:=]`
-   - SQLi: `execute\(|raw\s*\(|query\s*\(`
-   - XSS: `innerHTML|document\.write|eval\(`
-3. **Verify**: Check reflection completeness. Compare with Design Specs.
-4. **Handoff**: Return `review_score` (0-1) and `critical_issues`. IF `critical_issues` found or score < 0.5 -> return status="failed".
+2. **Scan**: Security audit using `grep_search` (Secrets, PII, SQLi, XSS).
+3. **Audit**: Trace dependencies and verify logic against Specification.
+4. **Reflect**: Self-review for completeness and potential bias. Populate `reflection` field.
+5. **Handoff**: Return `review_score` and `critical_issues`. IF `critical_issues` found -> return status="failed".
 </workflow>
 
 <protocols>
