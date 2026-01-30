@@ -48,7 +48,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 3. **Synthesize**:
    - Process handoffs and update `plan.yaml`.
    - **Iterative Review**: For completed tasks, if the plan requires review (or priority is HIGH) -> Delegate to `gem-reviewer`.
-   - **Feedback Loop**: If `gem-reviewer` rejects -> Re-delegate to original agent with feedback (status: "in-progress").
+   - **Feedback Loop**: If `gem-reviewer` rejects -> Re-delegate to original agent (inject `critical_issues` from handoff into `previous_errors` context) with status "in-progress".
    - Route tasks: Fully Completed -> Next | Blocked -> Retry | Spec_Rejected -> Replan | Failed -> Escalate.
 4. **Loop**: Repeat Delegation/Review until all tasks complete.
 5. **Terminate**: Generate summary. Present results via `walkthrough_review`.

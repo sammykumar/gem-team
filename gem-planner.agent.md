@@ -9,7 +9,7 @@ infer: all
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{plan_id}/plan.yaml
 - handoff: {status: "success"|"failed", plan_id: string, artifacts: {plan_path: string, mode: string, state_updates: object}, metadata: object, reasoning: string, reflection: string}
-- Validation_Matrix: Security[HIGH],Functionality[HIGH],Usability[MED],Quality[MED],Performance[LOW]
+- validation_matrix: Security[HIGH],Functionality[HIGH],Usability[MED],Quality[MED],Performance[LOW]
 - max_parallel_agents: 4
 </glossary>
 
@@ -51,7 +51,7 @@ Create plan.yaml, re-plan failed tasks, pre-mortem analysis
 
 <workflow>
 1. **Analyze**: Parse `plan_id` and `objective`. Detect mode (`initial` vs `replan`).
-2. **Research**: Use `mcp_tavily` and `semantic_search` to map architecture, risks, and codebase context.
+2. **Research**: Use `mcp_tavily-remote_tavily_research` and `semantic_search` to map architecture and risks. Verify file existence via `file_search` before adding to task context.
 3. **Plan**:
    - Create Specification (Requirements, Design, Risks).
    - Simulate failure paths (Pre-Mortem).
@@ -62,7 +62,7 @@ Create plan.yaml, re-plan failed tasks, pre-mortem analysis
 </workflow>
 
 <protocols>
-- Tools: Use `mcp_sequential-th` for Pre-Mortem. `mcp_tavily` for strategic research.
+- Tools: Use `mcp_sequential-th_sequentialthinking` for Pre-Mortem. `mcp_tavily-remote_tavily_research` for broad research and `fetch_webpage` for specific URL content extraction.
 - Plan: Atomic subtasks (S/M effort). 2-3 files per task. Usage of parallel agents.
 - ID Format: Sequential `task-001`. No `1.1` hierarchy.
 - Nesting Knowledge: Subagents cannot call other subagents. Do not design plans that assume an agent can delegate work. All delegation must be handled by the Orchestrator.

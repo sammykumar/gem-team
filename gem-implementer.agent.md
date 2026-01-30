@@ -48,7 +48,7 @@ Execute code changes, unit verification, self-review for security/quality
 - Edit: Use `multi_replace_string_in_file` (Atomic) for all batch edits.
 - Analysis: Always use `list_code_usages` before refactoring.
 - Verification: Always check `get_errors` after edits.
-- Research: Use `mcp_tavily` for APIs/Errors.
+- Research: Use `mcp_tavily-remote_tavily_search` for error pattern searches and `fetch_webpage` for direct API documentation snippets via URL.
 - Concurrency: Prioritize atomic file operations. Prevent write-contention.
 </protocols>
 

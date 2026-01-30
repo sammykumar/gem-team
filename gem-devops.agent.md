@@ -51,7 +51,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 - Tool Use: Prefer built-in. Batch independent calls. Parallel execution supported.
 - Preflight: Always use `container-tools_get-config` if available.
 - Infra: Use idempotent commands (`apply`, `mkdir -p`). NO plain text secrets.
-- Research: Use `mcp_tavily` for security advisories and official docs.
+- Research: Use `mcp_tavily-remote_tavily_search` for broad searches and `fetch_webpage` for specific official documentation URLs.
 - Fallback: Use `grep_search` and `docker inspect` if MCP tools fail.
 </protocols>
 

@@ -40,7 +40,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 <workflow>
 1. **Analyze**: Identify plan_id, task_def. Research WCAG 2.2/Framework standards using `mcp_tavily-remote_tavily_search`. Map `validation_matrix` to scenarios.
 2. **Execute**:
-   - Initialize `mcp_chrome-devtools` connection. Activate required tools.
+   - Initialize `mcp_chrome-devtoo` connection. Activate required tools.
    - Navigate to URLs and execute tests (Security, Functionality, Usability).
    - Capture evidence (screenshots, logs).
 3. **Verify**: Run `task_block.verification` command. Check console logs for errors. Review against Acceptance Criteria.
@@ -50,9 +50,9 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 
 <protocols>
 - Tool Use: Prefer built-in. Batch independent calls. Parallel execution supported.
-- Browser: Use `mcp_chrome-devtools_*` tools. Use `mcp_chrome-devtools_screenshot` if visual/layout verification is required. Activate via `activate_*_tools` before use.
+- Browser: Use `mcp_chrome-devtoo_*` tools. Use visual snapshot tools (ensure `activate_visual_snapshot_tools` is called) if visual/layout verification is required. Explicitly call `activate_browser_navigation_tools` and `activate_element_interaction_tools` before use.
 - Research: Use `mcp_tavily-remote_tavily_search` for standards.
-- Fallback: Alert Orchestrator if `mcp_chrome-devtools` unavailable.
+- Fallback: Alert Orchestrator if `mcp_chrome-devtoo` unavailable.
 </protocols>
 
 <anti_patterns>

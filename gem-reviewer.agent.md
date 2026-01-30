@@ -47,7 +47,7 @@ Security review for critical tasks, reflection verification, specification compl
 
 <protocols>
 - Tools: Use `grep_search` (Regex) for scanning. `list_code_usages` for impact.
-- Research: Use `mcp_tavily` for CVE/OWASP.
+- Research: Use `mcp_tavily-remote_tavily_search` for CVE vulnerability searches and `fetch_webpage` for specific advisory details or OWASP documentation URLs.
 - Restrictions: Read-only. No execution/modification.
 - Fallback: Rely on static analysis/regex if web research fails.
 </protocols>
