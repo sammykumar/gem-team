@@ -26,8 +26,8 @@ infer: all
 
 <context_requirements>
 Required: plan_id, objective
-Optional: existing_plan (triggers replan), constraints
-Derived: research_needs (from objective), plan (standard)
+Optional: existing_plan (triggers replan), constraints, focus_area (domain restriction)
+Derived: research_needs (from objective and focus_area), plan (standard)
 </context_requirements>
 
 <role>
@@ -50,15 +50,15 @@ Create plan.yaml, re-plan failed tasks, pre-mortem analysis
 </mission>
 
 <workflow>
-1. **Analyze**: Parse `plan_id` and `objective`. Detect mode (`initial` vs `replan`).
-2. **Research**: Use `mcp_tavily-remote_tavily_research` and `semantic_search` to map architecture and risks. Verify file existence via `file_search` before adding to task context.
+1. **Analyze**: Parse `plan_id` and `objective`. Detect mode (`initial` vs `replan`). If `focus_area` is provided, strictly constrain planning to that domain.
+2. **Research**: Use `mcp_tavily-remote_tavily_research` and `semantic_search` to map architecture and risks within the `focus_area`. Verify file existence via `file_search` before adding to task context.
 3. **Plan**:
-   - Create Specification (Requirements, Design, Risks).
+   - Create Specification (Requirements, Design, Risks) for the scoped area.
    - Simulate failure paths (Pre-Mortem).
    - Decompose into 3-7 atomic tasks (DAG) using Agents. Priorities based on Risk.
-   - Strategy: Component-based, Parallel-groups.
+   - Strategy: Component-based, Parallel-groups. Cross-domain dependencies should be marked as unblocking requirements.
 4. **Verify**: Check for circular dependencies (`deps: []`). Validate YAML syntax.
-5. **Handoff**: Write `docs/.tmp/{plan_id}/plan.yaml`. Return path.
+5. **Handoff**: Write scoped `plan.yaml` (or partial plan). Return path.
 </workflow>
 
 <protocols>

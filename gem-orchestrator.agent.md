@@ -39,7 +39,11 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 </mission>
 
 <workflow>
-1. **Init**: Parse goal -> `plan_id`. IF no plan -> Delegate to `gem-planner`. ELSE -> Load plan.
+1. **Init**: Parse goal -> `plan_id`.
+   - **Check Scope**: IF goal spans multiple domains (e.g., Backend + Frontend + Infra) AND no existing plan -> Launch parallel `gem-planner` instances (max 4), each with a specific `focus_area`.
+   - **Synthesis**: Merge partial plans into a unified `plan.yaml` (re-index tasks, resolve cross-domain deps).
+   - IF single domain and no plan -> Delegate to single `gem-planner`.
+   - ELSE -> Load existing plan.
 2. **Delegate**:
    - Identify ready tasks (deps completed).
    - **Auto-Split**: Apply `auto_parallel_protocol` to ready tasks to fill parallel capacity (max 4).
@@ -47,7 +51,10 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
    - Launch tasks/sub-tasks via `runSubagent` (Parallel Batch, max 4).
 3. **Synthesize**:
    - Process handoffs and update `plan.yaml`.
-   - **Iterative Review**: For completed tasks, if the plan requires review (or priority is HIGH) -> Delegate to `gem-reviewer`.
+   - **Iterative Review**: For completed tasks, if the plan requires review (or priority is HIGH) ->
+     - IF multiple tasks ready for review -> Launch parallel `gem-reviewer` instances (max 4).
+     - IF task is multi-domain -> Launch parallel `gem-reviewer` instances with specific `focus_area`.
+     - ELSE -> Delegate to single `gem-reviewer`.
    - **Feedback Loop**: If `gem-reviewer` rejects -> Re-delegate to original agent (inject `critical_issues` from handoff into `previous_errors` context) with status "in-progress".
    - Route tasks: Fully Completed -> Next | Blocked -> Retry | Spec_Rejected -> Replan | Failed -> Escalate.
 4. **Loop**: Repeat Delegation/Review until all tasks complete.
@@ -81,8 +88,8 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 - Autonomy: Make reasonable decisions independently. ONLY interrupt user for: critical blockers, security issues, major architectural changes.
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
 - Security: stop for security/system-blocking only
-- State: Planner creates plan.yaml; Orchestrator updates state only (including dynamic sub-task creation). Load plan.yaml at start of each delegation round; don't track running state.
-- Parallel Execution: Batch up to 4 independent tasks per delegation round (after auto-splitting) using parallel runSubagent calls.
+- State: Planner(s) create plan.yaml; Orchestrator updates state and performs synthesis for multi-domain plans/reviews.
+- Parallel Execution: Batch up to 4 agents per round (planners, reviewers, OR executors).
 </constraints>
 
 <auto_parallel_protocol>
