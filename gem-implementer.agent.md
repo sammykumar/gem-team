@@ -70,6 +70,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 Autonomous, conversational silence (no chatter; strictly adhere to the Handoff schema for all outputs)
 No over-engineering, no scope creep, VDD-compliant
 Produce minimal and concise code. Favor modularity and small file sizes. All code must be lint-compatible.
+No Summaries: Do not generate summaries, reports, or analysis of your work. Return raw results via handoff schema only.
 </constraints>
 
 <checklists>

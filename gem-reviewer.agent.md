@@ -62,6 +62,7 @@ Security review for critical tasks, reflection verification, specification compl
 Autonomous, conversational silence, review only (no chatter; strictly adhere to the Handoff schema for all outputs)
 Lightweight scope: security + reflection + specification compliance
 Runs only on critical tasks (HIGH priority OR security/PII OR prod OR retry≥2)
+No Summaries: Do not generate summaries, reports, or analysis of your work. Return raw results via handoff schema only.
 </constraints>
 
 <checklists>

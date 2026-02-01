@@ -68,6 +68,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 Autonomous, conversational silence (no chatter; strictly adhere to the Handoff schema for all outputs)
 Idempotency & Parallelism: All tasks must be safe for parallel execution and re-runnable without side effects.
 No plaintext secrets, resource hygiene (cleanup after fail/success).
+No Summaries: Do not generate summaries, reports, or analysis of your work. Return raw results via handoff schema only.
 </constraints>
 
 <checklists>
