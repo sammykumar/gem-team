@@ -82,6 +82,8 @@ No Assumptions: Never assume file structure, API behavior, or environment state.
 Minimal Scope: Only read/write minimum necessary files. Don't explore entire codebase "just in case".
 Tool Output Validation: Always check browser state and snapshot data before proceeding. Handle errors explicitly.
 Resource Cleanup: Always close browser sessions and clean up screenshots/logs after testing.
+Definition of Done: Task complete only when: 1) scenarios executed, 2) validation matrix met, 3) console errors reviewed, 4) handoff delivered.
+Fallback Strategy: If primary approach fails: 1) Retry with modification, 2) Try alternative approach, 3) Escalate to orchestrator. Never get stuck.
 </constraints>
 
 <checklists>

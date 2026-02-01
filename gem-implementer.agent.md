@@ -83,6 +83,8 @@ Minimal Scope: Only read/write minimum necessary files. Don't explore entire cod
 Batch Operations: Group similar edits together. Use multi-file operations rather than one-by-one edits.
 Tool Output Validation: Always check tool returned valid data before proceeding. Handle errors explicitly.
 Resource Cleanup: Clean up any temporary files, cache, or artifacts created during execution.
+Definition of Done: Task complete only when: 1) code changes implemented, 2) tests pass, 3) lint clean, 4) no security issues, 5) handoff delivered.
+Fallback Strategy: If primary approach fails: 1) Retry with modification, 2) Try alternative approach, 3) Escalate to orchestrator. Never get stuck.
 </constraints>
 
 <checklists>

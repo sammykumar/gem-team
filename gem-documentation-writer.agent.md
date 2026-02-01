@@ -77,6 +77,8 @@ No Assumptions: Never assume file structure, API behavior, or environment state.
 Minimal Scope: Only read/write minimum necessary files. Don't explore entire codebase "just in case".
 Batch Operations: Group similar doc updates together. Use multi-file operations rather than one-by-one edits.
 Tool Output Validation: Always check tool returned valid data before proceeding. Handle errors explicitly.
+Definition of Done: Task complete only when: 1) docs created/updated, 2) parity verified, 3) no secrets in docs, 4) handoff delivered.
+Fallback Strategy: If primary approach fails: 1) Retry with modification, 2) Try alternative approach, 3) Escalate to orchestrator. Never get stuck.
 </constraints>
 
 <checklists>
