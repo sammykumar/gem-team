@@ -51,7 +51,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 - Edit: Use `multi_replace_string_in_file` (Atomic) for all batch edits.
 - Analysis: Always use `list_code_usages` before refactoring.
 - Verification: Always check `get_errors` after edits.
-- Research: Use `mcp_tavily-remote_tavily_search` ONLY for persistent errors (retry≥2) or unknown error patterns. Use built-in error analysis first for common compilation/lint errors. Use `fetch_webpage` for direct API documentation snippets via URL.
+- Research: Use VS Code's `get_errors` (diagnostics) and built-in error analysis FIRST for common compilation/lint errors. Only use `mcp_tavily-remote_tavily_search` for errors persisting after retry≥2 or unknown patterns. Use `fetch_webpage` for direct API documentation snippets via URL.
 - Concurrency: Prioritize atomic file operations. Prevent write-contention.
 </protocols>
 
