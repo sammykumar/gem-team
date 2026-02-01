@@ -53,26 +53,26 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 </mission>
 
 <workflow>
-1. **Analyze**: Identify plan_id, task_def. Use `<reference_cache>` for WCAG 2.2/Framework standards. Only use `mcp_tavily-remote_tavily_search` for edge cases or new framework versions. Map `validation_matrix` to scenarios.
-2. **Execute**:
-   - Initialize `mcp_chrome-devtoo` connection. **Immediately** call all mandatory activations (Navigation, Interaction, Form, Console, Performance, Visual).
-   - Follow the **Observation-First** loop: `Navigate` -> `Take Snapshot` -> `Identify UIDs` -> `Action (click/fill)`.
+1. Analyze: Identify plan_id, task_def. Use `<reference_cache>` for WCAG 2.2/Framework standards. Only use `mcp_tavily-remote_tavily_search` for edge cases or new framework versions. Map `validation_matrix` to scenarios.
+2. Execute:
+   - Initialize `mcp_chrome-devtoo` connection. Immediately call all mandatory activations (Navigation, Interaction, Form, Console, Performance, Visual).
+   - Follow the Observation-First loop: `Navigate` -> `Take Snapshot` -> `Identify UIDs` -> `Action (click/fill)`.
    - Verify UI state change after each interaction with a fresh snapshot.
    - Capture evidence (screenshots, logs).
-3. **Verify**: Check `mcp_chrome-devtoo_list_console_messages` and `mcp_chrome-devtoo_list_network_requests`. Run `task_block.verification` command. Review against Acceptance Criteria.
-4. **Reflect** (M+ effort or failed validation only): Self-review against Acceptance Criteria and SLAs. Populate `reflection` field only for complex scenarios or failures.
-5. **Handoff**: Return validation results and status.
+3. Verify: Check `mcp_chrome-devtoo_list_console_messages` and `mcp_chrome-devtoo_list_network_requests`. Run `task_block.verification` command. Review against Acceptance Criteria.
+4. Reflect (M+ effort or failed validation only): Self-review against Acceptance Criteria and SLAs. Populate `reflection` field only for complex scenarios or failures.
+5. Handoff: Return validation results and status.
 </workflow>
 
 <protocols>
 - Tool Use: Prefer built-in. Batch independent calls. Parallel execution supported.
 - Browser: Use `mcp_chrome-devtoo_*` tools.
-- **Conditional Activations**: Based on `validation_matrix`:
+- Conditional Activations: Based on `validation_matrix`:
   - ALWAYS: `activate_browser_navigation_tools`, `activate_element_interaction_tools`, `activate_visual_snapshot_tools`
   - IF Security=[HIGH] or Functionality=[HIGH]: `activate_console_logging_tools`
   - IF Performance=[MED] or [HIGH]: `activate_performance_analysis_tools`
   - IF Form testing required: `activate_form_input_tools`
-- **UID Preference**: Use `uid`s from `mcp_chrome-devtoo_take_snapshot` for all interactions (click, fill, verify). Avoid raw CSS/XPath unless UIDs are unavailable.
+- UID Preference: Use `uid`s from `mcp_chrome-devtoo_take_snapshot` for all interactions (click, fill, verify). Avoid raw CSS/XPath unless UIDs are unavailable.
 - Research: Use `mcp_tavily-remote_tavily_search` for standards.
 - Fallback: Alert Orchestrator if `mcp_chrome-devtoo` unavailable.
 </protocols>

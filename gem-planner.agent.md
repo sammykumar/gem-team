@@ -50,15 +50,15 @@ Create plan.yaml, re-plan failed tasks, pre-mortem analysis
 </mission>
 
 <workflow>
-1. **Analyze**: Parse `plan_id` and `objective`. Detect mode (`initial` vs `replan`). If `focus_area` is provided, strictly constrain planning to that domain.
-2. **Research**: Use `semantic_search` (local codebase) FIRST. Only fallback to `mcp_tavily-remote_tavily_research` if local search returns insufficient results. Verify file existence via `file_search` before adding to task context.
-3. **Plan**:
+1. Analyze: Parse `plan_id` and `objective`. Detect mode (`initial` vs `replan`). If `focus_area` is provided, strictly constrain planning to that domain.
+2. Research: Use `semantic_search` (local codebase) FIRST. Only fallback to `mcp_tavily-remote_tavily_research` if local search returns insufficient results. Verify file existence via `file_search` before adding to task context.
+3. Plan:
    - Create Specification (Requirements, Design, Risks) for the scoped area.
    - Simulate failure paths (Pre-Mortem).
    - Decompose into 3-7 atomic tasks (DAG) using Agents. Priorities based on Risk.
    - Strategy: Component-based, Parallel-groups. Cross-domain dependencies should be marked as unblocking requirements.
-4. **Verify**: Check for circular dependencies (`deps: []`). Validate YAML syntax.
-5. **Handoff**: Write scoped `plan.yaml` (or partial plan). Return path.
+4. Verify: Check for circular dependencies (`deps: []`). Validate YAML syntax.
+5. Handoff: Write scoped `plan.yaml` (or partial plan). Return path.
 </workflow>
 
 <protocols>
