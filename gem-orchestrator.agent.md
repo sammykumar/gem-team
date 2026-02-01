@@ -9,7 +9,7 @@ agents: ["gem-planner", "gem-implementer", "gem-chrome-tester", "gem-devops", "g
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{plan_id}/plan.yaml
-- max_parallel_agents: 4 (Batch runSubagent calls) | max_retries: 3
+- max_parallel_agents: 4-8 (Batch runSubagent calls: 4 for heavy tasks, 8 for lightweight) | max_retries: 3 per sub-task
 </glossary>
 
 <context_requirements>
@@ -45,23 +45,24 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
    - IF single domain and no plan -> Delegate to single `gem-planner`.
    - ELSE -> Load existing plan.
 2. Delegate:
-    - Identify ready tasks (deps completed).
-    - Auto-Split: Apply `auto_parallel_protocol` to ready tasks to fill parallel capacity.
-    - Dynamic Expansion: For lint|format|typecheck|refactor|cleanup tasks, apply <dynamic_task_expansion> protocol. Create ephemeral sub-tasks, track in orchestrator state, update plan.yaml parent task to "expanding".
-    - Smart Batching: Group similar tasks for dispatch:
-      - Batch 1: All lint|format sub-tasks (same context type, shared patterns)
-      - Batch 2: All typecheck sub-tasks (TypeScript-specific)
-      - Batch 3: Implementation tasks (mixed as needed)
-      - NEVER mix heavy + lightweight in same dispatch round
-    - Agent Selection: Match task type to agent specialty. IF docs/diagrams → gem-documentation-writer; IF browser tests → gem-chrome-tester; IF infra → gem-devops; ELSE code → gem-implementer.
-    - Launch tasks/sub-tasks via `runSubagent` (Parallel Batch, max 4-8 based on task weight per batch).
+   - Identify ready tasks (deps completed).
+   - Auto-Split: Apply `auto_parallel_protocol` to ready tasks to fill parallel capacity.
+   - Dynamic Expansion: For lint|format|typecheck|refactor|cleanup tasks, apply <dynamic_task_expansion> protocol. Create ephemeral sub-tasks, track in orchestrator state, update plan.yaml parent task to "expanding".
+   - Smart Batching: Group similar tasks for dispatch:
+     - Batch 1: All lint|format sub-tasks (same context type, shared patterns)
+     - Batch 2: All typecheck sub-tasks (TypeScript-specific)
+     - Batch 3: Implementation tasks (mixed as needed)
+     - NEVER mix heavy + lightweight in same dispatch round
+   - Agent Selection: Match task type to agent specialty. IF docs/diagrams → gem-documentation-writer; IF browser tests → gem-chrome-tester; IF infra → gem-devops; ELSE code → gem-implementer.
+   - Launch tasks/sub-tasks via `runSubagent` (Parallel Batch, max 4-8 based on task weight per batch).
 3. Synthesize:
-    - Expansion Handling: IF handoff is from expanded sub-task (`task_id@*` pattern):
-      - Update `expansion_state[task_id].completed++`
-      - IF all sub-tasks complete: Update parent task in plan.yaml to "completed", aggregate results, clear expansion state
-      - IF any sub-task failed: Mark parent "failed", aggregate errors
-    - Process handoffs and update `plan.yaml`.
-    - Doc Detection: IF handoff.metadata.docs_needed=true -> Spawn `gem-documentation-writer` task (parallel if capacity available).
+   - Expansion Handling: IF handoff is from expanded sub-task (`task_id@*` pattern):
+     - Update `expansion_state[task_id].completed++`
+     - Track sub-task status for partial failure handling
+     - IF all sub-tasks complete: Update parent task in plan.yaml to "completed" or "in-progress" (for retry), aggregate results
+     - IF any sub-task failed after max retries: Mark parent "failed", aggregate errors
+   - Process handoffs and update `plan.yaml`.
+   - Doc Detection: IF handoff.metadata.docs_needed=true -> Spawn `gem-documentation-writer` task (parallel if capacity available).
    - Iterative Review: For completed tasks, if the plan requires review (or priority is HIGH) ->
      - IF multiple tasks ready for review -> Launch parallel `gem-reviewer` instances (max 4).
      - IF task is multi-domain -> Launch parallel `gem-reviewer` instances with specific `focus_area`.
@@ -105,7 +106,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
 - Retry: max 3 attempts; retry≥3 → gem-planner replan
 - Security: stop for security/system-blocking only
 - State: Planner(s) create plan.yaml; Orchestrator updates state and performs synthesis for multi-domain plans/reviews.
-- Parallel Execution: Batch up to 4 agents per round (planners, reviewers, OR executors).
+- Parallel Execution: Batch 4-8 agents per round based on task weight (heavy: 4, lightweight: 8). Never exceed 8 concurrent agents.
 </constraints>
 
 <auto_parallel_protocol>
@@ -142,20 +143,36 @@ For lint|format|typecheck|refactor|cleanup tasks that need domain/directory/file
        status: "expanding"
      }
      ```
-3. Delegation:
+4. Delegation:
    - Mark parent task status as "expanding" in plan.yaml (preserves task history)
    - Launch sub-tasks via `runSubagent` with `context.files` scoped to specific domain/directory/file
+   - **Smart Batch Integration**: Apply Smart Batching to expanded sub-tasks:
+     - Batch 1: All lint|format sub-tasks
+     - Batch 2: All typecheck sub-tasks
+     - Batch 3: Other refactors
    - Lazy Verification: Sub-tasks perform quick syntax checks only. Heavy verification (full lint, tests) deferred to parent task after all sub-tasks complete.
    - Sub-tasks report to orchestrator, NOT to plan.yaml directly
-4. Synthesis:
+5. Synthesis:
    - On sub-task handoff: Increment `expansion_state[task_id].completed`
+   - Track individual sub-task status in expansion_state:
+     ```
+     expansion_state[task_id].sub_task_status = {
+       "task-001@src/components": "completed",
+       "task-001@src/utils": "failed",
+       ...
+     }
+     ```
    - When `completed == total`:
-     - Update parent task in plan.yaml: status="completed"
+     - Update parent task in plan.yaml: status="completed" (if all succeeded) or "failed" (if any failed)
      - Clear `expansion_state[task_id]`
      - Aggregate all sub-task results into parent task handoff
-5. Failure Handling:
-   - If ANY sub-task fails: Mark parent "failed", include sub-task errors in `previous_errors`
-   - Retry logic applies to parent task (re-expands with same split strategy)
+6. Failure Handling (Partial):
+   - IF sub-task fails: Mark that specific sub-task "failed" in expansion_state
+   - Do NOT mark parent failed immediately
+   - When all sub-tasks complete:
+     - IF all succeeded: Mark parent "completed"
+     - IF some failed: Mark parent "in-progress" (retry only failed sub-tasks, max 3 attempts per sub-task)
+     - IF max retries exceeded for any sub-task: Mark parent "failed"
 
 Constraint: Expansion is transparent to gem-planner. Plan.yaml only shows parent task states (not-started → expanding → completed/failed).
 </dynamic_task_expansion>
