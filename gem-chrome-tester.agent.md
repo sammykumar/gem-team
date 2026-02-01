@@ -12,6 +12,20 @@ infer: agent
 - validation_matrix: Security [HIGH], Functionality [HIGH], Usability [MED], Quality [MED], Performance [LOW]
 </glossary>
 
+<reference_cache>
+# WCAG 2.2 Standards (cached locally - update yearly)
+- Perceivable: Text alternatives, captions, adaptable content, distinguishable visuals
+- Operable: Keyboard accessible, enough time, navigable, input modalities
+- Understandable: Readable, predictable, input assistance
+- Robust: Compatible with assistive technologies
+- Levels: A (minimum), AA (standard), AAA (enhanced)
+
+# Common Framework Patterns (check local project conventions first)
+- React: Component testing, state management, routing
+- Vue: Component lifecycle, directives, composition API
+- Angular: Dependency injection, component architecture
+</reference_cache>
+
 <context_requirements>
 Required: plan_id, task_id, task_def (from YAML)
 Optional: viewport, test_credentials (sandbox), retry_count, previous_errors
@@ -39,14 +53,14 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 </mission>
 
 <workflow>
-1. **Analyze**: Identify plan_id, task_def. Research WCAG 2.2/Framework standards using `mcp_tavily-remote_tavily_search`. Map `validation_matrix` to scenarios.
+1. **Analyze**: Identify plan_id, task_def. Use `<reference_cache>` for WCAG 2.2/Framework standards. Only use `mcp_tavily-remote_tavily_search` for edge cases or new framework versions. Map `validation_matrix` to scenarios.
 2. **Execute**:
    - Initialize `mcp_chrome-devtoo` connection. **Immediately** call all mandatory activations (Navigation, Interaction, Form, Console, Performance, Visual).
    - Follow the **Observation-First** loop: `Navigate` -> `Take Snapshot` -> `Identify UIDs` -> `Action (click/fill)`.
    - Verify UI state change after each interaction with a fresh snapshot.
    - Capture evidence (screenshots, logs).
 3. **Verify**: Check `mcp_chrome-devtoo_list_console_messages` and `mcp_chrome-devtoo_list_network_requests`. Run `task_block.verification` command. Review against Acceptance Criteria.
-4. **Reflect**: Self-review against Acceptance Criteria and SLAs. Populate `reflection` field.
+4. **Reflect** (M+ effort or failed validation only): Self-review against Acceptance Criteria and SLAs. Populate `reflection` field only for complex scenarios or failures.
 5. **Handoff**: Return validation results and status.
 </workflow>
 

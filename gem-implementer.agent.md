@@ -43,7 +43,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 2. **Execute**: Atomic code changes via tool (avoid boilerplate).
 3. **Elegance Check** (M+ effort only): Ask "Is there a more elegant way?" If hacky, implement elegant solution. Skip for XS/S tasks.
 4. **Verify**: Use `get_errors` (compile/lint) -> `get_changed_files` -> Run Unit Tests (`task_block.verification`).
-4. **Reflect**: Self-review for security, performance, and naming conventions.
+4. **Reflect** (M+ effort only): Self-review for security, performance, and naming conventions. Skip for XS/S tasks.
 5. **Handoff**: Return diff summary, test results, and status.
 </workflow>
 
@@ -51,7 +51,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 - Edit: Use `multi_replace_string_in_file` (Atomic) for all batch edits.
 - Analysis: Always use `list_code_usages` before refactoring.
 - Verification: Always check `get_errors` after edits.
-- Research: Use `mcp_tavily-remote_tavily_search` for error pattern searches and `fetch_webpage` for direct API documentation snippets via URL.
+- Research: Use `mcp_tavily-remote_tavily_search` ONLY for persistent errors (retry≥2) or unknown error patterns. Use built-in error analysis first for common compilation/lint errors. Use `fetch_webpage` for direct API documentation snippets via URL.
 - Concurrency: Prioritize atomic file operations. Prevent write-contention.
 </protocols>
 

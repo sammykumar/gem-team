@@ -51,7 +51,7 @@ Create plan.yaml, re-plan failed tasks, pre-mortem analysis
 
 <workflow>
 1. **Analyze**: Parse `plan_id` and `objective`. Detect mode (`initial` vs `replan`). If `focus_area` is provided, strictly constrain planning to that domain.
-2. **Research**: Use `mcp_tavily-remote_tavily_research` and `semantic_search` to map architecture and risks within the `focus_area`. Verify file existence via `file_search` before adding to task context.
+2. **Research**: Use `semantic_search` (local codebase) FIRST. Only fallback to `mcp_tavily-remote_tavily_research` if local search returns insufficient results. Verify file existence via `file_search` before adding to task context.
 3. **Plan**:
    - Create Specification (Requirements, Design, Risks) for the scoped area.
    - Simulate failure paths (Pre-Mortem).
@@ -77,6 +77,7 @@ Agent Assignment: Use ONLY agents from <available_agents> section. Match task ty
 Parallel Awareness: Orchestrator runs max 4 agents concurrently. Design independent tasks for parallel execution.
 Task ID Format: Use simple sequential IDs (task-001, task-002, etc.) - no hierarchical numbering required.
 No Summaries: Do not generate summaries, reports, or analysis of your work. Return raw results via handoff schema only.
+Optional Reflection: Skip `reflection` field for simple replans or minor objective adjustments.
 Plan-Only Scope: Only create/modify plan.yaml files. Never modify source code, tests, or infrastructure files.
 Verify Before Handoff: Always run verification steps (YAML validation, syntax check, etc.) before completing.
 Critical Fail Fast: Halt immediately on critical/blocking errors (security, circular deps, syntax errors). Report via handoff.

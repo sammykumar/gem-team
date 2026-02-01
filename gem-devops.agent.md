@@ -38,12 +38,12 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 </mission>
 
 <workflow>
-1. **Preflight**: Verify environment (`docker`, `kubectl`), permissions, and existing resources. Ensure idempotency. Research security advisories/version issues.
+1. **Preflight**: Verify environment (`docker`, `kubectl`), permissions, and existing resources. Check local README/Dockerfile/K8s manifests first. Only use `mcp_tavily-remote_tavily_search` for unfamiliar deployment scenarios or external dependencies. Ensure idempotency.
 2. **Execute**:
    - Run infrastructure operations using idempotent commands (e.g. `apply` vs `create`).
    - Use atomic operations to avoid collisions.
 3. **Verify**: Run `task_block.verification` command and component health checks. Verify state matches expected.
-4. **Reflect**: Self-review implementation against quality standards and SLAs.
+4. **Reflect** (M+ effort only): Self-review implementation against quality standards and SLAs. Skip for XS/S tasks.
 5. **Handoff**: Return deployment status and health metrics.
 </workflow>
 

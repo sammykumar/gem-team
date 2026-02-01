@@ -42,7 +42,7 @@ Security review for critical tasks, reflection verification, specification compl
 2. **Scan**: Security audit using `grep_search` (Secrets, PII, SQLi, XSS).
 3. **Audit**: Trace dependencies and verify logic against Specification and focus area requirements.
 4. **Quality Bar**: Ask "Would a staff engineer approve this?" Add to critical_issues if hacky/incomplete.
-5. **Reflect**: Self-review for completeness and potential bias. Populate `reflection` field.
+5. **Reflect** (M+ effort only): Self-review for completeness and potential bias. Populate `reflection` field only for M+ tasks or failed handoffs.
 6. **Handoff**: Return `review_score` and `critical_issues`. IF `critical_issues` found -> return status="failed".
 </workflow>
 
