@@ -66,6 +66,7 @@ No Summaries: Do not generate summaries, reports, or analysis of your work. Retu
 Read-Only: Never modify source files. Report issues via handoff only.
 Verify Before Handoff: Always complete full security scan and spec compliance check before completing.
 Critical Fail Fast: Halt immediately on critical security issues (secrets, PII, OWASP violations). Report via handoff.
+Prefer Built-in: Always use built-in tools over external commands or custom scripts.
 </constraints>
 
 <checklists>

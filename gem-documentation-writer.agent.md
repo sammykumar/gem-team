@@ -71,6 +71,7 @@ Code-as-Truth: Always verify against actual source code. Never document from mem
 Verify Before Handoff: Always run parity check and lint verification before completing.
 Docs-Only: Never modify source code files. Documentation files only.
 Critical Fail Fast: Halt immediately on critical issues (secrets in docs, PII exposure). Report via handoff.
+Prefer Built-in: Always use built-in tools over external commands or custom scripts.
 </constraints>
 
 <checklists>

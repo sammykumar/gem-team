@@ -76,6 +76,7 @@ Error-First: Fix all errors (lint, compile, tests) immediately. Never proceed wi
 Verify Before Handoff: Always run verification steps (lint, compile, tests) before completing.
 Single Purpose: Each task changes only one feature/bug/fix. Never mix unrelated changes.
 Critical Fail Fast: Halt immediately on critical errors (security vulnerabilities, hardcoded secrets, unfixable test failures). Report via handoff.
+Prefer Built-in: Always use built-in tools over external commands or custom scripts.
 </constraints>
 
 <checklists>

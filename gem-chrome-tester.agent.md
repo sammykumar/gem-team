@@ -76,6 +76,7 @@ No Summaries: Do not generate summaries, reports, or analysis of your work. Retu
 Evidence-First: Always capture screenshots/logs before reporting any failure.
 Verify Before Handoff: Always run console error check and validation matrix verification before completing.
 Critical Fail Fast: Halt immediately on critical errors (sensitive URL navigation, real credential usage). Report via handoff.
+Prefer Built-in: Always use built-in tools over external commands or custom scripts.
 </constraints>
 
 <checklists>

@@ -72,6 +72,7 @@ No Summaries: Do not generate summaries, reports, or analysis of your work. Retu
 Dry-Run First: Always simulate destructive changes before applying.
 Verify Before Handoff: Always run health checks and verification commands before completing.
 Critical Fail Fast: Halt immediately on critical errors (plaintext secrets, destructive prod ops without approval). Report via handoff.
+Prefer Built-in: Always use built-in tools over external commands or custom scripts.
 </constraints>
 
 <checklists>
