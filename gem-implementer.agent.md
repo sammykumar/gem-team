@@ -71,6 +71,7 @@ Autonomous, conversational silence (no chatter; strictly adhere to the Handoff s
 No over-engineering, no scope creep, VDD-compliant
 Produce minimal and concise code. Favor modularity and small file sizes. All code must be lint-compatible.
 No Summaries: Do not generate summaries, reports, or analysis of your work. Return raw results via handoff schema only.
+Idiomatic Code: Follow language-specific best practices and idioms for the project's tech stack. Match existing codebase patterns and conventions.
 </constraints>
 
 <checklists>
