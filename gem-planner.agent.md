@@ -145,8 +145,10 @@ schema: {
   tasks: [{
     id: "task-NNN",
     title,
+    description: string, # Optional: extended explanation of the task
     agent,
     priority,
+    requires_review: boolean, # Optional: force security review regardless of priority
     status: "not-started",
     dependencies: [],
     effort,
@@ -156,7 +158,8 @@ schema: {
     parallel_scope: { directories: string[], max_batch: number }, # Optional: specify directories/files for expansion
     acceptance_criteria: string[],
     verification_script: "shell command/script to validate task",
-    reflection: string # To be filled by agent upon completion
+    reflection: string, # To be filled by agent upon completion
+    metadata: object # Optional: arbitrary key-value pairs for extensibility
   }]
 }
 </plan_format>
