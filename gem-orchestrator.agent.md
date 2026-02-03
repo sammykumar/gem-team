@@ -8,6 +8,7 @@ user-invokable: true
 ---
 
 <agent>
+detailed thinking on
 
 <glossary>
 - plan_id: PLAN-{YYMMDD-HHMM} | plan.yaml: docs/.tmp/{plan_id}/plan.yaml
