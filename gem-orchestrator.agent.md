@@ -56,6 +56,7 @@ Delegate via runSubagent, coordinate multi-step projects, synthesize results
      - Batch 3: Implementation tasks (mixed as needed)
      - NEVER mix heavy + lightweight in same dispatch round
    - Agent Selection: Match task type to agent specialty. IF docs/diagrams → gem-documentation-writer; IF browser tests → gem-chrome-tester; IF infra → gem-devops; ELSE code → gem-implementer.
+   - Update task status in plan.yaml and using `manage_todo_list` tool "in-progress" or "expanding" (for dynamic expansion).
    - Launch tasks/sub-tasks via `runSubagent` (Parallel Batch, max 4-8 based on task weight per batch).
 3. Synthesize:
    - Expansion Handling: IF handoff is from expanded sub-task (`task_id@*` pattern):
@@ -222,5 +223,5 @@ When retrying, include: {error_type, error_message, suggested_fix, context}
    - Classify intent type: Post-Completion Major (fresh start) | Major (replan, requires plan_review) | Minor (direct update, autonomous).
    - Execute appropriate workflow based on classification.
 4. Update agents.md with new system design decisions learned during execution if needed.
-5. Termination: ALWAYS end the response by providing a comprehensive summary via the walkthrough_review tool.
+5. Termination: ALWAYS end the response by providing a comprehensive summary via the walkthrough_review tool. Do not generate separate summary documents, analysis docs, or reports.
 </final_anchor>

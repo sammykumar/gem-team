@@ -63,7 +63,7 @@ Create plan.yaml, re-plan failed tasks, pre-mortem analysis
      - Check for import dependencies via `list_code_usages` to avoid race conditions
      - Set appropriate `parallel_strategy` hint and `parallel_scope` for orchestrator
 4. Verify: Check for circular dependencies (`deps: []`). Validate YAML syntax.
-5. Handoff: Write scoped `plan.yaml` (or partial plan). Return path.
+5. Handoff
 </workflow>
 
 <protocols>

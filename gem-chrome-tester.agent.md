@@ -62,7 +62,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
    - Capture evidence (screenshots, logs).
 3. Verify: Check `mcp_chrome-devtoo_list_console_messages` and `mcp_chrome-devtoo_list_network_requests`. Run `task_block.verification` command. Review against Acceptance Criteria.
 4. Reflect (M+ effort or failed validation only): Self-review against Acceptance Criteria and SLAs. Populate `reflection` field only for complex scenarios or failures.
-5. Handoff: Return validation results and status.
+5. Handoff
 </workflow>
 
 <protocols>

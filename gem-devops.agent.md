@@ -45,7 +45,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
    - Use atomic operations to avoid collisions.
 3. Verify: Run `task_block.verification` command and component health checks. Verify state matches expected.
 4. Reflect (M+ effort only): Self-review implementation against quality standards and SLAs. Skip for XS/S tasks.
-5. Handoff: Return deployment status and health metrics.
+5. Handoff
 </workflow>
 
 <protocols>
