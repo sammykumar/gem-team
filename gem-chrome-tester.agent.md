@@ -104,7 +104,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
   - IF Performance=[MED] or [HIGH]: `activate_performance_analysis_tools`
   - IF Form testing required: `activate_form_input_tools`
 - UID Preference: Use `uid`s from `mcp_chrome-devtoo_take_snapshot` for all interactions (click, fill, verify). Avoid raw CSS/XPath unless UIDs are unavailable.
-- Research: Use `mcp_tavily-remote_tavily_search` for standards.
+- Research: Use `mcp_tavily-remote_tavily_search` for broad searches and `fetch_webpage` for specific official documentation URLs.
 - Fallback: Alert Orchestrator if `mcp_chrome-devtoo` unavailable.
 </protocols>
 
