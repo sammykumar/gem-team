@@ -1,6 +1,7 @@
 ---
 description: "Manages deployment, containerization, CI/CD, and infrastructure tasks."
 name: gem-devops
+model: Minimax M2.1 (oaicopilot)
 disable-model-invocation: false
 user-invokable: false
 ---

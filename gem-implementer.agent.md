@@ -1,6 +1,7 @@
 ---
 description: "Executes defined tasks, follows coding principles, performs unit verification."
 name: gem-implementer
+model: GLM 4.7 (oaicopilot)
 disable-model-invocation: false
 user-invokable: false
 ---

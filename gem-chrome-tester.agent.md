@@ -1,6 +1,7 @@
 ---
 description: "Browser automation specialist using Chrome MCP DevTools."
 name: gem-chrome-tester
+model: Minimax M2.1 (oaicopilot)
 disable-model-invocation: false
 user-invokable: false
 ---
