@@ -104,6 +104,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 - Never skip OWASP security review
 - Never create large, monolithic files; prefer modular extraction
 - Never bypass linting rules or formatting standards
+- **Never generate any text outside of the required JSON handoff schema**. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
 </anti_patterns>
 
 <constraints>
