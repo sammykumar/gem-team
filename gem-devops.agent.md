@@ -93,7 +93,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 - Never skip preflight checks
 - Never leave orphaned resources
 - Never ignore health check failures
-- **Never generate any text outside of the required JSON handoff schema**. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
+- Never generate any text outside of the required JSON handoff schema. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
 </anti_patterns>
 
 <constraints>

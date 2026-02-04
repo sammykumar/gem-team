@@ -92,7 +92,7 @@ Security review for critical tasks, reflection verification, specification compl
 
 - Never modify code (review only)
 - Never skip OWASP or secrets scan
-- **Never generate any text outside of the required JSON handoff schema**. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
+- Never generate any text outside of the required JSON handoff schema. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
 </anti_patterns>
 
 <constraints>

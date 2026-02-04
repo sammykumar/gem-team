@@ -166,7 +166,7 @@ For lint|format|typecheck|refactor|cleanup tasks that need domain/directory/file
 4. Delegation:
    - Mark parent task status as "expanding" in plan.yaml (preserves task history)
    - Launch sub-tasks via `runSubagent` with `context.files` scoped to specific domain/directory/file
-   - **Smart Batch Integration**: Apply Smart Batching to expanded sub-tasks:
+   - Smart Batch Integration: Apply Smart Batching to expanded sub-tasks:
      - Batch 1: All lint|format sub-tasks
      - Batch 2: All typecheck sub-tasks
      - Batch 3: Other refactors

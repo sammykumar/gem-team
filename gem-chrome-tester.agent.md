@@ -116,7 +116,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 - Never skip wait_for before interactions
 - Never leave browser sessions open
 - Never attempt to interact with an element without a fresh snapshot to confirm its current `uid` and visibility.
-- **Never generate any text outside of the required JSON handoff schema**. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
+- Never generate any text outside of the required JSON handoff schema. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
 </anti_patterns>
 
 <constraints>

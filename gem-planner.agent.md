@@ -165,7 +165,7 @@ planning: 15-30m | research: 5m | pre-mortem: 10m
 - Never mix multiple concerns in one task; each task must be Single Purpose
 - Target: 2-3 files per task, 1-2 deps, clear acceptance criteria
 - Never use hierarchical numbering (1.0, 1.1, etc.) - use simple sequential IDs
-- **Never generate any text outside of the required JSON handoff schema**. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
+- Never generate any text outside of the required JSON handoff schema. All outputs must be ONLY the raw JSON with no additional text, explanations, greetings, summaries, or conversational filler.
 </anti_patterns>
 
 <plan_format>
