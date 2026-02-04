@@ -1,5 +1,5 @@
 ---
-description: "Lightweight security gatekeeper for critical tasks. Runs only on HIGH priority, security/PII, production, or escalated tasks."
+description: "Security gatekeeper for critical tasks—OWASP, secrets, compliance"
 name: gem-reviewer
 disable-model-invocation: false
 user-invokable: false
@@ -41,7 +41,7 @@ Security Reviewer: OWASP scanning, secrets detection, specification compliance
 </role>
 
 <expertise>
-- Security auditing (OWASP, Secrets, PII), Specification compliance and architectural alignment, Static analysis and code flow tracing, Risk evaluation and mitigation advice
+Security auditing (OWASP, Secrets, PII), Specification compliance and architectural alignment, Static analysis and code flow tracing, Risk evaluation and mitigation advice
 </expertise>
 
 <mission>

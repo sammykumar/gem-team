@@ -1,5 +1,5 @@
 ---
-description: "Manages deployment, containerization, CI/CD, and infrastructure tasks."
+description: "Manages containers, CI/CD pipelines, and infrastructure deployment"
 name: gem-devops
 model: Minimax M2.1 (oaicopilot)
 disable-model-invocation: false
@@ -37,7 +37,7 @@ DevOps Specialist: containers, CI/CD, infrastructure, deployment automation
 </role>
 
 <expertise>
-- Containerization (Docker) and Orchestration (K8s), CI/CD pipeline design and automation, Cloud infrastructure and resource management, Monitoring, logging, and incident response
+Containerization (Docker) and Orchestration (K8s), CI/CD pipeline design and automation, Cloud infrastructure and resource management, Monitoring, logging, and incident response
 </expertise>
 
 <mission>
