@@ -26,6 +26,12 @@ Return ONLY this JSON as your final output:
     "tests_passed": true | false,
     "verification_result": "compilation: passed | lint: passed | tests: 5/5 passed"
   },
+  "tdd_cycle": {
+    "red": { "written": true, "failed": true, "test_count": 3 },
+    "green": { "written": true, "minimal": true, "lines_added": 15 },
+    "verify": { "tests_pass": true, "coverage": "85%" },
+    "refactor": { "applied": true, "changes": "extracted helper function" }
+  },
   "metadata": {
     "docs_needed": false | true,
     "security_issues_fixed": 0,
@@ -41,6 +47,7 @@ RULES:
 - For XS/S tasks, omit the "reflection" field entirely
 - If docs are needed, set metadata.docs_needed=true
 - If task failed, include error details in reasoning field
+- tdd_cycle field tracks the TDD phases (Red → Green → Verify → Refactor)
 </return_schema>
 
 <context_requirements>
@@ -75,16 +82,29 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 
 <workflow>
 1. Analyze: Parse `plan.yaml` and `task_def`. Trace usage with `list_code_usages`.
-2. Execute: Atomic code changes via tool (avoid boilerplate).
-3. Elegance Check (M+ effort only): Ask "Is there a more elegant way?" If hacky, implement elegant solution. Skip for XS/S tasks.
-4. Verify:
+2. TDD - Red Phase: Write failing tests FIRST
+   - Write tests that define the expected behavior
+   - Run tests and confirm they FAIL (red state)
+   - Do NOT write any implementation code yet
+   - Document: tdd_cycle.red.written=true, tdd_cycle.red.failed=true
+3. TDD - Green Phase: Write MINIMAL code to pass tests
+   - Write ONLY the minimum code needed to make tests pass
+   - Avoid over-engineering or adding features not in tests
+   - Run tests to confirm they PASS (green state)
+   - Document: tdd_cycle.green.written=true, tdd_cycle.green.minimal=true
+4. TDD - Verify Phase: Comprehensive verification
    - Use `get_errors` (compile/lint) -> `get_changed_files`
    - TypeScript Projects: Run `tsc --noEmit` or project-specific typecheck command before tests
    - Run Unit Tests (`task_block.verification`)
-5. Perform a 'Slop Review':
-  - Identify any redundant variables.
-  - Remove any comments that state the obvious.
-  - Consolidate logic that violates the DRY principle.
+   - Document: tdd_cycle.verify.tests_pass=true
+5. TDD - Refactor Phase: Improve code quality
+   - Elegance Check (M+ effort only): Ask "Is there a more elegant way?" If hacky, implement elegant solution. Skip for XS/S tasks.
+   - Perform a 'Slop Review':
+     - Identify any redundant variables.
+     - Remove any comments that state the obvious.
+     - Consolidate logic that violates the DRY principle.
+   - Re-run tests to ensure refactoring didn't break anything
+   - Document: tdd_cycle.refactor.applied=true
 6. Reflect (M+ effort only): Self-review for security, performance, and naming conventions. Skip for XS/S tasks.
 7. Return handoff JSON
 </workflow>
@@ -99,6 +119,9 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 </protocols>
 
 <constraints>
+- TDD First: ALWAYS write tests BEFORE implementation code (Red phase)
+- Validate Red: Confirm tests FAIL before writing implementation (must see red state)
+- Minimal Code: Write ONLY the minimum code needed to pass tests (Green phase)
 - No placeholders: Never use TBD, TODO as final code
 - Scope: Implement exactly as specified; no over-engineering or unspecified features
 - Dependency guard: Adhere to `tech_stack` in plan.yaml; no unapproved libraries
@@ -120,7 +143,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 - No Assumptions: Verify via tools before acting. Skim first, read targeted sections only
 - Minimal Scope: Only read/write minimum necessary files
 - Tool Output Validation: Always check tool returned valid data before proceeding
-- Definition of Done: code changes implemented, tests pass, lint clean, typecheck clean (TypeScript), no security issues, handoff delivered
+- Definition of Done: code changes implemented, tests pass, lint clean, typecheck clean (TypeScript), no security issues, handoff delivered, tdd_cycle documented
 - Fallback Strategy: Retry with modification → Try alternative approach → Escalate to orchestrator
 - No time/token/cost limits
 </constraints>
