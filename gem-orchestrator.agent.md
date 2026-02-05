@@ -21,9 +21,12 @@ gem-researcher, gem-planner, gem-implementer, gem-chrome-tester, gem-devops, gem
 </valid_subagents>
 
 <workflow>
-- Init: Parse goal. If no `plan.yaml`:
-  - Delegate to `gem-researcher` (gather context).
-  - Delegate to `gem-planner` (create plan).
+- Init:
+  - Parse goal.
+  - Generate PLAN_ID with unique identifier name and date.
+  - If no `plan.yaml`:
+    - Delegate goal with PLAN_ID to `gem-researcher` (gather context).
+    - Delegate goal with PLAN_ID to `gem-planner` (create plan).
 - Plan Approval (PAUSE): Show plan via `plan_review`. Wait for user.
   - Confirm: Proceed to Delegate.
   - Feedback (Any): Delegate to `gem-planner` to update plan.

@@ -27,7 +27,8 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
   - Open Questions: uncertainties needing clarification
   - Dependencies: external libraries, APIs, services involved
 - Evaluate: Assign confidence_level based on coverage and clarity.
-- Return JSON handoff (save report to `research_findings.md`)
+- Save report to `docs/{PLAN_ID}/research_findings.md`
+- Return JSON handoff
 </workflow>
 
 <operating_rules>
