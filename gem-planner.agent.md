@@ -51,9 +51,10 @@ Create plan.yaml from research findings, re-plan failed tasks, pre-mortem analys
   - Dependencies between tasks
   - Verification scripts
   - Acceptance criteria
+  - Failure modes: For each task (especially high/medium), identify ≥1 failure scenario with likelihood, impact, mitigation.
 - Pre-Mortem: Identify ≥2 potential failure scenarios with likelihood, impact, mitigation.
 - Plan: Create plan as per plan_format schema.
-- Verify: Check circular dependencies (topological sort), validate YAML syntax, verify required fields present.
+- Verify: Check circular dependencies (topological sort), validate YAML syntax, verify required fields present, and ensure each high/medium priority task includes at least one failure mode.
 - Return JSON handoff
 </workflow>
 
@@ -77,6 +78,7 @@ Create plan.yaml from research findings, re-plan failed tasks, pre-mortem analys
 - TL;DR: 1-3 sentence summary
 - Validation Matrix: Security, Functionality, Usability, Quality, Performance with priority levels
 - Pre-Mortem: ≥2 failure paths with likelihood, impact, mitigation
+- Task-level Pre-Mortem: Each high/medium priority task must include ≥1 failure mode with mitigation
 - Open Questions: If any ambiguity exists (including research gaps)
 - 3-7 atomic tasks (DAG, no circular deps)
 
@@ -134,6 +136,12 @@ schema: {
     effort,
     context: { files: string[] },
     acceptance_criteria: string[],
+    failure_modes: [{  # Optional but recommended for high/medium priority tasks
+      scenario: string,
+      likelihood: "HIGH" | "MEDIUM" | "LOW",
+      impact: "HIGH" | "MEDIUM" | "LOW",
+      mitigation: string
+    }],
     verification_script: "shell command/script to validate task",
     reflection: string, # To be filled by agent upon completion
     metadata: object # Optional: arbitrary key-value pairs for extensibility
