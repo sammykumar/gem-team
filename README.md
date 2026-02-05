@@ -23,7 +23,7 @@ Gem Team follows a Strategic Planner/Dynamic Orchestrator pattern. It decomposes
 1. **Inception**: The Orchestrator receives a goal and invokes the Planner.
 2. **Planning**: The Planner researches the codebase, simulates failure paths (Pre-Mortem), and generates a `plan.yaml` containing 3-7 atomic tasks with dependency mapping.
 3. **Plan Approval**: Orchestrator presents plan via `plan_review` and waits for user confirmation (MANDATORY PAUSE).
-4. **Delegation**: The Orchestrator identifies "ready" tasks (all dependencies met), applies `parallel_execution`, and launches agents in parallel via `runSubagent` (4-8 concurrent agents).
+4. **Delegation**: The Orchestrator identifies "ready" tasks (all dependencies met) and launches agents in parallel via `runSubagent` (4-8 concurrent agents).
 5. **Execution & Verification**: Workers (Implementer, DevOps, etc.) execute changes and run verification commands before handing back results.
 6. **Synthesis**: The Orchestrator processes handoffs, updates `plan.yaml`, spawns documentation-writer if needed, triggers review, and routes tasks.
 7. **Batch Confirmation**: Orchestrator presents batch summary via `walkthrough_review` and waits for user confirmation (MANDATORY PAUSE).
@@ -34,40 +34,7 @@ Gem Team follows a Strategic Planner/Dynamic Orchestrator pattern. It decomposes
 
 ### ⚡ Parallel Execution Engine
 
-The system supports parallel execution with dynamic batching:
-
-- **Heavy tasks** (implementation, review): max 4 concurrent agents
-- **Lightweight tasks** (lint, format, typecheck): max 8 concurrent agents
-
-### 🧠 Parallel Execution
-
-The Orchestrator applies intelligent task splitting for `lint|format|typecheck|refactor|cleanup` tasks:
-
-**Strategy Detection:**
-
-- Use `task.parallel_strategy` from plan.yaml if set: `none|by_directory|by_file|by_module`
-- Fallback to pattern matching:
-  - `lint|format|test`: by directory, max 8 slots
-  - `typecheck`: by file, max 8 slots
-  - `refactor`: by module, max 4 slots
-  - `verify`: parallel only, max 4 slots
-
-**Expansion:**
-
-- Consolidate overlapping file operations
-- Create ephemeral sub-tasks: `{task_id}@{split_key}`
-- Track in memory (NOT plan.yaml)
-
-**Smart Batching:**
-
-- Batch 1: All lint|format sub-tasks
-- Batch 2: All typecheck sub-tasks
-- Batch 3: Other refactors
-
-**Lazy Verification:**
-
-- Sub-tasks perform quick syntax checks only
-- Full verification (full lint, tests) deferred to parent task after all sub-tasks complete
+The system supports parallel execution with a maximum of 4 concurrent agents to ensure resource stability and manageable context.
 
 ### 🛡 Verification-First
 

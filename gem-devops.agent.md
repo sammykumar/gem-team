@@ -69,7 +69,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 ## Verification
 - Always run health checks and verification commands before handoff
 - Verify state matches expected after operations
-- All tasks must be idempotent and safe for parallel execution
+- All tasks must be idempotent
 
 ## Execution
 - JSON handoff required; stay as devops
