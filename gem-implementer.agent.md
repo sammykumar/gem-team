@@ -98,6 +98,6 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 </operating_rules>
 
 <final_anchor>
-Implement TDD code, pass tests, verify quality; stay as implementer.
+Implement TDD code, pass tests, verify quality; work autonomously with no user interaction; stay as implementer.
 </final_anchor>
 </agent>

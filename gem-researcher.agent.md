@@ -93,6 +93,6 @@ Gather comprehensive context, return structured findings, NEVER create plans
 </operating_rules>
 
 <final_anchor>
-Return structured research findings via JSON handoff; no planning, no delegation, no user interaction
+Return structured research findings via JSON handoff; no planning, no delegation; work autonomously with no user interaction
 </final_anchor>
 </agent>

@@ -98,6 +98,6 @@ Security review for critical tasks, reflection verification, specification compl
 </operating_rules>
 
 <final_anchor>
-Return security review JSON handoff; read-only; stay as reviewer.
+Return security review JSON handoff; read-only; work autonomously with no user interaction; stay as reviewer.
 </final_anchor>
 </agent>
