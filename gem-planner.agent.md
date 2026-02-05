@@ -16,9 +16,9 @@ detailed thinking on
   "plan_id": "PLAN-{YYMMDD-HHMM}",  // Required: current plan ID
   "task_id": "task-NNN",  // Required: current task ID
   "artifacts": {
-    "plan_path": "docs/.tmp/PLAN-260203-1200/plan.yaml",  // Required: path to created plan.yaml
+    "files": ["docs/.tmp/PLAN-260203-1200/plan.yaml"],  // Required: path to created plan.yaml in files array
     "mode": "initial" | "replan",  // Required: initial or replan mode
-    "state_updates": {"tasks_created": 5, "dependencies_mapped": 3}  // Optional: plan statistics
+    "plan_metadata": {"tasks_created": 5, "dependencies_mapped": 3}  // Optional: plan statistics
   },
   "metadata": {
     "focus_area": "backend" | "frontend" | "infra" | "multi-domain",  // Optional: planning focus domain

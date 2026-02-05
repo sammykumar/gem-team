@@ -20,15 +20,15 @@ Gem Team follows a Strategic Planner/Dynamic Orchestrator pattern. It decomposes
 
 ## 🔄 Core Workflow
 
-1. **Inception**: The Orchestrator receives a goal and invokes the Planner.
-2. **Planning**: The Planner researches the codebase, simulates failure paths (Pre-Mortem), and generates a `plan.yaml` containing 3-7 atomic tasks with dependency mapping.
-3. **Plan Approval**: Orchestrator presents plan via `plan_review` and waits for user confirmation (MANDATORY PAUSE).
-4. **Delegation**: The Orchestrator identifies "ready" tasks (all dependencies met) and launches agents in parallel via `runSubagent` (4-8 concurrent agents).
-5. **Execution & Verification**: Workers (Implementer, DevOps, etc.) execute changes and run verification commands before handing back results.
-6. **Synthesis**: The Orchestrator processes handoffs, updates `plan.yaml`, spawns documentation-writer if needed, triggers review, and routes tasks.
-7. **Batch Confirmation**: Orchestrator presents batch summary via `walkthrough_review` and waits for user confirmation (MANDATORY PAUSE).
-8. **Loop**: Repeat steps 4-7 until all tasks complete.
-9. **Delivery**: Results are presented via a comprehensive `walkthrough_review` summary.
+1. Inception: The Orchestrator receives a goal and invokes the Planner.
+2. Planning: The Planner researches the codebase, simulates failure paths (Pre-Mortem), and generates a `plan.yaml` containing 3-7 atomic tasks with dependency mapping.
+3. Plan Approval: Orchestrator presents plan via `plan_review` and waits for user confirmation (MANDATORY PAUSE).
+4. Delegation: The Orchestrator identifies "ready" tasks (all dependencies met) and launches agents in parallel via `runSubagent` (4-8 concurrent agents).
+5. Execution & Verification: Workers (Implementer, DevOps, etc.) execute changes and run verification commands before handing back results.
+6. Synthesis: The Orchestrator processes handoffs, updates `plan.yaml`, spawns documentation-writer if needed, triggers review, and routes tasks.
+7. Batch Confirmation: Orchestrator presents batch summary via `walkthrough_review` and waits for user confirmation (MANDATORY PAUSE).
+8. Loop: Repeat steps 4-7 until all tasks complete.
+9. Delivery: Results are presented via a comprehensive `walkthrough_review` summary.
 
 ## 🛠 Key Features
 
@@ -50,9 +50,9 @@ State is persisted in `docs/.tmp/{plan_id}/plan.yaml`. This allows the team to r
 User → Orchestrator → Subagents (via runSubagent)
 ```
 
-- **Orchestrator**: `disable-model-invocation: true` - delegates via `runSubagent`, never executes tasks directly
-- **Subagents**: `disable-model-invocation: false` - execute tasks via tools
-- **Subagents CANNOT call other subagents** - all cross-agent collaboration mediated by orchestrator
+- Orchestrator: `disable-model-invocation: true` - delegates via `runSubagent`, never executes tasks directly
+- Subagents: `disable-model-invocation: false` - execute tasks via tools
+- Subagents CANNOT call other subagents - all cross-agent collaboration mediated by orchestrator
 
 ## 📁 Project Structure
 

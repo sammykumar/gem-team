@@ -2,7 +2,7 @@
 description: "Executes TDD code changes, ensures verification, maintains quality"
 name: gem-implementer
 disable-model-invocation: false
-user-invokable: false
+user-invokable: true
 ---
 
 <agent>
@@ -24,7 +24,7 @@ detailed thinking on
     "docs_needed": false | true,  // Required: set true if API changes require documentation
     "security_issues_fixed": 0,  // Optional: number of security issues fixed
     "files_modified": 2,  // Optional: number of files modified
-    "tdd_cycle": {  // Optional: TDD phase tracking for M+ effort
+    "tdd_cycle": {  // Required for M+ effort tasks (Optional for XS/S): TDD phase tracking
       "red": { "written": true, "failed": true, "test_count": 3 },
       "green": { "written": true, "minimal": true, "lines_added": 15 },
       "verify": { "tests_pass": true, "coverage": "85%" },

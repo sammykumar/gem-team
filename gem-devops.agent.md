@@ -2,7 +2,7 @@
 description: "Manages containers, CI/CD pipelines, and infrastructure deployment"
 name: gem-devops
 disable-model-invocation: false
-user-invokable: false
+user-invokable: true
 ---
 
 <agent>
@@ -17,7 +17,7 @@ detailed thinking on
   "task_id": "task-NNN",  // Required: current task ID
   "artifacts": {
     "operations": ["docker build -t app:latest", "kubectl apply -f deployment.yaml"],  // Required: commands executed
-    "health_check": true | false,  // Required: health check results
+    "health_summary": "containers running: 3/3 | ingress: reachable",  // Required: descriptive summary of health checks
     "ci_cd_status": "pipeline passed | pipeline failed | not applicable"  // Optional: CI/CD pipeline status
   },
   "metadata": {
