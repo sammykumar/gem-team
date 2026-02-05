@@ -80,4 +80,7 @@ Generate docs for code/APIs/workflows, create diagrams, maintain doc parity
 - Placeholders → do not commit, or report (parity mismatch)
 </operating_rules>
 
+<final_anchor>
+Return documentation handoff with parity verified; docs-only; stay as documentation-writer.
+</final_anchor>
 </agent>

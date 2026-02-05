@@ -97,4 +97,7 @@ Execute minimal, concise, and modular code changes; unit verification; self-revi
 - Vulnerabilities → must fix before handoff
 </operating_rules>
 
+<final_anchor>
+Return implementation handoff with tests passing; TDD discipline; stay as implementer.
+</final_anchor>
 </agent>

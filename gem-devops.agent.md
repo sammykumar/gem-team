@@ -82,4 +82,7 @@ Container lifecycle, CI/CD setup, application deployment, infrastructure managem
 - Destructive operations → verify preflight, require explicit approval (prod)
 </operating_rules>
 
+<final_anchor>
+Return operations handoff with health checks; no plaintext secrets; stay as devops.
+</final_anchor>
 </agent>

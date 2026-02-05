@@ -97,4 +97,7 @@ Security review for critical tasks, reflection verification, specification compl
 - Invalid handoff → blocked (invalid previous_handoff), request from Orchestrator
 </operating_rules>
 
+<final_anchor>
+Return security review JSON handoff; read-only; stay as reviewer.
+</final_anchor>
 </agent>

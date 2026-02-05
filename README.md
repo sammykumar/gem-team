@@ -11,7 +11,8 @@ Gem Team follows a Strategic Planner/Dynamic Orchestrator pattern. It decomposes
 | Agent | Model | Specialty | Primary Responsibility |
 | :--- | :--- | :--- | :--- |
 | `gem-orchestrator` | GLM 4.7 | Coordination | Coordinates multi-agent workflows, delegates tasks, synthesizes results via runSubagent |
-| `gem-planner` | Minimax M2.1 | Strategy | Creates DAG-based plans with pre-mortem analysis and task decomposition |
+| `gem-researcher` | Minimax M2.1 | Research | Gathers codebase context, identifies relevant files/patterns, returns structured findings |
+| `gem-planner` | Minimax M2.1 | Strategy | Creates DAG-based plans with pre-mortem analysis and task decomposition from research findings |
 | `gem-implementer` | GLM 4.7 | Execution | Executes TDD code changes, ensures verification, maintains quality |
 | `gem-chrome-tester` | Minimax M2.1 | Testing | Automates browser testing, UI/UX validation via Chrome DevTools |
 | `gem-devops` | Minimax M2.1 | Infrastructure | Manages containers, CI/CD pipelines, and infrastructure deployment |
@@ -20,17 +21,21 @@ Gem Team follows a Strategic Planner/Dynamic Orchestrator pattern. It decomposes
 
 ## 🔄 Core Workflow
 
-1. Inception: The Orchestrator receives a goal and invokes the Planner.
-2. Planning: The Planner researches the codebase, simulates failure paths (Pre-Mortem), and generates a `plan.yaml` containing 3-7 atomic tasks with dependency mapping.
+1. Inception: The Orchestrator receives a goal and invokes the Researcher for context gathering, then the Planner creates the plan.
+2. Planning: The Planner synthesizes research findings, designs the task DAG, simulates failure paths (Pre-Mortem), and generates a `plan.yaml` containing 3-7 atomic tasks with dependency mapping.
 3. Plan Approval: Orchestrator presents plan via `plan_review` and waits for user confirmation (MANDATORY PAUSE).
-4. Delegation: The Orchestrator identifies "ready" tasks (all dependencies met) and launches agents in parallel via `runSubagent` (4-8 concurrent agents).
+4. Delegation: The Orchestrator identifies "ready" tasks (all dependencies met) and launches agents in parallel via `runSubagent` (max 4 concurrent agents).
 5. Execution & Verification: Workers (Implementer, DevOps, etc.) execute changes and run verification commands before handing back results.
-6. Synthesis: The Orchestrator processes handoffs, updates `plan.yaml`, spawns documentation-writer if needed, triggers review, and routes tasks.
+6. Synthesis: The Orchestrator processes handoffs, updates `plan.yaml`, triggers review when needed, and routes tasks for revision or retry.
 7. Batch Confirmation: Orchestrator presents batch summary via `walkthrough_review` and waits for user confirmation (MANDATORY PAUSE).
-8. Loop: Repeat steps 4-7 until all tasks complete.
+8. Loop: Repeat steps 4-7 until all tasks complete. If stuck, orchestrator may trigger fresh research and replanning.
 9. Delivery: Results are presented via a comprehensive `walkthrough_review` summary.
 
 ## 🛠 Key Features
+
+### 🔍 Separation of Research & Planning
+
+The Researcher agent autonomously gathers codebase context, identifying relevant files, patterns, and dependencies before the Planner creates the task DAG. This ensures planning is based on comprehensive, accurate context while keeping the Planner focused on architecture and decomposition.
 
 ### ⚡ Parallel Execution Engine
 

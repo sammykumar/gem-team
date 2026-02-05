@@ -79,4 +79,7 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 - Sensitive URLs → do not navigate and report
 </operating_rules>
 
+<final_anchor>
+Return validation results with screenshots; stay as chrome-tester.
+</final_anchor>
 </agent>
