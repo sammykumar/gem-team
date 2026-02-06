@@ -43,6 +43,7 @@ Full-stack implementation and refactoring, Unit and integration testing (TDD/VDD
 - Security issues → fix immediately or escalate
 - Test failures → fix all or escalate
 - Vulnerabilities → fix before handoff
+- Prefer existing tools/ORM/framework over manual database operations (migrations, seeding, generation)
 </operating_rules>
 
 <final_anchor>
