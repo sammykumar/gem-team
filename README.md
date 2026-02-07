@@ -121,7 +121,7 @@ flowchart TD
 
 ### Workflow Stages
 
-1. **Inception** — Orchestrator receives goal → invokes Researcher for context → Planner designs the DAG
+1. **Inception** — Orchestrator receives goal → delegates to multiple Researchers (by focus area) → Planner synthesizes findings into a DAG
 2. **Planning** — Planner synthesizes findings, creates 3-7 atomic tasks with dependencies, runs pre-mortem analysis, saves `plan.yaml`
 3. **Plan Approval** — Planner presents plan via `plan_review` → **MANDATORY PAUSE** → iterates on feedback until approved
 4. **Delegation** — Orchestrator identifies "ready" tasks (dependencies met) → launches up to 4 agents in parallel via `runSubagent`
@@ -135,9 +135,9 @@ flowchart TD
 
 ## 🛠 Key Features
 
-### 🔍 Separation of Research & Planning
+### 🔍 Focus-Based Context Gathering
 
-The **Researcher agent** autonomously gathers codebase context — identifying relevant files, patterns, and dependencies — before the **Planner** creates the task DAG. This ensures planning is based on comprehensive, accurate context while keeping the Planner focused on architecture and decomposition.
+The **Orchestrator** identifies key domains or features and launches multiple **Researcher agents** in parallel, each targeting a specific `focus_area`. This ensures deep, specific context is gathered for every part of the system before the **Planner** synthesizes it all into a unified `plan.yaml`.
 
 ### ⚡ Parallel Execution Engine
 
