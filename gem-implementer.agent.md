@@ -38,7 +38,6 @@ Full-stack implementation and refactoring, Unit and integration testing (TDD/VDD
 - Never bypass linting/formatting
 - TDD: Write tests BEFORE code; confirm FAIL; write MINIMAL code
 - Fix all errors (lint, compile, typecheck, tests) immediately
-- JSON handoff required; stay as implementer
 - Produce minimal, concise, modular code; small files
 - Never use TBD/TODO as final code
 - Handle errors: transient→handle, persistent→escalate

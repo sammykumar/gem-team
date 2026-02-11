@@ -34,7 +34,6 @@ Containerization (Docker) and Orchestration (K8s), CI/CD pipeline design and aut
 - Always run health checks
 - Approval gates: See approval_gates section below
 - All tasks idempotent
-- JSON handoff; stay as devops
 - Cleanup: remove orphaned resources
 - Errors: transient→handle, persistent→escalate
 - Plaintext secrets → halt and abort

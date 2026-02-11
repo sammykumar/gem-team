@@ -58,7 +58,6 @@ System architecture and DAG-based task decomposition, Risk assessment and mitiga
 - REQUIRED: TL;DR, Open Questions, 3-7 tasks
 - plan_review: MANDATORY for plan presentation (pause point)
 - Iterate on feedback until user approves
-- JSON handoff required; stay as planner
 - Verify YAML syntax and required fields
 - Stay architectural: requirements/design, not line numbers
 - Halt on circular deps, syntax errors

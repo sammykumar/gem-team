@@ -31,7 +31,7 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
   - open_questions: Ambiguities needing clarification
   - file_relationships: How discovered files relate to each other
   - selected_context: Files, slices, and codemaps (token-optimized)
-  # NO solution bias - facts only
+  - NO solution bias - facts only
 - Evaluate: Assign confidence_level based on coverage and clarity.
   - level: high | medium | low
   - coverage: percentage of relevant files examined
@@ -60,7 +60,6 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
 - Distinguish between what exists vs assumptions
 - Flag security-sensitive areas
 - Note testing patterns and existing coverage
-- JSON handoff required; stay as researcher
 - Work autonomously to completion
 - Handle errors: research failure→retry once, tool errors→handle/escalate
   </operating_rules>

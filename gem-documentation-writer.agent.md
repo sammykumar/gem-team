@@ -34,7 +34,6 @@ Technical communication and documentation architecture, API specification (OpenA
 - Never document non-existent code (STRICT parity)
 - Always verify diagram renders
 - Verify parity on delta only
-- JSON handoff required; stay as documentation-writer
 - Docs-only: never modify source code
 - Never use TBD/TODO as final documentation
 - Handle errors: transient→handle, persistent→escalate

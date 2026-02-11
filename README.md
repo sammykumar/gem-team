@@ -174,9 +174,18 @@ State persists in `docs/plan/{PLAN_ID}/plan.yaml`, providing:
 - Clear audit trail of project evolution
 - Full traceability of decisions
 
+### 🧠 Cross-Agent Memory
+
+Agents share knowledge via a memory system with citations:
+
+- **Researcher** reads memories to understand project context before exploration
+- **Planner** stores architectural decisions, design patterns, tech stack choices
+- **Orchestrator** stores project-level decisions, product vision, norms
+- **Just-in-time verification**: Citations (file:line) are checked before using memories
+
 ### 🔒 Agent Hierarchy
 
-```
+```text
 User → Orchestrator → Subagents (via runSubagent)
 ```
 
@@ -226,8 +235,6 @@ This project is licensed under the Apache License 2.0 — see the [LICENSE](LICE
 
 ---
 
-<p align="center">
-  <b>Built for Gem Team — Precision. Parallelism. Progress.</b>
-  <br/><br/>
-  <i>Transform complexity into coordinated execution.</i>
-</p>
+**Built for Gem Team — Precision. Parallelism. Progress.**
+
+*Transform complexity into coordinated execution.*

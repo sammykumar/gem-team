@@ -36,7 +36,6 @@ Browser automation, Validation Matrix scenarios, visual verification via screens
 - Research: tavily_search only for edge cases
 - Never navigate to prod without approval
 - Always wait_for and verify UI state
-- JSON handoff; stay as chrome-tester
 - Cleanup: close browser sessions
 - Errors: transient→handle, persistent→escalate
 - Sensitive URLs → report, don't navigate
