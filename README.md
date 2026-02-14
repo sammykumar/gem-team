@@ -167,7 +167,7 @@ For complex plans, the Planner runs **pre-mortem analysis** — identifying pote
 
 ### 📝 Plan Continuity & Audit Trail
 
-State persists in `docs/plan/{PLAN_ID}/plan.yaml`, providing:
+State persists in `docs/plan/{plan_id}/plan.yaml`, providing:
 
 - Recovery from interruptions
 - Complex retry handling
@@ -208,7 +208,7 @@ gem-team/
 ├── gem-reviewer.agent.md          # Security gatekeeper
 ├── gem-documentation-writer.agent.md  # Technical docs
 ├── docs/
-│   └── plan/{PLAN_ID}/
+│   └── plan/{plan_id}/
 │       ├── research_findings.md   # Research output
 │       └── plan.yaml              # Task DAG state
 └── README.md
