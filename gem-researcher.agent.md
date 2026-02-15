@@ -18,18 +18,32 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
 
 <workflow>
 - Analyze: Parse plan_id, objective, focus_area from parent agent.
-- Research: Examine actual code/implementation FIRST via hybrid retrieval + relationship discovery:
-  - Stage 1: semantic_search for conceptual discovery (what things DO)
-  - Stage 2: grep_search for exact pattern matching (function/class names, keywords)
-  - Stage 3: Merge and deduplicate results from both stages
-  - Stage 4: Discover relationships using direct tool queries (stateless approach):
-    * Dependencies: grep_search('^import |^from .* import ', files=merged) → Parse results to extract file→[imports]
-    * Dependents: For each file, grep_search(f'^import {file}|^from {file} import') → Returns files that import this file
-    * Subclasses: grep_search(f'class \\w+\\({class_name}\\)') → Returns all subclasses
-    * Callers (simple): semantic_search(f"functions that call {function_name}") → Returns functions that call this
-    * Callees: read_file(file_path) → Find function definition → Extract calls within function → Return list of called functions
-  - Stage 5: Use relationship insights to expand understanding and identify related components
-  - Stage 6: read_file for detailed examination of merged results with relationship context
+- Research: Examine actual code/implementation FIRST via hybrid retrieval + relationship discovery + iterative multi-pass:
+  - Stage 0: Determine task complexity (for iterative mode):
+    * Simple: Single concept, narrow scope → 1 pass (current mode)
+    * Medium: Multiple concepts, moderate scope → 2 passes
+    * Complex: Broad scope, many aspects → 3 passes
+  - Stage 1-N: Multi-pass research (iterate based on complexity):
+    * Pass 1: Initial discovery (broad search)
+      - Stage 1: semantic_search for conceptual discovery (what things DO)
+      - Stage 2: grep_search for exact pattern matching (function/class names, keywords)
+      - Stage 3: Merge and deduplicate results from both stages
+      - Stage 4: Discover relationships using direct tool queries (stateless approach):
+        + Dependencies: grep_search('^import |^from .* import ', files=merged) → Parse results to extract file→[imports]
+        + Dependents: For each file, grep_search(f'^import {file}|^from {file} import') → Returns files that import this file
+        + Subclasses: grep_search(f'class \\w+\\({class_name}\\)') → Returns all subclasses
+        + Callers (simple): semantic_search(f"functions that call {function_name}") → Returns functions that call this
+        + Callees: read_file(file_path) → Find function definition → Extract calls within function → Return list of called functions
+      - Stage 5: Use relationship insights to expand understanding and identify related components
+      - Stage 6: read_file for detailed examination of merged results with relationship context
+      - Analyze gaps: Identify what was missed or needs deeper exploration
+    * Pass 2 (if complexity ≥ medium): Refinement (focus on findings from Pass 1)
+      - Refine search queries based on gaps from Pass 1
+      - Repeat Stages 1-6 with focused queries
+      - Analyze gaps: Identify remaining gaps
+    * Pass 3 (if complexity = complex): Deep dive (specific aspects)
+      - Focus on remaining gaps from Pass 2
+      - Repeat Stages 1-6 with specific queries
   - COMPLEMENTARY: Use sequential thinking for COMPLEX analysis tasks (e.g., "Analyze circular dependencies", "Trace data flow")
 - Synthesize: Create structured research report with DOMAIN-SCOPED YAML coverage:
   - Metadata: methodology, tools used, scope, confidence, coverage
@@ -60,6 +74,12 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
 - Context-efficient file reading: prefer semantic search, file outlines, and targeted line-range reads; limit to 200 lines per read
 - Built-in preferred; batch independent calls
 - Hybrid Retrieval: Use semantic_search FIRST for conceptual discovery, then grep_search for exact pattern matching (function/class names, keywords). Merge and deduplicate results before detailed examination.
+- Iterative Agency: Determine task complexity (simple/medium/complex) → Execute 1-3 passes accordingly:
+  * Simple (1 pass): Broad search, read top results, return findings
+  * Medium (2 passes): Pass 1 (broad) → Analyze gaps → Pass 2 (refined) → Return findings
+  * Complex (3 passes): Pass 1 (broad) → Analyze gaps → Pass 2 (refined) → Analyze gaps → Pass 3 (deep dive) → Return findings
+  * Each pass refines queries based on previous findings and gaps
+  * Stateless: Each pass is independent, no state between passes (except findings)
 - Explore: Read relevant files within the focus_area only, identify key functions/classes, note patterns and conventions specific to this domain.
 - Use memory view/search to check memories for project context before exploration
 - Memory READ: Verify citations (file:line) before using stored memories
