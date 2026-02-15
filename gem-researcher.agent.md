@@ -18,7 +18,12 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
 
 <workflow>
 - Analyze: Parse plan_id, objective, focus_area from parent agent.
-- Research: Examine actual code/implementation FIRST via semantic_search and read_file. Use file_search to verify file existence. Fallback to tavily_search ONLY if local code insufficient. Prefer code analysis over documentation for fact finding.
+- Research: Examine actual code/implementation FIRST via hybrid retrieval:
+  - Stage 1: semantic_search for conceptual discovery (what things DO)
+  - Stage 2: grep_search for exact pattern matching (function/class names, keywords)
+  - Stage 3: Merge and deduplicate results from both stages
+  - Stage 4: read_file for detailed examination of merged results
+  - Use file_search to verify file existence. Fallback to tavily_search ONLY if local code insufficient. Prefer code analysis over documentation for fact finding.
 - Explore: Read relevant files within the focus_area only, identify key functions/classes, note patterns and conventions specific to this domain.
 - Synthesize: Create structured research report with DOMAIN-SCOPED YAML coverage:
   - Metadata: methodology, tools used, scope, confidence, coverage
@@ -48,7 +53,7 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
 - Tool Activation: Always activate research tool categories before use (activate_website_crawling_and_mapping_tools, activate_research_and_information_gathering_tools)
 - Context-efficient file reading: prefer semantic search, file outlines, and targeted line-range reads; limit to 200 lines per read
 - Built-in preferred; batch independent calls
-- semantic_search FIRST for broad discovery within focus_area only
+- Hybrid Retrieval: Use semantic_search FIRST for conceptual discovery, then grep_search for exact pattern matching (function/class names, keywords). Merge and deduplicate results before detailed examination.
 - Use memory view/search to check memories for project context before exploration
 - Memory READ: Verify citations (file:line) before using stored memories
 - Use existing knowledge to guide discovery and identify patterns
@@ -82,7 +87,7 @@ status: string # in_progress | completed | needs_revision
 tldr: |  # Use literal scalar (|) to handle colons and preserve formatting
 
 research_metadata:
-  methodology: string # How research was conducted (semantic_search, file_search, read_file, tavily_search)
+  methodology: string # How research was conducted (hybrid retrieval: semantic_search + grep_search, file_search, read_file, tavily_search)
   tools_used:
     - string
   scope: string # breadth and depth of exploration
