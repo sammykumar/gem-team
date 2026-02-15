@@ -103,33 +103,36 @@ Gem Team follows a **Strategic Planner/Dynamic Orchestrator** pattern. It decomp
 flowchart TD
     A[🎯 User Goal] --> B[🎭 Orchestrator]
     B --> C[🔍 Researcher]
-    C --> D[📋 Planner]
-    D --> E[📄 plan.yaml]
-    E --> F{⏸️ Plan Approval}
-    F -->|Feedback| E
-    F -->|Approved| G[🚀 Parallel Execution]
-    G --> H[💻 Implementer]
-    G --> I[🌐 Chrome Tester]
-    G --> J[⚙️ DevOps]
-    G --> K[🛡️ Reviewer]
-    G --> L[📝 Doc Writer]
-    H & I & J & K & L --> M[🔄 Synthesize Results]
-    M --> N{All Tasks Done?}
-    N -->|No| G
-    N -->|Yes| O[📊 Walkthrough Summary]
+    C --> D{⏸️ Findings Review}
+    D -->|Feedback| C
+    D -->|Approved| E[📋 Planner]
+    E --> F[📄 plan.yaml]
+    F --> G{⏸️ Plan Approval}
+    G -->|Feedback| F
+    G -->|Approved| H[🚀 Parallel Execution]
+    H --> I[💻 Implementer]
+    H --> J[🌐 Chrome Tester]
+    H --> K[⚙️ DevOps]
+    H --> L[🛡️ Reviewer]
+    H --> M[📝 Doc Writer]
+    I & J & K & L & M --> N[🔄 Synthesize Results]
+    N --> O{All Tasks Done?}
+    O -->|No| H
+    O -->|Yes| P[📊 Walkthrough Summary]
 ```
 
 ### Workflow Stages
 
-1. **Inception** — Orchestrator receives goal → delegates to multiple Researchers (by focus area) → Planner synthesizes findings into a DAG
-2. **Planning** — Planner synthesizes findings, creates 3-7 atomic tasks with dependencies, runs pre-mortem analysis, saves `plan.yaml`
-3. **Plan Approval** — Planner presents plan via `plan_review` → **MANDATORY PAUSE** → iterates on feedback until approved
-4. **Delegation** — Orchestrator identifies "ready" tasks (dependencies met) → launches up to 4 agents in parallel via `runSubagent`
-5. **Execution** — Workers execute changes and run verification commands before returning results
-6. **Synthesis** — Orchestrator processes handoffs, updates `plan.yaml`, routes failures for revision/retry
-7. **Batch Confirmation** — Orchestrator presents summary via `walkthrough_review` → **MANDATORY PAUSE**
-8. **Loop** — Repeat delegation/synthesis until all tasks complete. Triggers replanning if stuck.
-9. **Delivery** — Final comprehensive `walkthrough_review` summary presented
+1. **Inception** — Orchestrator receives goal → delegates to multiple Researchers (by focus area)
+2. **Findings Review** — Orchestrator presents consolidated research findings via `plan_review` → **MANDATORY PAUSE** → iterates on feedback until findings are approved
+3. **Planning** — Planner synthesizes findings, creates 3-7 atomic tasks with dependencies, runs pre-mortem analysis, saves `plan.yaml`
+4. **Plan Approval** — Planner presents plan via `plan_review` → **MANDATORY PAUSE** → iterates on feedback until approved
+5. **Delegation** — Orchestrator identifies "ready" tasks (dependencies met) → launches up to 4 agents in parallel via `runSubagent`
+6. **Execution** — Workers execute changes and run verification commands before returning results
+7. **Synthesis** — Orchestrator processes handoffs, updates `plan.yaml`, routes failures for revision/retry
+8. **Batch Confirmation** — Orchestrator presents summary via `walkthrough_review` → **MANDATORY PAUSE**
+9. **Loop** — Repeat delegation/synthesis until all tasks complete. Triggers replanning if stuck.
+10. **Delivery** — Final comprehensive `walkthrough_review` summary presented
 
 ---
 
