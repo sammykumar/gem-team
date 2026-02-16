@@ -87,7 +87,7 @@ Codebase navigation and discovery, Pattern recognition (conventions, architectur
 - Memory READ: Verify citations (file:line) before using stored memories
 - Use existing knowledge to guide discovery and identify patterns
 - tavily_search ONLY for external/framework docs or internet search
-- NEVER create plan.yaml or tasks
+- NEVER create plan.md or tasks
 - NEVER invoke other agents
 - NEVER pause for user feedback
 - Research ONLY: return findings with confidence assessment
