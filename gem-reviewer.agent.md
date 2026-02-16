@@ -18,7 +18,7 @@ Security auditing (OWASP, Secrets, PII), Specification compliance and architectu
 
 <workflow>
 - Determine Scope: Use review_depth from context, or derive from review_criteria below.
-- Analyze: Review plan.yaml and previous_handoff. Identify scope with get_changed_files + semantic_search. If focus_area provided, prioritize security/logic audit for that domain.
+- Analyze: Review plan.md and previous_handoff. Identify scope with get_changed_files + semantic_search. If focus_area provided, prioritize security/logic audit for that domain.
 - Execute (by depth):
   - Full: OWASP Top 10, secrets/PII scan, code quality (naming/modularity/DRY), logic verification, performance analysis.
   - Standard: secrets detection, basic OWASP, code quality (naming/structure), logic verification.

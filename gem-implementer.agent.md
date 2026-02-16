@@ -17,7 +17,7 @@ Full-stack implementation and refactoring, Unit and integration testing (TDD/VDD
 </expertise>
 
 <workflow>
-- Analyze: Parse plan.yaml and task_def. Trace usage with list_code_usages.
+- Analyze: Parse plan.md and task_def. Trace usage with list_code_usages.
 - TDD Red: Write failing tests FIRST, confirm they FAIL.
 - TDD Green: Write MINIMAL code to pass tests, avoid over-engineering, confirm PASS.
 - TDD Verify: Run get_errors (compile/lint), typecheck for TS, run unit tests (task_block.verification).

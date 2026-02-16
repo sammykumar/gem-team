@@ -33,7 +33,7 @@ Traditional AI coding assistants hit walls when projects get complex:
 | 🎯 **Lack of Specialization** | 8 expert agents: researcher, planner, implementer, tester, reviewer, devops, and documentation specialist |
 | 🐢 **Sequential Bottlenecks** | DAG-based parallel execution — up to 4 agents work simultaneously                                         |
 | ❌ **Missing Verification**   | Verification-first: no task completes without passing its verification command                            |
-| 📜 **No Audit Trail**         | Persistent `plan.yaml` state file tracks every decision, status, and outcome                              |
+| 📜 **No Audit Trail**         | Persistent `plan.md` state file tracks every decision, status, and outcome                                |
 
 ### Key Benefits
 
@@ -57,7 +57,7 @@ Gem Team follows a **Strategic Planner/Dynamic Orchestrator** pattern. It decomp
 ┌──────────────────────────────────────────────────────────────────┐
 │                      🎭 ORCHESTRATOR                             │
 │  • Coordinates workflow    • Delegates via runSubagent          │
-│  • Maintains plan.yaml     • Synthesizes results                │
+│  • Maintains plan.md       • Synthesizes results                │
 └──────────────────────────────┬───────────────────────────────────┘
                                ▼
         ┌──────────────────────┴──────────────────────┐
@@ -68,7 +68,7 @@ Gem Team follows a **Strategic Planner/Dynamic Orchestrator** pattern. It decomp
 └───────────────────┘                     └────────────┬───────────┘
                                                        ▼
                                           ┌────────────────────────┐
-                                          │  📄 plan.yaml          │
+                                          │  📄 plan.md            │
                                           │  (Task DAG + State)    │
                                           └────────────┬───────────┘
                                                        ▼
@@ -106,7 +106,7 @@ flowchart TD
     C --> D{⏸️ Findings Review}
     D -->|Feedback| C
     D -->|Approved| E[📋 Planner]
-    E --> F[📄 plan.yaml]
+    E --> F[📄 plan.md]
     F --> G{⏸️ Plan Approval}
     G -->|Feedback| F
     G -->|Approved| H[🚀 Parallel Execution]
@@ -125,11 +125,11 @@ flowchart TD
 
 1. **Inception** — Orchestrator receives goal → delegates to multiple Researchers (by focus area)
 2. **Findings Review** — Orchestrator presents consolidated research findings via `plan_review` → **MANDATORY PAUSE** → iterates on feedback until findings are approved
-3. **Planning** — Planner synthesizes findings, creates 3-7 atomic tasks with dependencies, runs pre-mortem analysis, saves `plan.yaml`
+3. **Planning** — Planner synthesizes findings, creates 3-7 atomic tasks with dependencies, runs pre-mortem analysis, saves `plan.md`
 4. **Plan Approval** — Planner presents plan via `plan_review` → **MANDATORY PAUSE** → iterates on feedback until approved
 5. **Delegation** — Orchestrator identifies "ready" tasks (dependencies met) → launches up to 4 agents in parallel via `runSubagent`
 6. **Execution** — Workers execute changes and run verification commands before returning results
-7. **Synthesis** — Orchestrator processes handoffs, updates `plan.yaml`, routes failures for revision/retry
+7. **Synthesis** — Orchestrator processes handoffs, updates `plan.md`, routes failures for revision/retry
 8. **Batch Confirmation** — Orchestrator presents summary via `walkthrough_review` → **MANDATORY PAUSE**
 9. **Loop** — Repeat delegation/synthesis until all tasks complete. Triggers replanning if stuck.
 10. **Delivery** — Final comprehensive `walkthrough_review` summary presented
@@ -140,7 +140,7 @@ flowchart TD
 
 ### 🔍 Focus-Based Context Gathering
 
-The **Orchestrator** identifies key domains or features and launches multiple **Researcher agents** in parallel, each targeting a specific `focus_area`. This ensures deep, specific context is gathered for every part of the system before the **Planner** synthesizes it all into a unified `plan.yaml`.
+The **Orchestrator** identifies key domains or features and launches multiple **Researcher agents** in parallel, each targeting a specific `focus_area`. This ensures deep, specific context is gathered for every part of the system before the **Planner** synthesizes it all into a unified `plan.md`.
 
 ### ⚡ Parallel Execution Engine
 
@@ -170,7 +170,7 @@ For complex plans, the Planner runs **pre-mortem analysis** — identifying pote
 
 ### 📝 Plan Continuity & Audit Trail
 
-State persists in `docs/plan/{plan_id}/plan.yaml`, providing:
+State persists in `docs/plan/{plan_id}/plan.md`, providing:
 
 - Recovery from interruptions
 - Complex retry handling
@@ -213,7 +213,7 @@ gem-team/
 ├── docs/
 │   └── plan/{plan_id}/
 │       ├── research_findings.yaml   # Research output
-│       └── plan.yaml              # Task DAG state
+│       └── plan.md                  # Task DAG state (markdown format)
 └── README.md
 ```
 
