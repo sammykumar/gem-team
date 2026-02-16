@@ -52,6 +52,12 @@ System architecture and DAG-based task decomposition, Risk assessment and mitiga
 - Design for parallel execution
 - Subagents cannot call other subagents
 - Base tasks on research_findings; note gaps in open_questions
+- Visual diagrams: Include Mermaid.js diagrams when plans involve:
+  - Architecture changes (use `graph TD` or `graph LR` for component relationships)
+  - API workflows or sequences (use `sequenceDiagram` for request/response flows)
+  - Data pipelines (use `flowchart` for multi-step data processing)
+  - State transitions (use `stateDiagram-v2` for state machines)
+  - Always accompany diagrams with text descriptions for accessibility
 - REQUIRED: TL;DR, Open Questions, tasks as needed (prefer fewer, well-scoped tasks that deliver clear user value)
 - plan_review: MANDATORY for plan presentation (pause point)
   - Fallback: If plan_review tool unavailable, use ask_questions to present plan and gather approval
@@ -114,6 +120,23 @@ max_estimated_effort: medium # small | medium | large
 
 ## Implementation Specification
 
+### Architecture Overview
+
+[Text description of the architecture]
+
+**Visual Architecture:** _(Use when plan involves multiple components, API interactions, or architectural changes)_
+
+```mermaid
+graph TD
+    A[Component A] -->|API Call| B[Component B]
+    B --> C[Database]
+    A --> D[External Service]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff4e1
+    style C fill:#f0f0f0
+```
+
 ### Code Structure
 [How new code should be organized/architected]
 
@@ -133,6 +156,27 @@ max_estimated_effort: medium # small | medium | large
 - **Responsibility:** [What this component does]
 - **Interfaces:**
   - [Public API/method 1]
+
+### Data Flow
+
+[Text description of data flow]
+
+**Visual Flow:** _(Use for API sequences, data pipelines, or multi-step workflows)_
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Service
+    participant DB
+    
+    Client->>API: POST /endpoint
+    API->>Service: Process request
+    Service->>DB: Query data
+    DB-->>Service: Return results
+    Service-->>API: Formatted response
+    API-->>Client: 200 OK
+```
 
 ### Dependencies
 - **[Component A]** → **[Component B]**: [How they interact - calls, inherits, composes]
@@ -155,6 +199,19 @@ max_estimated_effort: medium # small | medium | large
 
 #### Description
 [Detailed description of what needs to be done]
+
+#### Workflow _(Optional - include for complex tasks with multiple steps or interactions)_
+
+**Visual Workflow:**
+
+```mermaid
+flowchart LR
+    A[Start] --> B{Condition}
+    B -->|Yes| C[Action 1]
+    B -->|No| D[Action 2]
+    C --> E[End]
+    D --> E
+```
 
 #### Context Files
 - `path/to/file1.ext`: [Description of relevance]
